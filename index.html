@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر المفروشات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header .logo {
+            font-size: 20px;
+            color: #ffd700;
+        }
+        header .search-bar input {
+            padding: 5px;
+            border: none;
+            border-radius: 20px;
+            width: 200px;
+        }
+        header .notifications {
+            position: relative;
+        }
+        header .notifications .icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        header .notifications .badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: red;
+            color: #fff;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar a {
+            display: block;
+            padding: 10px;
+            background-color: #ffd700;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            text-align: center;
+            margin: 0 5px;
+            flex: 1;
+        }
+        .navbar a:hover {
+            background-color: #ffcc00;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .banner {
+            background-color: #333;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+            height: 200px;
+        }
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            opacity: 0.7;
+        }
+        .banner h2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            margin: 0;
+            color: #ffd700;
+        }
+        .banner p {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            margin: 0;
+            color: #ffd700;
+        }
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .category {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            flex: 1 1 calc(50% - 10px);
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .category img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .category h3 {
+            color: #333;
+            margin: 10px 0 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">متجر المفروشات</div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="ابحث هنا..." oninput="performSearch()">
+        </div>
+        <div class="notifications">
+            <span class="icon">🔔</span>
+            <span class="badge">3</span>
+        </div>
+    </header>
+    <div class="navbar">
+        <a href="#">الرئيسية</a>
+        <a href="#">المفروشات</a>
+        <a href="#">السرر</a>
+        <a href="#">الأرائك</a>
+        <a href="#">الطاولات</a>
+        <a href="#">الخزائن</a>
+        <a href="#">اتصل بنا</a>
+    </div>
+    <div class="main-content">
+        <div class="banner">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="إعلان">
+            <h2>عرض خاص على المفروشات</h2>
+            <p>احصل على خصم 50% على جميع المفروشات حتى نهاية الشهر.</p>
+        </div>
+        <div class="categories">
+            <div class="category">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="السرر">
+                <h3>السرر</h3>
+            </div>
+            <div class="category">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الأرائك">
+                <h3>الأرائك</h3>
+            </div>
+            <div class="category">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الطاولات">
+                <h3>الطاولات</h3>
+            </div>
+            <div class="category">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الخزائن">
+                <h3>الخزائن</h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function performSearch() {
+            const query = document.getElementById('search-input').value;
+            console.log('بحث عن:', query);
+            // يمكنك إضافة منطق البحث هنا، مثل استدعاء API أو تصفية العناصر
+        }
+    </script>
+</body>
+</html>
