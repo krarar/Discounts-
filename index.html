@@ -24,29 +24,6 @@
             font-size: 20px;
             color: #ffd700;
         }
-        header .search-bar input {
-            padding: 5px;
-            border: none;
-            border-radius: 20px;
-            width: 200px;
-        }
-        header .notifications {
-            position: relative;
-        }
-        header .notifications .icon {
-            font-size: 24px;
-            cursor: pointer;
-        }
-        header .notifications .badge {
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background-color: red;
-            color: #fff;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 12px;
-        }
         .navbar {
             background-color: #fff;
             padding: 10px 20px;
@@ -108,11 +85,11 @@
             margin: 0;
             color: #ffd700;
         }
-        .categories {
+        .categories, .products {
             display: flex;
             flex-wrap: wrap;
         }
-        .category {
+        .category, .product {
             background-color: #fff;
             border-radius: 10px;
             padding: 10px;
@@ -123,15 +100,15 @@
             max-width: calc(50% - 20px); /* لضمان عدم تجاوز العرض */
             box-sizing: border-box;
         }
-        .category img {
+        .category img, .product img {
             max-width: 100%;
             border-radius: 10px;
         }
-        .category h3 {
+        .category h3, .product h3 {
             color: #333;
             margin: 10px 0 0;
         }
-        .category button {
+        .category button, .add-product-button {
             background-color: #ffd700;
             border: none;
             border-radius: 5px;
@@ -140,15 +117,13 @@
             font-size: 14px;
             margin-top: 10px;
         }
-        .category button:hover {
+        .category button:hover, .add-product-button:hover {
             background-color: #ffcc00;
         }
-
-        /* نمط النافذة المنبثقة */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
@@ -163,6 +138,7 @@
             padding: 20px;
             border-radius: 10px;
             width: 300px;
+            position: relative;
         }
         .modal-header {
             display: flex;
@@ -192,115 +168,125 @@
             cursor: pointer;
             width: 100%;
         }
+        /* لتوسيع النافذة المنبثقة لتكون بجانب المحتوى */
+        .modal-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .modal-content {
+            max-width: 500px; /* يمكنك تعديل العرض حسب الحاجة */
+            margin: 0 20px; /* تباعد على الجانبين */
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">متجر المفروشات</div>
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="ابحث هنا..." oninput="performSearch()">
-        </div>
-        <div class="notifications">
-            <span class="icon">🔔</span>
-            <span class="badge">3</span>
-        </div>
     </header>
     <div class="navbar">
-        <a href="#">الرئيسية</a>
-        <a href="#">المفروشات</a>
-        <a href="#">السرر</a>
-        <a href="#">الأرائك</a>
-        <a href="#">الطاولات</a>
-        <a href="#">الخزائن</a>
-        <a href="#">اتصل بنا</a>
+        <a href="#" onclick="showSection('main')">الرئيسية</a>
+        <a href="#" onclick="showSection('categories')">الفئات</a>
+        <a href="#" onclick="showSection('productDetails')">عرض التفاصيل</a>
     </div>
     <div class="main-content">
-        <div class="banner">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="إعلان">
-            <h2>عرض خاص على المفروشات</h2>
-            <p>احصل على خصم 50% على جميع المفروشات حتى نهاية الشهر.</p>
+        <!-- قسم الرئيسية -->
+        <div id="main">
+            <div class="banner">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="إعلان">
+                <h2>عرض خاص على المفروشات</h2>
+                <p>احصل على خصم 50% على جميع المفروشات حتى نهاية الشهر.</p>
+            </div>
         </div>
-        <button onclick="openModal()">إضافة إعلان جديد</button>
-        <div class="categories" id="categories">
+
+        <!-- قسم الفئات -->
+        <div id="categories" style="display: none;">
             <div class="category">
                 <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="السرر">
                 <h3>السرر</h3>
-                <button onclick="window.location.href='details.html?category=سرر'">عرض التفاصيل</button>
+                <button onclick="showSection('productDetails')">عرض التفاصيل</button>
             </div>
             <div class="category">
                 <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الأرائك">
                 <h3>الأرائك</h3>
-                <button onclick="window.location.href='details.html?category=أرائك'">عرض التفاصيل</button>
+                <button onclick="showSection('productDetails')">عرض التفاصيل</button>
             </div>
-            <div class="category">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الطاولات">
-                <h3>الطاولات</h3>
-                <button onclick="window.location.href='details.html?category=طاولات'">عرض التفاصيل</button>
-            </div>
-            <div class="category">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الخزائن">
-                <h3>الخزائن</h3>
-                <button onclick="window.location.href='details.html?category=خزائن'">عرض التفاصيل</button>
+            <!-- أضف المزيد من الفئات هنا -->
+        </div>
+
+        <!-- قسم تفاصيل الفئة -->
+        <div id="productDetails" style="display: none;">
+            <button class="add-product-button" onclick="openProductModal()">إضافة منتج جديد</button>
+            <div id="products" class="products">
+                <!-- سيتم إضافة المنتجات هنا -->
             </div>
         </div>
-    </div>
 
-    <!-- النافذة المنبثقة -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>إضافة إعلان جديد</h2>
-                <span class="close" onclick="closeModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <input type="text" id="ad-title" placeholder="عنوان الإعلان">
-                <input type="text" id="ad-desc" placeholder="وصف الإعلان">
-                <input type="text" id="ad-image-url" placeholder="رابط صورة الإعلان">
-                <button onclick="addAd()">إضافة الإعلان</button>
+        <!-- نافذة إضافة منتج -->
+        <div id="productModal" class="modal">
+            <div class="modal-container">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>إضافة منتج جديد</h2>
+                        <span class="close" onclick="closeProductModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="product-name" placeholder="اسم المنتج">
+                        <input type="text" id="product-price" placeholder="سعر المنتج">
+                        <input type="text" id="product-size" placeholder="القياس المتوفر">
+                        <input type="text" id="product-url" placeholder="رابط صورة المنتج">
+                        <button onclick="addProduct()">إضافة المنتج</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        function openModal() {
-            document.getElementById('myModal').style.display = 'flex';
+        function showSection(sectionId) {
+            document.getElementById('main').style.display = 'none';
+            document.getElementById('categories').style.display = 'none';
+            document.getElementById('productDetails').style.display = 'none';
+            document.getElementById('productModal').style.display = 'none';
+
+            document.getElementById(sectionId).style.display = 'block';
         }
 
-        function closeModal() {
-            document.getElementById('myModal').style.display = 'none';
+        function openProductModal() {
+            document.getElementById('productModal').style.display = 'flex';
         }
 
-        function addAd() {
-            const title = document.getElementById('ad-title').value;
-            const desc = document.getElementById('ad-desc').value;
-            const imageUrl = document.getElementById('ad-image-url').value;
+        function closeProductModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
 
-            if (title && desc && imageUrl) {
-                const categories = document.getElementById('categories');
+        function addProduct() {
+            const name = document.getElementById('product-name').value;
+            const price = document.getElementById('product-price').value;
+            const size = document.getElementById('product-size').value;
+            const imageUrl = document.getElementById('product-url').value;
 
-                const newAd = document.createElement('div');
-                newAd.classList.add('category');
-                newAd.innerHTML = `
-                    <img src="${imageUrl}" alt="${title}">
-                    <h3>${title}</h3>
-                    <p>${desc}</p>
-                    <button onclick="window.location.href='details.html?category=${encodeURIComponent(title)}'">عرض التفاصيل</button>
+            if (name && price && size && imageUrl) {
+                const products = document.getElementById('products');
+
+                const newProduct = document.createElement('div');
+                newProduct.classList.add('product');
+                newProduct.innerHTML = `
+                    <img src="${imageUrl}" alt="${name}">
+                    <h3>${name}</h3>
+                    <p>السعر: ${price}</p>
+                    <p>القياس: ${size}</p>
                 `;
 
-                categories.appendChild(newAd);
+                products.appendChild(newProduct);
 
-                console.log('إضافة إعلان:', { title, desc, imageUrl });
+                console.log('إضافة منتج:', { name, price, size, imageUrl });
 
-                closeModal();
+                closeProductModal();
             } else {
                 alert('يرجى ملء جميع الحقول');
             }
-        }
-
-        function performSearch() {
-            const query = document.getElementById('search-input').value;
-            console.log('بحث عن:', query);
-            // يمكنك إضافة منطق البحث هنا، مثل استدعاء API أو تصفية العناصر
         }
     </script>
 </body>
