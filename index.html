@@ -111,17 +111,17 @@
         .categories {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
         }
         .category {
             background-color: #fff;
             border-radius: 10px;
             padding: 10px;
-            margin: 10px 0;
-            flex: 1 1 calc(50% - 10px);
-            box-sizing: border-box;
+            margin: 10px;
+            flex: 1 0 45%; /* عرض الفئة */
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: calc(50% - 20px); /* لضمان عدم تجاوز العرض */
+            box-sizing: border-box;
         }
         .category img {
             max-width: 100%;
@@ -130,6 +130,67 @@
         .category h3 {
             color: #333;
             margin: 10px 0 0;
+        }
+        .category button {
+            background-color: #ffd700;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .category button:hover {
+            background-color: #ffcc00;
+        }
+
+        /* نمط النافذة المنبثقة */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .close {
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .modal-body input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        .modal-body button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
         }
     </style>
 </head>
@@ -159,27 +220,83 @@
             <h2>عرض خاص على المفروشات</h2>
             <p>احصل على خصم 50% على جميع المفروشات حتى نهاية الشهر.</p>
         </div>
-        <div class="categories">
+        <button onclick="openModal()">إضافة إعلان جديد</button>
+        <div class="categories" id="categories">
             <div class="category">
                 <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="السرر">
                 <h3>السرر</h3>
+                <button onclick="window.location.href='details.html?category=سرر'">عرض التفاصيل</button>
             </div>
             <div class="category">
                 <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الأرائك">
                 <h3>الأرائك</h3>
+                <button onclick="window.location.href='details.html?category=أرائك'">عرض التفاصيل</button>
             </div>
             <div class="category">
                 <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الطاولات">
                 <h3>الطاولات</h3>
+                <button onclick="window.location.href='details.html?category=طاولات'">عرض التفاصيل</button>
             </div>
             <div class="category">
                 <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الخزائن">
                 <h3>الخزائن</h3>
+                <button onclick="window.location.href='details.html?category=خزائن'">عرض التفاصيل</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- النافذة المنبثقة -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إضافة إعلان جديد</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="ad-title" placeholder="عنوان الإعلان">
+                <input type="text" id="ad-desc" placeholder="وصف الإعلان">
+                <input type="text" id="ad-image-url" placeholder="رابط صورة الإعلان">
+                <button onclick="addAd()">إضافة الإعلان</button>
             </div>
         </div>
     </div>
 
     <script>
+        function openModal() {
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function addAd() {
+            const title = document.getElementById('ad-title').value;
+            const desc = document.getElementById('ad-desc').value;
+            const imageUrl = document.getElementById('ad-image-url').value;
+
+            if (title && desc && imageUrl) {
+                const categories = document.getElementById('categories');
+
+                const newAd = document.createElement('div');
+                newAd.classList.add('category');
+                newAd.innerHTML = `
+                    <img src="${imageUrl}" alt="${title}">
+                    <h3>${title}</h3>
+                    <p>${desc}</p>
+                    <button onclick="window.location.href='details.html?category=${encodeURIComponent(title)}'">عرض التفاصيل</button>
+                `;
+
+                categories.appendChild(newAd);
+
+                console.log('إضافة إعلان:', { title, desc, imageUrl });
+
+                closeModal();
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        }
+
         function performSearch() {
             const query = document.getElementById('search-input').value;
             console.log('بحث عن:', query);
