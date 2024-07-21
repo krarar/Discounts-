@@ -1,293 +1,431 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر المفروشات</title>
+    <title>متجر الكتروني عصري</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6C5CE7;
+            --secondary-color: #FD79A8;
+            --background-color: #070707d2;
+            --text-color: #f4f6f7d0;
+            --card-bg: #0f0e0e;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Tajawal', sans-serif;
             margin: 0;
             padding: 0;
-            direction: rtl;
-            background-color: #f4f4f4;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
+
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 20px;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        header .logo {
-            font-size: 20px;
-            color: #ffd700;
+
+        .header input[type="search"] {
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            width: 300px;
+            font-size: 16px;
+            background-color: var(--background-color);
+            transition: all 0.3s ease;
         }
-        .navbar {
-            background-color: #fff;
-            padding: 10px 20px;
+
+        .header input[type="search"]:focus {
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .header-buttons {
             display: flex;
-            justify-content: space-around;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            gap: 15px;
         }
-        .navbar a {
-            display: block;
-            padding: 10px;
-            background-color: #ffd700;
-            border-radius: 20px;
-            text-decoration: none;
-            color: #333;
-            font-size: 14px;
-            text-align: center;
-            margin: 0 5px;
-            flex: 1;
+
+        .header button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
-        .navbar a:hover {
-            background-color: #ffcc00;
+
+        .header button:hover {
+            transform: scale(1.1);
         }
-        .main-content {
+
+        .advertisements {
+            display: flex;
+            overflow-x: auto;
             padding: 20px;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border-radius: 10px;
+            white-space: nowrap;
         }
-        .banner {
-            background-color: #333;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            text-align: center;
-            color: white;
+
+        .ad-item {
+            flex: 0 0 auto;
+            width: 200px;
+            margin-right: 20px;
             overflow: hidden;
-            height: 200px;
-        }
-        .banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
             border-radius: 20px;
-            opacity: 0.7;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
         }
-        .banner h2 {
+
+        .ad-item:hover {
+            transform: scale(1.02);
+        }
+
+        .ad-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .ad-overlay {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            margin: 0;
-            color: #ffd700;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .banner p {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
-            margin: 0;
-            color: #ffd700;
-        }
-        .categories, .products {
+
+        .category-buttons {
             display: flex;
             flex-wrap: wrap;
-        }
-        .category, .product {
-            background-color: #fff;
+            justify-content: center;
+            padding: 20px;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
             border-radius: 10px;
-            padding: 10px;
-            margin: 10px;
-            flex: 1 0 45%; /* عرض الفئة */
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: calc(50% - 20px); /* لضمان عدم تجاوز العرض */
+        }
+
+        .category-buttons button {
+            padding: 12px 25px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            border-radius: 30px;
+            margin: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .category-buttons button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
             box-sizing: border-box;
         }
-        .category img, .product img {
-            max-width: 100%;
-            border-radius: 10px;
+
+        .category {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            flex: 1 1 calc(33.333% - 20px);
+            max-width: calc(33.333% - 20px);
         }
-        .category h3, .product h3 {
-            color: #333;
-            margin: 10px 0 0;
+
+        .category:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        .category button, .add-product-button {
-            background-color: #ffd700;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
+
+        .category img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
         }
-        .category button:hover, .add-product-button:hover {
-            background-color: #ffcc00;
+
+        .category:hover img {
+            transform: scale(1.05);
         }
-        .modal {
+
+        .category p {
+            padding: 20px;
+            font-size: 18px;
+            color: var(--text-color);
+            margin: 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .popup {
             display: none;
             position: fixed;
-            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.8);
             justify-content: center;
             align-items: center;
+            z-index: 1001;
         }
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            width: 300px;
-            position: relative;
+
+        .popup-content {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .modal-header h2 {
-            margin: 0;
-        }
-        .close {
-            cursor: pointer;
+
+        .popup-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
             font-size: 24px;
         }
-        .modal-body input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            box-sizing: border-box;
+
+        .popup-content label {
+            display: block;
+            margin: 20px 0 10px;
+            color: var(--text-color);
+            font-weight: bold;
         }
-        .modal-body button {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
+
+        .popup-content input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid var(--background-color);
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .popup-content input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .popup-content button {
+            padding: 12px 25px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            width: 100%;
+            font-size: 16px;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            font-weight: bold;
         }
-        /* لتوسيع النافذة المنبثقة لتكون بجانب المحتوى */
-        .modal-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+
+        .popup-content button.save {
+            background-color: var(--primary-color);
+            color: white;
         }
-        .modal-content {
-            max-width: 500px; /* يمكنك تعديل العرض حسب الحاجة */
-            margin: 0 20px; /* تباعد على الجانبين */
+
+        .popup-content button.save:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .popup-content button.close {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin-right: 10px;
+        }
+
+        .popup-content button.close:hover {
+            background-color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .category {
+                flex: 1 1 calc(50% - 20px);
+                max-width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+
+            .header input[type="search"] {
+                width: 100%;
+            }
         }
     </style>
+    <!-- Firebase Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js"></script>
 </head>
 <body>
-    <header>
-        <div class="logo">متجر المفروشات</div>
-    </header>
-    <div class="navbar">
-        <a href="#" onclick="showSection('main')">الرئيسية</a>
-        <a href="#" onclick="showSection('categories')">الفئات</a>
-        <a href="#" onclick="showSection('productDetails')">عرض التفاصيل</a>
+
+    <!-- Header -->
+    <div class="header">
+        <input type="search" placeholder="ابحث عن منتجات...">
+        <div class="header-buttons">
+            <button>🔔</button>
+            <button>☰</button>
+        </div>
     </div>
-    <div class="main-content">
-        <!-- قسم الرئيسية -->
-        <div id="main">
-            <div class="banner">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="إعلان">
-                <h2>عرض خاص على المفروشات</h2>
-                <p>احصل على خصم 50% على جميع المفروشات حتى نهاية الشهر.</p>
-            </div>
-        </div>
 
-        <!-- قسم الفئات -->
-        <div id="categories" style="display: none;">
-            <div class="category">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="السرر">
-                <h3>السرر</h3>
-                <button onclick="showSection('productDetails')">عرض التفاصيل</button>
-            </div>
-            <div class="category">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="الأرائك">
-                <h3>الأرائك</h3>
-                <button onclick="showSection('productDetails')">عرض التفاصيل</button>
-            </div>
-            <!-- أضف المزيد من الفئات هنا -->
+    <!-- Advertisements -->
+    <div class="advertisements">
+        <div class="ad-item">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf6-b88b-4736-b5f6-c4f8e473fb7d" alt="Ad 1">
+            <div class="ad-overlay">AD</div>
         </div>
-
-        <!-- قسم تفاصيل الفئة -->
-        <div id="productDetails" style="display: none;">
-            <button class="add-product-button" onclick="openProductModal()">إضافة منتج جديد</button>
-            <div id="products" class="products">
-                <!-- سيتم إضافة المنتجات هنا -->
-            </div>
+        <div class="ad-item">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1733753367429.jpg?alt=media&token=2fa0de4c-06c8-4ea5-92db-93af5d15f649" alt="Ad 2">
+            <div class="ad-overlay">AD</div>
         </div>
+        <!-- Add more ads as needed -->
+    </div>
 
-        <!-- نافذة إضافة منتج -->
-        <div id="productModal" class="modal">
-            <div class="modal-container">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2>إضافة منتج جديد</h2>
-                        <span class="close" onclick="closeProductModal()">&times;</span>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" id="product-name" placeholder="اسم المنتج">
-                        <input type="text" id="product-price" placeholder="سعر المنتج">
-                        <input type="text" id="product-size" placeholder="القياس المتوفر">
-                        <input type="text" id="product-url" placeholder="رابط صورة المنتج">
-                        <button onclick="addProduct()">إضافة المنتج</button>
-                    </div>
-                </div>
-            </div>
+    <!-- Category Buttons -->
+    <div class="category-buttons">
+        <button onclick="showPopup()">أضف منتج جديد</button>
+    </div>
+
+    <!-- Categories -->
+    <div class="categories">
+        <!-- Products will be added here -->
+    </div>
+
+    <!-- Popup Form -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h3>إضافة منتج جديد</h3>
+            <label for="product-name">اسم المنتج</label>
+            <input type="text" id="product-name" placeholder="اسم المنتج">
+
+            <label for="product-description">وصف المنتج</label>
+            <input type="text" id="product-description" placeholder="وصف المنتج">
+
+            <label for="product-price">سعر المنتج</label>
+            <input type="number" id="product-price" placeholder="سعر المنتج">
+
+            <label for="product-image">رابط الصورة</label>
+            <input type="text" id="product-image" placeholder="رابط الصورة">
+
+            <button class="save" onclick="saveProduct()">حفظ المنتج</button>
+            <button class="close" onclick="closePopup()">إغلاق</button>
         </div>
     </div>
 
     <script>
-        function showSection(sectionId) {
-            document.getElementById('main').style.display = 'none';
-            document.getElementById('categories').style.display = 'none';
-            document.getElementById('productDetails').style.display = 'none';
-            document.getElementById('productModal').style.display = 'none';
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "255034474844",
+            appId: "1:255034474844:web:5e3b7a6bc4b2fb94cc4199"
+        };
 
-            document.getElementById(sectionId).style.display = 'block';
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
         }
 
-        function openProductModal() {
-            document.getElementById('productModal').style.display = 'flex';
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
         }
 
-        function closeProductModal() {
-            document.getElementById('productModal').style.display = 'none';
-        }
+        function saveProduct() {
+            // Get the product details from the input fields
+            var name = document.getElementById('product-name').value.trim();
+            var description = document.getElementById('product-description').value.trim();
+            var price = document.getElementById('product-price').value.trim();
+            var imageUrl = document.getElementById('product-image').value.trim();
 
-        function addProduct() {
-            const name = document.getElementById('product-name').value;
-            const price = document.getElementById('product-price').value;
-            const size = document.getElementById('product-size').value;
-            const imageUrl = document.getElementById('product-url').value;
-
-            if (name && price && size && imageUrl) {
-                const products = document.getElementById('products');
-
-                const newProduct = document.createElement('div');
-                newProduct.classList.add('product');
-                newProduct.innerHTML = `
-                    <img src="${imageUrl}" alt="${name}">
-                    <h3>${name}</h3>
-                    <p>السعر: ${price}</p>
-                    <p>القياس: ${size}</p>
-                `;
-
-                products.appendChild(newProduct);
-
-                console.log('إضافة منتج:', { name, price, size, imageUrl });
-
-                closeProductModal();
-            } else {
+            // Validate input fields
+            if (!name || !description || !price || !imageUrl) {
                 alert('يرجى ملء جميع الحقول');
+                return;
             }
+
+            // Create a new product object
+            var newProduct = {
+                name: name,
+                description: description,
+                price: price,
+                imageUrl: imageUrl
+            };
+
+            // Save the new product to Firebase
+            var newProductRef = database.ref('products11').push();
+            newProductRef.set(newProduct)
+                .then(function() {
+                    console.log('Product saved successfully!');
+                    addProductToUI(newProduct);
+                    closePopup();
+                })
+                .catch(function(error) {
+                    console.error('Error saving product:', error);
+                });
         }
+
+        function addProductToUI(product) {
+            // Create a new category element
+            var category = document.createElement('div');
+            category.classList.add('category');
+            category.innerHTML = `
+                <img src="${product.imageUrl}" alt="${product.name}">
+                <p>${product.name}</p>
+                <p>${product.description}</p>
+                <p>${product.price} د.ع</p>
+            `;
+
+            // Add the new category to the categories container
+            document.querySelector('.categories11').appendChild(category);
+        }
+
+        // Load products from Firebase on page load
+        window.onload = function() {
+            var productsRef = database.ref('products11');
+            productsRef.on('value', function(snapshot) {
+                document.querySelector('.categories11').innerHTML = ''; // Clear existing products
+                snapshot.forEach(function(childSnapshot) {
+                    var product = childSnapshot.val();
+                    addProductToUI(product);
+                });
+            }, function(error) {
+                console.error('Error loading products:', error);
+            });
+        };
     </script>
 </body>
 </html>
