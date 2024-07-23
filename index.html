@@ -1,431 +1,352 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر الكتروني عصري</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>مفروشات الخيمة</title>
     <style>
-        :root {
-            --primary-color: #6C5CE7;
-            --secondary-color: #FD79A8;
-            --background-color: #070707d2;
-            --text-color: #f4f6f7d0;
-            --card-bg: #0f0e0e;
-        }
-
         body {
-            font-family: 'Tajawal', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
+            background-color: #f0f0f0;
         }
-
-        .header {
+        header {
+            background-color: #d4a017;
+            color: #000;
+            padding: 10px 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background-color: var(--card-bg);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            justify-content: space-between;
         }
-
-        .header input[type="search"] {
-            padding: 12px 20px;
-            border-radius: 30px;
-            border: none;
-            outline: none;
-            width: 300px;
-            font-size: 16px;
-            background-color: var(--background-color);
-            transition: all 0.3s ease;
+        header h1 {
+            margin: 0;
+            font-size: 24px;
         }
-
-        .header input[type="search"]:focus {
-            box-shadow: 0 0 0 2px var(--primary-color);
-        }
-
-        .header-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .header button {
-            background: none;
-            border: none;
-            color: var(--primary-color);
+        header .icon {
             font-size: 24px;
             cursor: pointer;
-            transition: transform 0.3s ease;
         }
-
-        .header button:hover {
-            transform: scale(1.1);
-        }
-
-        .advertisements {
+        header .search-container {
             display: flex;
-            overflow-x: auto;
-            padding: 20px;
-            background-color: var(--card-bg);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            border-radius: 10px;
-            white-space: nowrap;
-        }
-
-        .ad-item {
-            flex: 0 0 auto;
-            width: 200px;
-            margin-right: 20px;
-            overflow: hidden;
-            border-radius: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            position: relative;
-        }
-
-        .ad-item:hover {
-            transform: scale(1.02);
-        }
-
-        .ad-item img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .ad-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 5px 10px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
             align-items: center;
         }
-
+        header input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+            display: none; /* Initially hidden */
+        }
+        header input[type="text"].active {
+            display: block; /* Show when active */
+        }
+        header button {
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #b3860b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: none; /* Initially hidden */
+        }
+        header button.active {
+            display: block; /* Show when active */
+        }
+        .main-content {
+            padding: 20px;
+        }
         .category-buttons {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            padding: 20px;
-            background-color: var(--card-bg);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            border-radius: 10px;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-
         .category-buttons button {
-            padding: 12px 25px;
-            border: none;
-            background-color: var(--primary-color);
+            background-color: #d4a017;
             color: white;
+            border: none;
+            padding: 10px 20px;
             cursor: pointer;
-            border-radius: 30px;
-            margin: 5px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            font-weight: bold;
+            border-radius: 5px;
         }
-
         .category-buttons button:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
+            background-color: #b3860b;
         }
-
-        .categories {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-            box-sizing: border-box;
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
         }
-
-        .category {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            flex: 1 1 calc(33.333% - 20px);
-            max-width: calc(33.333% - 20px);
-        }
-
-        .category:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .category img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .category:hover img {
-            transform: scale(1.05);
-        }
-
-        .category p {
-            padding: 20px;
-            font-size: 18px;
-            color: var(--text-color);
-            margin: 0;
+        .product-card {
+            background-color: white;
+            padding: 10px;
             text-align: center;
-            font-weight: bold;
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .popup-content {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .popup-content h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            font-size: 24px;
-        }
-
-        .popup-content label {
-            display: block;
-            margin: 20px 0 10px;
-            color: var(--text-color);
-            font-weight: bold;
-        }
-
-        .popup-content input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 2px solid var(--background-color);
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        .popup-content input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-        }
-
-        .popup-content button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 30px;
-            transition: all 0.3s ease;
-            font-weight: bold;
         }
-
-        .popup-content button.save {
-            background-color: var(--primary-color);
+        .product-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .navbar {
+            background-color: white;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            display: block;
+            padding: 10px;
+            text-align: center;
+            color: #d4a017;
+            text-decoration: none;
+        }
+        .navbar a.active {
+            color: #000;
+        }
+        .sidebar {
+            background-color: #d4a017;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding-top: 60px;
+        }
+        .sidebar.active {
+            transform: translateX(0);
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li {
+            padding: 15px;
+            border-bottom: 1px solid #b3860b;
+        }
+        .sidebar ul li a {
             color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
         }
-
-        .popup-content button.save:hover {
-            background-color: var(--secondary-color);
+        .sidebar ul li a:hover {
+            color: #f0f0f0;
+            background-color: #b3860b;
         }
-
-        .popup-content button.close {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin-right: 10px;
+        .welcome-page {
+            display: none;
+            text-align: center;
+            padding: 50px;
         }
-
-        .popup-content button.close:hover {
-            background-color: #e0e0e0;
+        .welcome-page.active {
+            display: block;
         }
-
-        @media (max-width: 768px) {
-            .category {
-                flex: 1 1 calc(50% - 20px);
-                max-width: calc(50% - 20px);
-            }
+        .popup {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
         }
-
-        @media (max-width: 480px) {
-            .category {
-                flex: 1 1 100%;
-                max-width: 100%;
-            }
-
-            .header input[type="search"] {
-                width: 100%;
-            }
+        .popup.active {
+            display: block; /* Show when active */
+        }
+        .popup input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .popup button {
+            background-color: #d4a017;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .popup button:hover {
+            background-color: #b3860b;
         }
     </style>
-    <!-- Firebase Libraries -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js"></script>
 </head>
 <body>
+    <header>
+        <span class="icon" onclick="toggleSidebar()">&#9776;</span>
+        <h1>مفروشات الخيمة</h1>
+        <div class="search-container">
+            <input type="text" id="searchBox" placeholder="ابحث هنا" onfocus="showSearchButton()" onblur="hideSearchButton()" oninput="searchCategories()">
+            <button id="searchButton" onclick="searchCategories()">بحث</button>
+            <span class="icon" onclick="focusSearchBox()">&#128270;</span>
+        </div>
+    </header>
 
-    <!-- Header -->
-    <div class="header">
-        <input type="search" placeholder="ابحث عن منتجات...">
-        <div class="header-buttons">
-            <button>🔔</button>
-            <button>☰</button>
+    <div class="main-content" id="mainContent">
+        <div class="category-buttons">
+            <button onclick="showWelcomePage('ملابس')">ملابس</button>
+            <button onclick="showWelcomePage('أثاث')">أثاث</button>
+            <button onclick="showWelcomePage('منتجات طبيعية')">منتجات طبيعية</button>
+            <button onclick="showWelcomePage('جديدة')">جديدة</button>
+            <button onclick="showPopup()">إضافة منتج جديد</button> <!-- Added button -->
+        </div>
+        <div class="product-grid" id="productGrid">
+            <div class="product-card" onclick="showWelcomePage('إلكترونيات')">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product">
+                <p>إلكترونيات</p>
+            </div>
+            <div class="product-card" onclick="showWelcomePage('ملابس')">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product">
+                <p>ملابس</p>
+            </div>
+            <div class="product-card" onclick="showWelcomePage('كتب')">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product">
+                <p>كتب</p>
+            </div>
+            <div class="product-card" onclick="showWelcomePage('منتجات طبيعية')">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product">
+                <p>منتجات طبيعية</p>
+            </div>
         </div>
     </div>
 
-    <!-- Advertisements -->
-    <div class="advertisements">
-        <div class="ad-item">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf6-b88b-4736-b5f6-c4f8e473fb7d" alt="Ad 1">
-            <div class="ad-overlay">AD</div>
-        </div>
-        <div class="ad-item">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1733753367429.jpg?alt=media&token=2fa0de4c-06c8-4ea5-92db-93af5d15f649" alt="Ad 2">
-            <div class="ad-overlay">AD</div>
-        </div>
-        <!-- Add more ads as needed -->
+    <div class="navbar">
+        <a href="#" class="active" onclick="showMainPage()">الرئيسية</a>
+        <a href="#" onclick="showWelcomePage('بحث')">بحث</a>
+        <a href="#" onclick="showWelcomePage('الحساب')">الحساب</a>
     </div>
 
-    <!-- Category Buttons -->
-    <div class="category-buttons">
-        <button onclick="showPopup()">أضف منتج جديد</button>
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="#" onclick="showMainPage()">الرئيسية</a></li>
+            <li><a href="#" onclick="showWelcomePage('بحث')">بحث</a></li>
+            <li><a href="#" onclick="showWelcomePage('الحساب')">الحساب</a></li>
+            <li><a href="#" onclick="showWelcomePage('منتجات')">منتجات</a></li>
+            <li><a href="#" onclick="showWelcomePage('جديدة')">جديدة</a></li>
+            <li><a href="#" onclick="showWelcomePage('ملابس')">ملابس</a></li>
+            <li><a href="#" onclick="showWelcomePage('أثاث')">أثاث</a></li>
+        </ul>
     </div>
 
-    <!-- Categories -->
-    <div class="categories">
-        <!-- Products will be added here -->
+    <div class="welcome-page" id="welcomePage">
+        <h2>مرحبًا بك في فئة <span id="categoryName"></span></h2>
+        <p>نحن سعداء برؤيتك هنا!</p>
+        <button onclick="showMainPage()">العودة إلى الصفحة الرئيسية</button>
     </div>
 
-    <!-- Popup Form -->
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <h3>إضافة منتج جديد</h3>
-            <label for="product-name">اسم المنتج</label>
-            <input type="text" id="product-name" placeholder="اسم المنتج">
-
-            <label for="product-description">وصف المنتج</label>
-            <input type="text" id="product-description" placeholder="وصف المنتج">
-
-            <label for="product-price">سعر المنتج</label>
-            <input type="number" id="product-price" placeholder="سعر المنتج">
-
-            <label for="product-image">رابط الصورة</label>
-            <input type="text" id="product-image" placeholder="رابط الصورة">
-
-            <button class="save" onclick="saveProduct()">حفظ المنتج</button>
-            <button class="close" onclick="closePopup()">إغلاق</button>
-        </div>
+    <div class="popup" id="popup">
+        <h2>إضافة منتج جديد</h2>
+        <input type="text" id="imageUrl" placeholder="رابط الصورة">
+        <input type="text" id="categoryNameInput" placeholder="اسم الفئة">
+        <button onclick="addProduct()">إضافة</button>
+        <button onclick="closePopup()">إغلاق</button>
     </div>
 
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
-            authDomain: "messageemeapp.firebaseapp.com",
-            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
-            projectId: "messageemeapp",
-            storageBucket: "messageemeapp.appspot.com",
-            messagingSenderId: "255034474844",
-            appId: "1:255034474844:web:5e3b7a6bc4b2fb94cc4199"
-        };
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        function showWelcomePage(category) {
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('welcomePage').classList.add('active');
+            document.getElementById('categoryName').innerText = category;
+        }
+
+        function showMainPage() {
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('welcomePage').classList.remove('active');
+        }
+
+        function focusSearchBox() {
+            const searchBox = document.getElementById('searchBox');
+            const searchButton = document.getElementById('searchButton');
+            searchBox.classList.add('active');
+            searchButton.classList.add('active');
+            searchBox.focus();
+        }
+
+        function showSearchButton() {
+            document.getElementById('searchButton').classList.add('active');
+        }
+
+        function hideSearchButton() {
+            const searchBox = document.getElementById('searchBox');
+            const searchButton = document.getElementById('searchButton');
+            if (!searchBox.value) {
+                searchBox.classList.remove('active');
+                searchButton.classList.remove('active');
+            }
+        }
+
+        function searchCategories() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const categoryButtons = document.querySelectorAll('.category-buttons button');
+            const productCards = document.querySelectorAll('.product-card');
+
+            productCards.forEach(card => {
+                const category = card.querySelector('p').innerText.toLowerCase();
+                if (category.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            categoryButtons.forEach(button => {
+                const category = button.innerText.toLowerCase();
+                if (category.includes(searchTerm)) {
+                    button.style.display = 'block';
+                } else {
+                    button.style.display = 'none';
+                }
+            });
+        }
 
         function showPopup() {
-            document.getElementById('popup').style.display = 'flex';
+            document.getElementById('popup').classList.add('active');
         }
 
         function closePopup() {
-            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popup').classList.remove('active');
         }
 
-        function saveProduct() {
-            // Get the product details from the input fields
-            var name = document.getElementById('product-name').value.trim();
-            var description = document.getElementById('product-description').value.trim();
-            var price = document.getElementById('product-price').value.trim();
-            var imageUrl = document.getElementById('product-image').value.trim();
+        function addProduct() {
+            const imageUrl = document.getElementById('imageUrl').value;
+            const categoryName = document.getElementById('categoryNameInput').value;
 
-            // Validate input fields
-            if (!name || !description || !price || !imageUrl) {
-                alert('يرجى ملء جميع الحقول');
-                return;
+            if (imageUrl && categoryName) {
+                const productGrid = document.getElementById('productGrid');
+                const newProductCard = document.createElement('div');
+                newProductCard.className = 'product-card';
+                newProductCard.innerHTML = `
+                    <img src="${imageUrl}" alt="Product">
+                    <p>${categoryName}</p>
+                `;
+                newProductCard.onclick = function() {
+                    showWelcomePage(categoryName);
+                };
+                productGrid.appendChild(newProductCard);
+
+                closePopup();
+            } else {
+                alert('يرجى ملء جميع الحقول.');
             }
-
-            // Create a new product object
-            var newProduct = {
-                name: name,
-                description: description,
-                price: price,
-                imageUrl: imageUrl
-            };
-
-            // Save the new product to Firebase
-            var newProductRef = database.ref('products11').push();
-            newProductRef.set(newProduct)
-                .then(function() {
-                    console.log('Product saved successfully!');
-                    addProductToUI(newProduct);
-                    closePopup();
-                })
-                .catch(function(error) {
-                    console.error('Error saving product:', error);
-                });
         }
-
-        function addProductToUI(product) {
-            // Create a new category element
-            var category = document.createElement('div');
-            category.classList.add('category');
-            category.innerHTML = `
-                <img src="${product.imageUrl}" alt="${product.name}">
-                <p>${product.name}</p>
-                <p>${product.description}</p>
-                <p>${product.price} د.ع</p>
-            `;
-
-            // Add the new category to the categories container
-            document.querySelector('.categories11').appendChild(category);
-        }
-
-        // Load products from Firebase on page load
-        window.onload = function() {
-            var productsRef = database.ref('products11');
-            productsRef.on('value', function(snapshot) {
-                document.querySelector('.categories11').innerHTML = ''; // Clear existing products
-                snapshot.forEach(function(childSnapshot) {
-                    var product = childSnapshot.val();
-                    addProductToUI(product);
-                });
-            }, function(error) {
-                console.error('Error loading products:', error);
-            });
-        };
     </script>
 </body>
 </html>
