@@ -6,7 +6,7 @@
     <title>مفروشات الخيمة</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Tajawal', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
@@ -34,10 +34,10 @@
         header input[type="text"] {
             padding: 5px;
             font-size: 16px;
-            display: none; /* Initially hidden */
+            display: none;
         }
         header input[type="text"].active {
-            display: block; /* Show when active */
+            display: block;
         }
         header button {
             padding: 5px 10px;
@@ -46,10 +46,10 @@
             color: white;
             border: none;
             cursor: pointer;
-            display: none; /* Initially hidden */
+            display: none;
         }
         header button.active {
-            display: block; /* Show when active */
+            display: block;
         }
         .main-content {
             padding: 20px;
@@ -152,7 +152,7 @@
             display: block;
         }
         .popup {
-            display: none; /* Initially hidden */
+            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -163,7 +163,7 @@
             z-index: 1000;
         }
         .popup.active {
-            display: block; /* Show when active */
+            display: block;
         }
         .popup input[type="text"] {
             width: 100%;
@@ -184,6 +184,9 @@
             background-color: #b3860b;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 </head>
 <body>
     <header>
@@ -202,26 +205,9 @@
             <button onclick="showWelcomePage('أثاث')">أثاث</button>
             <button onclick="showWelcomePage('منتجات طبيعية')">منتجات طبيعية</button>
             <button onclick="showWelcomePage('جديدة')">جديدة</button>
-            <button onclick="showPopup()">إضافة منتج جديد</button> <!-- Added button -->
+            <button onclick="showPopup()">إضافة منتج جديد</button>
         </div>
-        <div class="product-grid" id="productGrid">
-            <div class="product-card" onclick="showWelcomePage('إلكترونيات')">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product">
-                <p>إلكترونيات</p>
-            </div>
-            <div class="product-card" onclick="showWelcomePage('ملابس')">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product">
-                <p>ملابس</p>
-            </div>
-            <div class="product-card" onclick="showWelcomePage('كتب')">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product">
-                <p>كتب</p>
-            </div>
-            <div class="product-card" onclick="showWelcomePage('منتجات طبيعية')">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product">
-                <p>منتجات طبيعية</p>
-            </div>
-        </div>
+        <div class="product-grid" id="productGrid"></div>
     </div>
 
     <div class="navbar">
@@ -235,118 +221,151 @@
             <li><a href="#" onclick="showMainPage()">الرئيسية</a></li>
             <li><a href="#" onclick="showWelcomePage('بحث')">بحث</a></li>
             <li><a href="#" onclick="showWelcomePage('الحساب')">الحساب</a></li>
-            <li><a href="#" onclick="showWelcomePage('منتجات')">منتجات</a></li>
-            <li><a href="#" onclick="showWelcomePage('جديدة')">جديدة</a></li>
+            <li><a href="#" onclick="showWelcomePage('إلكترونيات')">إلكترونيات</a></li>
             <li><a href="#" onclick="showWelcomePage('ملابس')">ملابس</a></li>
-            <li><a href="#" onclick="showWelcomePage('أثاث')">أثاث</a></li>
+            <li><a href="#" onclick="showWelcomePage('كتب')">كتب</a></li>
+            <li><a href="#" onclick="showWelcomePage('منتجات طبيعية')">منتجات طبيعية</a></li>
         </ul>
     </div>
 
     <div class="welcome-page" id="welcomePage">
-        <h2>مرحبًا بك في فئة <span id="categoryName"></span></h2>
-        <p>نحن سعداء برؤيتك هنا!</p>
-        <button onclick="showMainPage()">العودة إلى الصفحة الرئيسية</button>
+        <h2 id="categoryTitle">مرحبًا بك في فئة <span id="categoryName"></span></h2>
+        <button onclick="showPopup()">إضافة منتج جديد</button>
     </div>
 
     <div class="popup" id="popup">
         <h2>إضافة منتج جديد</h2>
-        <input type="text" id="imageUrl" placeholder="رابط الصورة">
-        <input type="text" id="categoryNameInput" placeholder="اسم الفئة">
+        <input type="text" id="productName" placeholder="اسم المنتج">
+        <input type="text" id="productCategory" placeholder="فئة المنتج">
+        <input type="text" id="productImage" placeholder="رابط صورة المنتج">
         <button onclick="addProduct()">إضافة</button>
-        <button onclick="closePopup()">إغلاق</button>
+        <button onclick="closePopup()">إلغاء</button>
     </div>
 
     <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Function to toggle the sidebar
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        function showWelcomePage(category) {
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('welcomePage').classList.add('active');
-            document.getElementById('categoryName').innerText = category;
+        // Function to show the search button when input is focused
+        function showSearchButton() {
+            document.getElementById('searchButton').classList.add('active');
         }
 
+        // Function to hide the search button when input loses focus
+        function hideSearchButton() {
+            document.getElementById('searchButton').classList.remove('active');
+        }
+
+        // Function to focus the search box
+        function focusSearchBox() {
+            document.getElementById('searchBox').classList.toggle('active');
+            document.getElementById('searchBox').focus();
+        }
+
+        // Function to show the main page content
         function showMainPage() {
             document.getElementById('mainContent').style.display = 'block';
             document.getElementById('welcomePage').classList.remove('active');
         }
 
-        function focusSearchBox() {
-            const searchBox = document.getElementById('searchBox');
-            const searchButton = document.getElementById('searchButton');
-            searchBox.classList.add('active');
-            searchButton.classList.add('active');
-            searchBox.focus();
+        // Function to show the welcome page for a category
+        function showWelcomePage(category) {
+            document.getElementById('categoryName').innerText = category;
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('welcomePage').classList.add('active');
         }
 
-        function showSearchButton() {
-            document.getElementById('searchButton').classList.add('active');
+        // Function to show the popup for adding a new product
+        function showPopup() {
+            document.getElementById('popup').classList.add('active');
         }
 
-        function hideSearchButton() {
-            const searchBox = document.getElementById('searchBox');
-            const searchButton = document.getElementById('searchButton');
-            if (!searchBox.value) {
-                searchBox.classList.remove('active');
-                searchButton.classList.remove('active');
-            }
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById('popup').classList.remove('active');
         }
 
-        function searchCategories() {
-            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
-            const categoryButtons = document.querySelectorAll('.category-buttons button');
-            const productCards = document.querySelectorAll('.product-card');
+        // Function to add a new product to Firestore
+        function addProduct() {
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
+            const imageUrl = document.getElementById('productImage').value;
 
-            productCards.forEach(card => {
-                const category = card.querySelector('p').innerText.toLowerCase();
-                if (category.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+            db.collection('products').add({
+                name: name,
+                category: category,
+                imageUrl: imageUrl
+            })
+            .then(() => {
+                alert('Product added successfully!');
+                closePopup();
+                loadProducts();
+            })
+            .catch(error => {
+                console.error('Error adding product: ', error);
             });
+        }
 
-            categoryButtons.forEach(button => {
-                const category = button.innerText.toLowerCase();
-                if (category.includes(searchTerm)) {
-                    button.style.display = 'block';
+        // Function to load products from Firestore
+        function loadProducts() {
+            db.collection('products').get().then((querySnapshot) => {
+                const productGrid = document.getElementById('productGrid');
+                productGrid.innerHTML = '';
+
+                querySnapshot.forEach((doc) => {
+                    const product = doc.data();
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+
+                    const img = document.createElement('img');
+                    img.src = product.imageUrl;
+                    img.alt = product.name;
+
+                    const name = document.createElement('h3');
+                    name.textContent = product.name;
+
+                    productCard.appendChild(img);
+                    productCard.appendChild(name);
+
+                    productGrid.appendChild(productCard);
+                });
+            });
+        }
+
+        // Function to search for categories
+        function searchCategories() {
+            const searchQuery = document.getElementById('searchBox').value.toLowerCase();
+            const categories = document.querySelectorAll('.category-buttons button');
+
+            categories.forEach((button) => {
+                const category = button.textContent.toLowerCase();
+                if (category.includes(searchQuery)) {
+                    button.style.display = 'inline-block';
                 } else {
                     button.style.display = 'none';
                 }
             });
         }
 
-        function showPopup() {
-            document.getElementById('popup').classList.add('active');
-        }
-
-        function closePopup() {
-            document.getElementById('popup').classList.remove('active');
-        }
-
-        function addProduct() {
-            const imageUrl = document.getElementById('imageUrl').value;
-            const categoryName = document.getElementById('categoryNameInput').value;
-
-            if (imageUrl && categoryName) {
-                const productGrid = document.getElementById('productGrid');
-                const newProductCard = document.createElement('div');
-                newProductCard.className = 'product-card';
-                newProductCard.innerHTML = `
-                    <img src="${imageUrl}" alt="Product">
-                    <p>${categoryName}</p>
-                `;
-                newProductCard.onclick = function() {
-                    showWelcomePage(categoryName);
-                };
-                productGrid.appendChild(newProductCard);
-
-                closePopup();
-            } else {
-                alert('يرجى ملء جميع الحقول.');
-            }
-        }
+        // Load products when the page is loaded
+        window.onload = loadProducts;
     </script>
 </body>
 </html>
