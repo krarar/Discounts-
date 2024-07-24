@@ -60,18 +60,18 @@
             <p id="product-description">وصف المنتج</p>
         </div>
         <div class="social-icons">
-            <a href="#" id="facebook-link"><i class="fab fa-facebook"></i></a>
-            <a href="#" id="twitter-link"><i class="fab fa-twitter"></i></a>
-            <a href="#" id="instagram-link"><i class="fab fa-instagram"></i></a>
-            <a href="#" id="whatsapp-link"><i class="fab fa-whatsapp"></i></a>
-            <a href="#" id="telegram-link"><i class="fab fa-telegram"></i></a>
+            <a href="#" id="facebook-link" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="#" id="twitter-link" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="#" id="instagram-link" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#" id="whatsapp-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" id="telegram-link" target="_blank"><i class="fab fa-telegram"></i></a>
         </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-     // تهيئة Firebase
+        // تهيئة Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
             authDomain: "messageemeapp.firebaseapp.com",
@@ -99,9 +99,9 @@
                 document.getElementById('product-image').src = product.image;
 
                 // تحديث روابط وسائل التواصل الاجتماعي
-                document.getElementById('facebook-link').href = product.facebookLink || '#';
+                document.getElementById('https://www.facebook.com').href = product.facebookLink || '#';
                 document.getElementById('twitter-link').href = product.twitterLink || '#';
-                document.getElementById('instagram-link').href = product.instagramLink || '#';
+                document.getElementById('ihttps://www.facebook.com).href = product.instagramLink || '#';
                 document.getElementById('whatsapp-link').href = product.whatsappLink || '#';
                 document.getElementById('telegram-link').href = product.telegramLink || '#';
             }
