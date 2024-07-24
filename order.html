@@ -51,10 +51,8 @@
             <input type="text" id="address" placeholder="العنوان" required>
             <input type="text" id="landmark" placeholder="أقرب نقطة دالة" required>
             <input type="text" id="phone" placeholder="رقم الهاتف" required>
-            <input type="text" id="alt-phone" placeholder="رقم الهاتف البديل" required>
-            <input type="text" id="size" placeholder="القياس" required>
-            <input type="text" id="color" placeholder="اللون" required>
-            <button id="submit-order">إرسال الطلب</button>
+            <input type="text" id="notes" placeholder="ملاحظات" required>
+            <button onclick="submitOrder()">إرسال الطلب</button>
         </div>
     </div>
 
@@ -71,40 +69,37 @@
             messagingSenderId: "278680662267",
             appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
         };
+
         firebase.initializeApp(firebaseConfig);
 
-        // إرسال الطلب إلى قاعدة البيانات
-        document.getElementById('submit-order').addEventListener('click', function() {
+        function submitOrder() {
+            // استرجاع بيانات المنتج المحفوظة
+            const product = JSON.parse(localStorage.getItem('selectedProduct'));
             const name = document.getElementById('name').value;
             const address = document.getElementById('address').value;
             const landmark = document.getElementById('landmark').value;
             const phone = document.getElementById('phone').value;
-            const altPhone = document.getElementById('alt-phone').value;
-            const size = document.getElementById('size').value;
-            const color = document.getElementById('color').value;
-            
-            if (name && address && phone && size && color) {
-                const orderData = {
-                    name: name,
-                    address: address,
-                    landmark: landmark,
-                    phone: phone,
-                    altPhone: altPhone,
-                    size: size,
-                    color: color,
-                    productId: new URLSearchParams(window.location.search).get('id')
-                };
+            const notes = document.getElementById('notes').value;
 
-                firebase.database().ref('orders').push(orderData).then(() => {
-                    alert('تم إرسال الطلب بنجاح');
-                }).catch((error) => {
-                    alert('حدث خطأ أثناء إرسال الطلب: ' + error.message);
-                });
-            } else {
-                alert('يرجى ملء جميع الحقول المطلوبة');
-            }
-        });
+            // تخزين الطلب في قاعدة البيانات
+            firebase.database().ref('orders').push({
+                name: name,
+                address: address,
+                landmark: landmark,
+                phone: phone,
+                notes: notes,
+                productName: product.name,
+                productPrice: product.price,
+                productImage: product.image,
+                productRating: product.rating
+            }).then(() => {
+                alert('تم إرسال الطلب بنجاح!');
+                window.location.href = 'index.html'; // العودة إلى الصفحة الرئيسية بعد إرسال الطلب
+            }).catch(error => {
+                console.error('Error sending order:', error);
+                alert('حدث خطأ أثناء إرسال الطلب. حاول مرة أخرى.');
+            });
+        }
     </script>
 </body>
 </html>
-
