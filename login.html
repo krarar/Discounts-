@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تسجيل الدخول</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #050505;
+            color: #fff;
+        }
+        .login-container {
+            text-align: center;
+            background-color: #1D001E;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+        .login-button {
+            background-color: #BE00BE;
+            border: none;
+            padding: 1rem;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+    </style>
+    <!-- إضافة Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script>
+        // تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // تسجيل الدخول باستخدام Google
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider).then((result) => {
+                console.log(result.user);
+                // يمكن توجيه المستخدم إلى صفحة أخرى بعد تسجيل الدخول
+                alert('تم تسجيل الدخول بنجاح');
+            }).catch((error) => {
+                console.error('خطأ في تسجيل الدخول:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>تسجيل الدخول</h2>
+        <button class="login-button" onclick="signInWithGoogle()">تسجيل الدخول باستخدام Google</button>
+    </div>
+</body>
+</html>
