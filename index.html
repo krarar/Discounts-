@@ -64,7 +64,7 @@
         .banner p {
             margin-bottom: 15px;
         }
-        .banner-button {
+        .banner button {
             background-color: #BE00BE;
             color: white;
             border: none;
@@ -96,6 +96,7 @@
             border-radius: 10px;
             padding: 10px;
             position: relative;
+            cursor: pointer;
         }
         .product-card img {
             width: 100%;
@@ -177,6 +178,21 @@
         .modal-content input[type="file"] {
             padding: 0;
         }
+        .action-buttons {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .action-buttons button {
+            background-color: #BE00BE;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
     <!-- إضافة Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -216,7 +232,7 @@
                         <div class="banner-content">
                             <h2>${ad.title}</h2>
                             <p>${ad.description}</p>
-                            <button onclick="Product">Product</button>
+                            <button onclick="productDetails('${adId}')">View Details</button>
                         </div>
                         <img src="${ad.image}" alt="${ad.title}" class="banner-image">
                     `;
@@ -242,6 +258,9 @@
                             <button onclick="deleteProduct('${productId}')">Delete</button>
                         </div>
                     `;
+                    productElement.addEventListener('click', function() {
+                        window.location.href = `details.html?id=${productId}`;
+                    });
                     productsContainer.appendChild(productElement);
                 });
             });
@@ -260,25 +279,24 @@
                 console.error('Upload failed:', error);
             }, function() {
                 uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    const newAd = {
+                    const newAdRef = database.ref('ads').push();
+                    newAdRef.set({
                         title: adTitle,
                         description: adDescription,
                         image: downloadURL
-                    };
-                    const adsRef = database.ref('ads');
-                    adsRef.push(newAd).then(function() {
-                        document.querySelector('.modal').style.display = 'none';
-                        window.location.reload();
                     });
+                    alert('Ad added successfully!');
+                    document.getElementById('addAdModal').style.display = 'none';
                 });
             });
         }
-        
+
         // إضافة منتج
         function addProduct() {
             const productName = document.getElementById('product-name').value;
             const productPrice = document.getElementById('product-price').value;
             const productRating = document.getElementById('product-rating').value;
+            const productDescription = document.getElementById('product-description').value;
             const productImage = document.getElementById('product-image').files[0];
 
             const storageRef = storage.ref('products/' + productImage.name);
@@ -288,95 +306,96 @@
                 console.error('Upload failed:', error);
             }, function() {
                 uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    const newProduct = {
+                    const newProductRef = database.ref('products').push();
+                    newProductRef.set({
                         name: productName,
                         price: productPrice,
                         rating: productRating,
+                        description: productDescription,
                         image: downloadURL
-                    };
-                    const productsRef = database.ref('products');
-                    productsRef.push(newProduct).then(function() {
-                        document.querySelector('.modal').style.display = 'none';
-                        window.location.reload();
                     });
+                    alert('Product added successfully!');
+                    document.getElementById('addProductModal').style.display = 'none';
                 });
             });
         }
 
         // حذف منتج
         function deleteProduct(productId) {
-            if (confirm('Are you sure you want to delete this product?')) {
-                const productRef = database.ref('products/' + productId);
-                productRef.remove().then(function() {
-                    window.location.reload();
-                });
+            if(confirm('Are you sure you want to delete this product?')) {
+                database.ref('products/' + productId).remove()
+                    .then(function() {
+                        alert('Product deleted successfully!');
+                        location.reload();
+                    }).catch(function(error) {
+                        console.error('Error deleting product:', error);
+                    });
             }
-        }
-
-        // فتح نافذة
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-
-        // إغلاق نافذة
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
         }
     </script>
 </head>
 <body>
     <div class="container">
         <div class="status-bar">
-            <span>9:41</span>
-            <span>
-                <i class="material-icons" style="font-size: 16px;">signal_cellular_alt</i>
-                <i class="material-icons" style="font-size: 16px;">wifi</i>
-                <i class="material-icons" style="font-size: 16px;">battery_full</i>
-            </span>
+            <span class="time">10:35 AM</span>
+            <div class="status-icons">
+                <span class="material-icons">signal_cellular_alt</span>
+                <span class="material-icons">wifi</span>
+                <span class="material-icons">battery_full</span>
+            </div>
         </div>
+
         <div class="header">
-            <i class="material-icons">search</i>
-            <i class="material-icons">favorite_border</i>
-            <i class="material-icons">shopping_cart</i>
+            <span class="material-icons">search</span>
+            <span class="material-icons">notifications</span>
         </div>
+
         <div class="ads">
-            <!-- سيتم إضافة الإعلانات هنا بواسطة JavaScript -->
+            <!-- الإعلانات تظهر هنا -->
         </div>
-        <!-- أزلت الأزرار من هنا -->
-        <div class="section-title">New Products</div>
-        <div class="products">
-            <!-- سيتم إضافة المنتجات هنا بواسطة JavaScript -->
-        </div>
-    </div>
-    <div class="footer">
-        <i class="material-icons">home</i>
-        <i class="material-icons">favorite_border</i>
-        <i class="material-icons">notifications</i>
-        <i class="material-icons">shopping_cart</i>
-        <i class="material-icons">person</i>
-    </div>
-    <!-- نموذج إضافة منتج -->
-    <div id="product-modal" class="modal">
-        <div class="modal-content">
-            <h2>Add New Product</h2>
-            <input type="text" id="product-name" placeholder="Product Name">
-            <input type="text" id="product-price" placeholder="Product Price">
-            <input type="text" id="product-rating" placeholder="Product Rating">
-            <input type="file" id="product-image">
-            <button onclick="addProduct()">Add Product</button>
-            <button onclick="closeModal('product-modal')">Close</button>
+
+        <div class="products-section">
+            <h2 class="section-title">Products</h2>
+            <div class="products">
+                <!-- المنتجات تظهر هنا -->
+            </div>
         </div>
     </div>
 
-    <!-- نموذج إضافة إعلان -->
-    <div id="ad-modal" class="modal">
+    <div class="footer">
+        <span class="material-icons">home</span>
+        <span class="material-icons" onclick="document.getElementById('addAdModal').style.display='flex'">add</span>
+        <span class="material-icons" onclick="document.getElementById('addProductModal').style.display='flex'">add_circle</span>
+        <span class="material-icons">account_circle</span>
+    </div>
+
+    <!-- إضافة إعلان -->
+    <div id="addAdModal" class="modal">
         <div class="modal-content">
-            <h2>Add New Ad</h2>
-            <input type="text" id="ad-title" placeholder="Ad Title">
-            <input type="text" id="ad-description" placeholder="Ad Description">
-            <input type="file" id="ad-image">
-            <button onclick="addAd()">Add Ad</button>
-            <button onclick="closeModal('ad-modal')">Close</button>
+            <h2>Add Ad</h2>
+            <input type="text" id="ad-title" placeholder="Title" required>
+            <textarea id="ad-description" placeholder="Description" required></textarea>
+            <input type="file" id="ad-image" accept="image/*" required>
+            <div class="action-buttons">
+                <button onclick="addAd()">Add Ad</button>
+                <button onclick="document.getElementById('addAdModal').style.display='none'">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- إضافة منتج -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Product</h2>
+            <input type="text" id="product-name" placeholder="Product Name" required>
+            <input type="text" id="product-price" placeholder="Price" required>
+            <input type="number" id="product-rating" placeholder="Rating (1-5)" min="1" max="5" required>
+            <textarea id="product-description" placeholder="Description" required></textarea>
+            <input type="file" id="product-image" accept="image/*" required>
+            <div class="action-buttons">
+                <button onclick="addProduct()">Add Product</button>
+                <button onclick="document.getElementById('addProductModal').style.display='none'">Cancel</button>
+            </div>
         </div>
     </div>
 </body>
