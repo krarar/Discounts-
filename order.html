@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب المنتج</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #4A004A;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+            max-width: 375px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .order-form {
+            background-color: #1D001E;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .order-form input, .order-form select {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .order-form button {
+            background-color: #FFD700;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            color: #4A004A;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>طلب المنتج</h1>
+        <div class="order-form">
+            <input type="text" id="name" placeholder="الاسم" required>
+            <input type="text" id="address" placeholder="العنوان" required>
+            <input type="text" id="landmark" placeholder="أقرب نقطة دالة" required>
+            <input type="text" id="phone" placeholder="رقم الهاتف" required>
+            <input type="text" id="alt-phone" placeholder="رقم الهاتف البديل" required>
+            <input type="text" id="size" placeholder="القياس" required>
+            <input type="text" id="color" placeholder="اللون" required>
+            <button id="submit-order">إرسال الطلب</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        // تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // إرسال الطلب إلى قاعدة البيانات
+        document.getElementById('submit-order').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const landmark = document.getElementById('landmark').value;
+            const phone = document.getElementById('phone').value;
+            const altPhone = document.getElementById('alt-phone').value;
+            const size = document.getElementById('size').value;
+            const color = document.getElementById('color').value;
+            
+            if (name && address && phone && size && color) {
+                const orderData = {
+                    name: name,
+                    address: address,
+                    landmark: landmark,
+                    phone: phone,
+                    altPhone: altPhone,
+                    size: size,
+                    color: color,
+                    productId: new URLSearchParams(window.location.search).get('id')
+                };
+
+                firebase.database().ref('orders').push(orderData).then(() => {
+                    alert('تم إرسال الطلب بنجاح');
+                }).catch((error) => {
+                    alert('حدث خطأ أثناء إرسال الطلب: ' + error.message);
+                });
+            } else {
+                alert('يرجى ملء جميع الحقول المطلوبة');
+            }
+        });
+    </script>
+</body>
+</html>
+
