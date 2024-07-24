@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تفاصيل المنتج</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,18 +17,36 @@
             padding: 20px;
             max-width: 375px;
             margin: 0 auto;
+            text-align: center;
         }
         .product-details img {
             width: 100%;
             height: auto;
             border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .product-details h1 {
             margin: 20px 0 10px;
             font-size: 24px;
+            color: #FFD700;
         }
         .product-details p {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .product-details .rating {
+            color: #FFD700;
+        }
+        .social-icons {
+            margin-top: 20px;
+        }
+        .social-icons a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #fff;
+        }
+        .social-icons i {
+            font-size: 40px;
         }
     </style>
 </head>
@@ -35,10 +54,15 @@
     <div class="container">
         <div class="product-details">
             <img id="product-image" src="" alt="Product Image">
-            <h1 id="product-name">Product Name</h1>
-            <p id="product-price">Product Price</p>
-            <p id="product-rating">Product Rating</p>
-            <p id="product-description">Product Description</p>
+            <h1 id="product-name">اسم المنتج</h1>
+            <p id="product-price">سعر المنتج</p>
+            <p id="product-rating" class="rating">تقييم المنتج</p>
+            <p id="product-description">وصف المنتج</p>
+        </div>
+        <div class="social-icons">
+            <a href="#" id="facebook-link"><i class="fab fa-facebook"></i></a>
+            <a href="#" id="twitter-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" id="instagram-link"><i class="fab fa-instagram"></i></a>
         </div>
     </div>
 
@@ -67,10 +91,15 @@
             const product = snapshot.val();
             if (product) {
                 document.getElementById('product-name').innerText = product.name;
-                document.getElementById('product-price').innerText = 'Price: ' + product.price;
-                document.getElementById('product-rating').innerText = 'Rating: ' + '★'.repeat(product.rating);
+                document.getElementById('product-price').innerText = 'السعر: ' + product.price + ' د.ع';
+                document.getElementById('product-rating').innerText = 'التقييم: ' + '★'.repeat(product.rating);
                 document.getElementById('product-description').innerText = product.description;
                 document.getElementById('product-image').src = product.image;
+
+                // تحديث روابط وسائل التواصل الاجتماعي
+                document.getElementById('facebook-link').href = product.facebookLink || '#';
+                document.getElementById('twitter-link').href = product.twitterLink || '#';
+                document.getElementById('instagram-link').href = product.instagramLink || '#';
             }
         });
     </script>
