@@ -158,29 +158,10 @@
                 document.getElementById('instagram-link').href = product.instagramLink || 'https://www.instagram.com';
                 document.getElementById('whatsapp-link').href = product.whatsappLink || 'https://www.linkedin.com';
                 document.getElementById('telegram-link').href = product.telegramLink || 'https://www.linkedin.com';
-            }
-        });
 
-        // جلب المنتجات الأخرى من قاعدة البيانات
-        firebase.database().ref('products').once('value').then(function(snapshot) {
-            const productsContainer = document.querySelector('.products');
-            snapshot.forEach(function(childSnapshot) {
-                const product = childSnapshot.val();
-                const productId = childSnapshot.key;
-                const productElement = document.createElement('div');
-                productElement.classList.add('product-card');
-                productElement.setAttribute('data-id', productId);
-                productElement.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p class="price">${product.price}</p>
-                    <div class="stars">${'★'.repeat(product.rating)}</div>
-                `;
-                productElement.addEventListener('click', function() {
-                    window.location.href = `details.html?id=${productId}`;
-                });
-                productsContainer.appendChild(productElement);
-            });
+                // تخزين تفاصيل المنتج للاستخدام في صفحة الطلب
+                localStorage.setItem('selectedProduct', JSON.stringify(product));
+            }
         });
 
         // الانتقال إلى صفحة طلب الشراء
