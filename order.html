@@ -40,6 +40,7 @@
             color: #4A004A;
             font-size: 18px;
             cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -48,11 +49,33 @@
         <h1>طلب المنتج</h1>
         <div class="order-form">
             <input type="text" id="name" placeholder="الاسم" required>
-            <input type="text" id="address" placeholder="العنوان" required>
+            <select id="country" required>
+                <option value="" disabled selected>اختر الدولة</option>
+                <option value="العراق">العراق</option>
+                <option value="السعودية">السعودية</option>
+                <option value="الأردن">الأردن</option>
+                <option value="مصر">مصر</option>
+                <option value="الامارات">الإمارات</option>
+                <!-- يمكنك إضافة المزيد من الدول هنا -->
+            </select>
+            <select id="province" required>
+                <option value="" disabled selected>اختر المحافظة</option>
+                <option value="بغداد">بغداد</option>
+                <option value="البصرة">البصرة</option>
+                <option value="الموصل">الموصل</option>
+                <option value="أربيل">أربيل</option>
+                <option value="النجف">النجف</option>
+                <option value="كربلاء">كربلاء</option>
+                <option value="السليمانية">السليمانية</option>
+                <option value="ذي قار">ذي قار</option>
+                <option value="الأنبار">الأنبار</option>
+                <!-- يمكنك إضافة المزيد من المحافظات هنا -->
+            </select>
             <input type="text" id="landmark" placeholder="أقرب نقطة دالة" required>
             <input type="text" id="phone" placeholder="رقم الهاتف" required>
             <input type="text" id="notes" placeholder="ملاحظات" required>
             <button onclick="submitOrder()">إرسال الطلب</button>
+            <button onclick="redirectToOrdersPage()">عرض الطلبات</button> <!-- زر عرض الطلبات -->
         </div>
     </div>
 
@@ -76,7 +99,8 @@
             // استرجاع بيانات المنتج المحفوظة
             const product = JSON.parse(localStorage.getItem('selectedProduct'));
             const name = document.getElementById('name').value;
-            const address = document.getElementById('address').value;
+            const country = document.getElementById('country').value;
+            const province = document.getElementById('province').value;
             const landmark = document.getElementById('landmark').value;
             const phone = document.getElementById('phone').value;
             const notes = document.getElementById('notes').value;
@@ -84,7 +108,8 @@
             // تخزين الطلب في قاعدة البيانات
             firebase.database().ref('orders').push({
                 name: name,
-                address: address,
+                country: country,
+                province: province,
                 landmark: landmark,
                 phone: phone,
                 notes: notes,
@@ -99,6 +124,10 @@
                 console.error('Error sending order:', error);
                 alert('حدث خطأ أثناء إرسال الطلب. حاول مرة أخرى.');
             });
+        }
+
+        function redirectToOrdersPage() {
+            window.location.href = 'orders.html'; // الانتقال إلى صفحة عرض الطلبات
         }
     </script>
 </body>
