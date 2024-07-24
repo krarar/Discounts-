@@ -48,6 +48,39 @@
         .social-icons i {
             font-size: 40px;
         }
+        .products-section {
+            margin-top: 30px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .product-card {
+            background-color: #1D001E;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+        .product-card h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .product-card .price {
+            color: #BE00BE;
+            font-weight: bold;
+        }
+        .stars {
+            color: #FFD700;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -65,6 +98,12 @@
             <a href="#" id="instagram-link" target="_blank"><i class="fab fa-instagram"></i></a>
             <a href="#" id="whatsapp-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
             <a href="#" id="telegram-link" target="_blank"><i class="fab fa-telegram"></i></a>
+        </div>
+        <div class="products-section">
+            <h2 class="section-title">منتجات أخرى</h2>
+            <div class="products">
+                <!-- المنتجات تظهر هنا -->
+            </div>
         </div>
     </div>
 
@@ -105,6 +144,28 @@
                 document.getElementById('whatsapp-link').href = product.whatsappLink || 'https://www.linkedin.com';
                 document.getElementById('telegram-link').href = product.telegramLink || 'https://www.linkedin.com';
             }
+        });
+
+        // جلب المنتجات الأخرى من قاعدة البيانات
+        firebase.database().ref('products').once('value').then(function(snapshot) {
+            const productsContainer = document.querySelector('.products');
+            snapshot.forEach(function(childSnapshot) {
+                const product = childSnapshot.val();
+                const productId = childSnapshot.key;
+                const productElement = document.createElement('div');
+                productElement.classList.add('product-card');
+                productElement.setAttribute('data-id', productId);
+                productElement.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">${product.price}</p>
+                    <div class="stars">${'★'.repeat(product.rating)}</div>
+                `;
+                productElement.addEventListener('click', function() {
+                    window.location.href = `details.html?id=${productId}`;
+                });
+                productsContainer.appendChild(productElement);
+            });
         });
     </script>
 </body>
