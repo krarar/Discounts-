@@ -79,39 +79,6 @@
         .social-icons i {
             font-size: 40px;
         }
-        .related-products {
-            margin-top: 40px;
-        }
-        .related-products h2 {
-            margin-bottom: 20px;
-            color: #FFD700;
-        }
-        .related-products .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 15px;
-            justify-content: center;
-        }
-        .related-products .product-card {
-            background-color: #fff;
-            color: #4A004A;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            text-align: center;
-        }
-        .related-products .product-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .related-products .product-card h3 {
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        .related-products .product-card p {
-            font-size: 16px;
-        }
     </style>
 </head>
 <body>
@@ -127,14 +94,6 @@
             </div>
             <button class="buy-button" onclick="redirectToOrderPage()">اشترِ الآن</button>
         </div>
-
-        <div class="related-products">
-            <h2>منتجات ذات صلة</h2>
-            <div class="products-grid" id="related-products-grid">
-                <!-- بطاقات المنتجات ذات الصلة تظهر هنا -->
-            </div>
-        </div>
-
         <div class="social-icons">
             <a href="#" id="facebook-link" target="_blank"><i class="fab fa-facebook"></i></a>
             <a href="#" id="twitter-link" target="_blank"><i class="fab fa-twitter"></i></a>
@@ -147,7 +106,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-             // تهيئة Firebase
+        // تهيئة Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
             authDomain: "messageemeapp.firebaseapp.com",
@@ -187,35 +146,8 @@
                     });
                     additionalImagesContainer.appendChild(img);
                 });
-
-                // جلب وعرض المنتجات ذات الصلة
-                displayRelatedProducts();
             }
         });
-
-        // عرض المنتجات ذات الصلة
-        function displayRelatedProducts() {
-            firebase.database().ref('products').once('value').then(function(snapshot) {
-                const products = snapshot.val();
-                const relatedProductsContainer = document.getElementById('related-products-grid');
-                for (let key in products) {
-                    if (products[key].id !== productId) { // عدم عرض المنتج الحالي
-                        const card = document.createElement('div');
-                        card.className = 'product-card';
-                        card.innerHTML = `
-                            <img src="${products[key].mainImage}" alt="Product Image">
-                            <h3>${products[key].name}</h3>
-                            <p>السعر: ${products[key].price} د.ع</p>
-                            <p>التقييم: ${'★'.repeat(products[key].rating)}</p>
-                        `;
-                        card.addEventListener('click', function() {
-                            window.location.href = `product_details.html?id=${key}`;
-                        });
-                        relatedProductsContainer.appendChild(card);
-                    }
-                }
-            });
-        }
 
         // الانتقال إلى صفحة طلب الشراء
         function redirectToOrderPage() {
