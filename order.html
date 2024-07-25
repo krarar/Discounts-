@@ -42,6 +42,13 @@
             cursor: pointer;
             margin-top: 10px;
         }
+        .order-form img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -74,6 +81,7 @@
             <input type="text" id="landmark" placeholder="أقرب نقطة دالة" required>
             <input type="text" id="phone" placeholder="رقم الهاتف" required>
             <input type="text" id="notes" placeholder="ملاحظات" required>
+            <img id="product-image" src="" alt="Product Image">
             <button onclick="submitOrder()">إرسال الطلب</button>
             <button onclick="redirectToOrdersPage()">عرض الطلبات</button> <!-- زر عرض الطلبات -->
         </div>
@@ -98,6 +106,7 @@
         function submitOrder() {
             // استرجاع بيانات المنتج المحفوظة
             const product = JSON.parse(localStorage.getItem('selectedProduct'));
+            const selectedImage = new URLSearchParams(window.location.search).get('image');
             const name = document.getElementById('name').value;
             const country = document.getElementById('country').value;
             const province = document.getElementById('province').value;
@@ -115,7 +124,7 @@
                 notes: notes,
                 productName: product.name,
                 productPrice: product.price,
-                productImage: product.image,
+                productImage: selectedImage || product.image, // استخدام الصورة المحددة إذا كانت موجودة
                 productRating: product.rating
             }).then(() => {
                 alert('تم إرسال الطلب بنجاح!');
@@ -129,6 +138,13 @@
         function redirectToOrdersPage() {
             window.location.href = 'orders.html'; // الانتقال إلى صفحة عرض الطلبات
         }
+
+        // تحميل صورة المنتج المحدد
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedImage = new URLSearchParams(window.location.search).get('image');
+            const productImage = document.getElementById('product-image');
+            productImage.src = selectedImage || 'default-image-url'; // وضع URL افتراضي إذا لم يتم تحديد صورة
+        });
     </script>
 </body>
 </html>
