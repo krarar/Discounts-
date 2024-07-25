@@ -207,24 +207,29 @@
             const productsRef = database.ref('products');
 
             // تحميل الإعلانات
-            adsRef.once('value', function(snapshot) {
-                const adsContainer = document.querySelector('.ads');
-                snapshot.forEach(function(childSnapshot) {
-                    const ad = childSnapshot.val();
-                    const adId = childSnapshot.key;
-                    const adElement = document.createElement('div');
-                    adElement.classList.add('banner');
-                    adElement.setAttribute('data-id', adId);
-                    adElement.innerHTML = `
-                        <div class="banner-content">
-                            <h2>${ad.title}</h2>
-                            <p>${ad.description}</p>
-                        </div>
-                        <img src="${ad.image}" alt="${ad.title}" class="banner-image">
-                    `;
-                    adsContainer.appendChild(adElement);
-                });
-            });
+adsRef.once('value', function(snapshot) {
+    const adsContainer = document.querySelector('.ads');
+    snapshot.forEach(function(childSnapshot) {
+        const ad = childSnapshot.val();
+        const adId = childSnapshot.key;
+        const adElement = document.createElement('div');
+        adElement.classList.add('banner');
+        adElement.setAttribute('data-id', adId);
+        adElement.innerHTML = `
+            <div class="banner-content">
+                <h2>${ad.title}</h2>
+                <p>${ad.description}</p>
+            </div>
+            <img src="${ad.image}" alt="${ad.title}" class="banner-image">
+        `;
+        adElement.addEventListener('click', function() {
+            // هنا تحتاج إلى استخدام الرابط الصحيح لصفحة التفاصيل.
+            window.location.href = `details.html?id=${ad.productId}`;
+        });
+        adsContainer.appendChild(adElement);
+    });
+});
+
 
             // تحميل المنتجات
             productsRef.once('value', function(snapshot) {
