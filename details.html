@@ -19,11 +19,28 @@
             margin: 0 auto;
             text-align: center;
         }
-        .product-details img {
+        .product-details img.main-image {
             width: 100%;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .product-details .additional-images {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .product-details .additional-images img {
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .product-details .additional-images img.selected {
+            border-color: #00FF00; /* اللون الأخضر */
         }
         .product-details h1 {
             margin: 20px 0 10px;
@@ -36,6 +53,20 @@
         }
         .product-details .rating {
             color: #FFD700;
+        }
+        .buy-button {
+            margin-top: 20px;
+            background-color: #FFD700;
+            color: #4A004A;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .buy-button:hover {
+            background-color: #D4A700;
         }
         .social-icons {
             margin-top: 20px;
@@ -50,6 +81,11 @@
         }
         .products-section {
             margin-top: 30px;
+        }
+        .products-section h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #FFD700;
         }
         .products {
             display: grid;
@@ -86,11 +122,15 @@
 <body>
     <div class="container">
         <div class="product-details">
-            <img id="product-image" src="" alt="Product Image">
+            <img id="product-image" class="main-image" src="" alt="Product Image">
             <h1 id="product-name">اسم المنتج</h1>
             <p id="product-price">سعر المنتج</p>
             <p id="product-rating" class="rating">تقييم المنتج</p>
             <p id="product-description">وصف المنتج</p>
+            <div class="additional-images" id="additional-images">
+                <!-- الصور الإضافية تظهر هنا -->
+            </div>
+            <button class="buy-button" onclick="redirectToOrderPage()">اشترِ الآن</button>
         </div>
         <div class="social-icons">
             <a href="#" id="facebook-link" target="_blank"><i class="fab fa-facebook"></i></a>
@@ -101,8 +141,8 @@
         </div>
         <div class="products-section">
             <h2 class="section-title">منتجات أخرى</h2>
-            <div class="products" id="products">
-                <!-- المنتجات تظهر هنا -->
+            <div class="products">
+                <!-- المنتجات الأخرى تظهر هنا -->
             </div>
         </div>
     </div>
@@ -135,7 +175,21 @@
                 document.getElementById('product-price').innerText = 'السعر: ' + product.price + ' د.ع';
                 document.getElementById('product-rating').innerText = 'التقييم: ' + '★'.repeat(product.rating);
                 document.getElementById('product-description').innerText = product.description;
-                document.getElementById('product-image').src = product.image;
+                document.getElementById('product-image').src = product.mainImage;
+
+                // عرض الصور الإضافية
+                const additionalImagesContainer = document.getElementById('additional-images');
+                product.images.forEach(imageUrl => {
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = 'Additional Image';
+                    img.addEventListener('click', function() {
+                        document.querySelectorAll('.additional-images img').forEach(img => img.classList.remove('selected'));
+                        img.classList.add('selected');
+                        localStorage.setItem('selectedImage', imageUrl); // تخزين الصورة المحددة
+                    });
+                    additionalImagesContainer.appendChild(img);
+                });
 
                 // تحديث روابط وسائل التواصل الاجتماعي
                 document.getElementById('facebook-link').href = product.facebookLink || 'https://www.facebook.com';
@@ -148,7 +202,7 @@
 
         // جلب المنتجات الأخرى من قاعدة البيانات
         firebase.database().ref('products').once('value').then(function(snapshot) {
-            const productsContainer = document.getElementById('products');
+            const productsContainer = document.querySelector('.products');
             snapshot.forEach(function(childSnapshot) {
                 const product = childSnapshot.val();
                 const productId = childSnapshot.key;
@@ -156,7 +210,7 @@
                 productElement.classList.add('product-card');
                 productElement.setAttribute('data-id', productId);
                 productElement.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${product.mainImage}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p class="price">${product.price}</p>
                     <div class="stars">${'★'.repeat(product.rating)}</div>
@@ -167,6 +221,16 @@
                 productsContainer.appendChild(productElement);
             });
         });
+
+        // الانتقال إلى صفحة طلب الشراء
+        function redirectToOrderPage() {
+            const selectedImage = localStorage.getItem('selectedImage');
+            if (selectedImage) {
+                window.location.href = `order.html?id=${productId}&image=${encodeURIComponent(selectedImage)}`;
+            } else {
+                alert('يرجى تحديد صورة قبل الشراء.');
+            }
+        }
     </script>
 </body>
 </html>
