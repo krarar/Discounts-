@@ -265,7 +265,7 @@
                 document.getElementById('product-price').innerText = 'السعر: ' + product.price + ' د.ع';
                 document.getElementById('product-rating').innerText = 'التقييم: ' + '★'.repeat(product.rating);
                 document.getElementById('product-description').innerText = product.description;
-                document.getElementById('product-image').src = product.Image;
+                document.getElementById('product-image').src = product.mainImage;
 
                 // عرض الصور الإضافية
                 const additionalImagesContainer = document.getElementById('additional-images');
@@ -300,7 +300,7 @@
                 productElement.classList.add('product-card');
                 productElement.setAttribute('data-id', productId);
                 productElement.innerHTML = `
-                    <img src="${product.Image}" alt="${product.name}">
+                    <img src="${product.mainImage}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p class="price">${product.price}</p>
                     <div class="stars">${'★'.repeat(product.rating)}</div>
