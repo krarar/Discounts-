@@ -180,6 +180,7 @@
             cursor: pointer;
         }
     </style>
+
     <!-- إضافة Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -218,7 +219,6 @@
                         <div class="banner-content">
                             <h2>${ad.title}</h2>
                             <p>${ad.description}</p>
-                            
                         </div>
                         <img src="${ad.image}" alt="${ad.title}" class="banner-image">
                     `;
@@ -236,7 +236,7 @@
                     productElement.classList.add('product-card');
                     productElement.setAttribute('data-id', productId);
                     productElement.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
+                        <img src="${product.mainImage}" alt="${product.name}">
                         <h3>${product.name}</h3>
                         <p class="price">${product.price}</p>
                         <div class="stars">${'★'.repeat(product.rating)}</div>
@@ -281,65 +281,95 @@
         function addProduct() {
             const productName = document.getElementById('product-name').value;
             const productPrice = document.getElementById('product-price').value;
-            const productRating = document.getElementById('product-rating').value;
-            const productImage = document.getElementById('product-image').files[0];
+            const productDescription = document.getElementById('product-description').value;
+            const productRating = parseInt(document.getElementById('product-rating').value);
+            const productMainImage = document.getElementById('product-main-image').files[0];
+            const productImages = document.getElementById('product-images').files;
 
-            const storageRef = storage.ref('products/' + productImage.name);
-            const uploadTask = storageRef.put(productImage);
+            let mainImageUrl = '';
+            const productImagesUrls = [];
+            let uploadCount = 0;
 
-            uploadTask.on('state_changed', function(snapshot){}, function(error) {
+            // رفع الصورة الرئيسية
+            const mainImageRef = storage.ref('products/' + productMainImage.name);
+            const mainUploadTask = mainImageRef.put(productMainImage);
+            mainUploadTask.on('state_changed', function(snapshot) {}, function(error) {
                 console.error('Upload failed:', error);
             }, function() {
-                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    const newProductRef = database.ref('products').push();
-                    newProductRef.set({
-                        name: productName,
-                        price: productPrice,
-                        rating: productRating,
-                        image: downloadURL
+                mainUploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    mainImageUrl = downloadURL;
+                    
+                    // رفع الصور الإضافية
+                    Array.from(productImages).forEach(file => {
+                        const storageRef = storage.ref('products/' + file.name);
+                        const uploadTask = storageRef.put(file);
+
+                        uploadTask.on('state_changed', function(snapshot) {}, function(error) {
+                            console.error('Upload failed:', error);
+                        }, function() {
+                            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                                productImagesUrls.push(downloadURL);
+                                uploadCount++;
+                                if (uploadCount === productImages.length) {
+                                    const newProductRef = database.ref('products').push();
+                                    newProductRef.set({
+                                        name: productName,
+                                        price: productPrice,
+                                        description: productDescription,
+                                        rating: productRating,
+                                        mainImage: mainImageUrl,
+                                        images: productImagesUrls
+                                    });
+                                    alert('Product added successfully!');
+                                    location.reload();
+                                }
+                            });
+                        });
                     });
-                    alert('Product added successfully!');
-                    location.reload();
                 });
             });
         }
 
-        // حذف المنتج
+        // حذف منتج
         function deleteProduct(productId) {
             if (confirm('Are you sure you want to delete this product?')) {
-                database.ref('products/' + productId).remove().then(function() {
-                    alert('Product deleted successfully!');
-                    location.reload();
-                }).catch(function(error) {
-                    console.error('Delete failed:', error);
-                });
+                const productRef = database.ref('products/' + productId);
+                productRef.remove();
+                alert('Product deleted successfully!');
+                location.reload();
             }
         }
 
-        // عرض المودال
-        function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
+        // عرض النموذج لإضافة إعلان
+        function showAdModal() {
+            const adModal = document.getElementById('ad-modal');
+            adModal.style.display = 'flex';
         }
 
-        // إخفاء المودال
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+        // عرض النموذج لإضافة منتج
+        function showProductModal() {
+            const productModal = document.getElementById('product-modal');
+            productModal.style.display = 'flex';
+        }
+
+        // إغلاق النموذج
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
         }
     </script>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <i class="material-icons" onclick="showModal('addAdModal')">add_box</i>
-            <i class="material-icons" onclick="showModal('addProductModal')">add_shopping_cart</i>
+            <i class="material-icons" onclick="showAdModal()">add</i>
+            <i class="material-icons" onclick="showProductModal()">add</i>
         </div>
-        <div class="ads">
-            <!-- إعلانات -->
-        </div>
-        <h2 class="section-title">منتجاتنا</h2>
-        <div class="products">
-            <!-- المنتجات -->
-        </div>
+        <div class="ads"></div>
+        <h2 class="section-title">المنتجات</h2>
+        <div class="products"></div>
+    </div>
         <div class="footer">
             <i class="material-icons" onclick="goHome()">home</i>
             <i class="material-icons" onclick="showSearchModal()">search</i>
@@ -403,35 +433,39 @@
                 document.getElementById(modalId).style.display = 'none';
             }
         </script>
-        
 
-    <!-- مودال لإضافة إعلان -->
-    <div id="addAdModal" class="modal">
+    <!-- نموذج إضافة إعلان -->
+    <div id="ad-modal" class="modal">
         <div class="modal-content">
             <h2>إضافة إعلان</h2>
             <input type="text" id="ad-title" placeholder="عنوان الإعلان">
             <textarea id="ad-description" placeholder="وصف الإعلان"></textarea>
-            <input type="file" id="ad-image">
+            <input type="file" id="ad-image" accept="image/*">
             <div class="action-buttons">
                 <button onclick="addAd()">إضافة</button>
-                <button onclick="closeModal('addAdModal')">إلغاء</button>
+                <button onclick="closeModal()">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <!-- مودال لإضافة منتج -->
-    <div id="addProductModal" class="modal">
+    <!-- نموذج إضافة منتج -->
+    <div id="product-modal" class="modal">
         <div class="modal-content">
             <h2>إضافة منتج</h2>
             <input type="text" id="product-name" placeholder="اسم المنتج">
             <input type="text" id="product-price" placeholder="سعر المنتج">
-            <input type="number" id="product-rating" placeholder="تقييم المنتج" min="1" max="5">
-            <input type="file" id="product-image">
-            <div class="action-buttons">
-                <button onclick="addProduct()">إضافة</button>
-                <button onclick="closeModal('addProductModal')">إلغاء</button>
-            </div>
-        </div>
-    </div>
+            <textarea id="product-description" placeholder="وصف المنتج"></textarea>
+            <input type="number" id="product-rating" min="1" max="5" placeholder="التقييم (1-5)">
+            <input type
+="file" id="product-main-image" accept="image/*">
+<input type="file" id="product-images" accept="image/*" multiple>
+<div class="action-buttons">
+<button onclick="addProduct()">إضافة</button>
+<button onclick="closeModal()">إلغاء</button>
+</div>
+</div>
+</div>
+
 </body>
 </html>
+```
