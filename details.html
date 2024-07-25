@@ -117,10 +117,80 @@
             color: #FFD700;
             font-size: 12px;
         }
+        .header {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .header i {
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #4A004A;
+            padding: 10px 0;
+        }
+        .footer i {
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+        }
+        .modal-content h2 {
+            margin-bottom: 15px;
+        }
+        .modal-content input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .modal-content .action-buttons button {
+            background-color: #FFD700;
+            color: #4A004A;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .modal-content .action-buttons button:hover {
+            background-color: #D4A700;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="header">
+            <i class="material-icons" onclick="showAdModal()">add</i>
+            <i class="material-icons" onclick="showProductModal()">add</i>
+        </div>
         <div class="product-details">
             <img id="product-image" class="main-image" src="" alt="Product Image">
             <h1 id="product-name">اسم المنتج</h1>
@@ -143,6 +213,25 @@
             <h2 class="section-title">منتجات أخرى</h2>
             <div class="products">
                 <!-- المنتجات الأخرى تظهر هنا -->
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <i class="material-icons" onclick="goHome()">home</i>
+        <i class="material-icons" onclick="showSearchModal()">search</i>
+        <i class="material-icons">shopping_cart</i>
+        <i class="material-icons" onclick="goToLogin()">account_circle</i>
+    </div>
+
+    <!-- مودال للبحث -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <h2>البحث في المنتجات</h2>
+            <input type="text" id="search-query" placeholder="ادخل اسم المنتج">
+            <div class="action-buttons">
+                <button onclick="searchProduct()">بحث</button>
+                <button onclick="closeModal('searchModal')">إلغاء</button>
             </div>
         </div>
     </div>
@@ -231,6 +320,47 @@
                 alert('يرجى تحديد صورة قبل الشراء.');
             }
         }
+
+        // إعادة توجيه إلى الصفحة الرئيسية
+        function goHome() {
+            window.location.href = 'index.html'; // استبدل 'index.html' بعنوان الصفحة الرئيسية
+        }
+
+        // عرض مودال البحث
+        function showSearchModal() {
+            showModal('searchModal');
+        }
+
+        // وظيفة البحث عن منتج
+        function searchProduct() {
+            const query = document.getElementById('search-query').value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+            closeModal('searchModal');
+        }
+
+        // عرض المودال
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        // إخفاء المودال
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // إعادة توجيه إلى صفحة تسجيل الدخول
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
     </script>
 </body>
-</html>
+                    </html>
+                    
