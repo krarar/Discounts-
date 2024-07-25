@@ -89,14 +89,14 @@
         .related-products .products-grid {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: space-between;
         }
         .related-products .product-card {
             background-color: #fff;
             color: #4A004A;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 45%;
+            width: 48%;
             margin-bottom: 20px;
             padding: 10px;
             text-align: center;
@@ -112,6 +112,16 @@
         }
         .related-products .product-card p {
             font-size: 16px;
+        }
+
+        /* تعديل العرض للشاشات الأكبر */
+        @media (min-width: 600px) {
+            .container {
+                max-width: 750px;
+            }
+            .related-products .product-card {
+                width: 30%;
+            }
         }
     </style>
 </head>
@@ -210,7 +220,7 @@
                             <p>التقييم: ${'★'.repeat(products[key].rating)}</p>
                         `;
                         card.addEventListener('click', function() {
-                            window.location.href = `product_details.html?id=${key}`;
+                            window.location.href = `product_details.html?id=${products[key].id}`;
                         });
                         relatedProductsContainer.appendChild(card);
                     }
@@ -229,5 +239,4 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
