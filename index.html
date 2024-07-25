@@ -441,35 +441,38 @@ adsRef.once('value', function(snapshot) {
 
     <!-- نموذج إضافة إعلان -->
     <div id="ad-modal" class="modal">
-        <div class="modal-content">
-            <h2>إضافة إعلان</h2>
-            <input type="text" id="ad-title" placeholder="عنوان الإعلان">
-            <textarea id="ad-description" placeholder="وصف الإعلان"></textarea>
-            <input type="file" id="ad-image" accept="image/*">
-            <div class="action-buttons">
-                <button onclick="addAd()">إضافة</button>
-                <button onclick="closeModal()">إلغاء</button>
-            </div>
+    <div class="modal-content">
+        <h2>إضافة إعلان</h2>
+        <input type="text" id="ad-title" placeholder="عنوان الإعلان">
+        <textarea id="ad-description" placeholder="وصف الإعلان"></textarea>
+        <input type="file" id="ad-image" accept="image/*">
+        <input type="text" id="ad-product-id" placeholder="معرف المنتج المرتبط (اختياري)">
+        <div class="action-buttons">
+            <button onclick="addAd()">إضافة</button>
+            <button onclick="closeModal()">إلغاء</button>
         </div>
     </div>
+</div>
+
 
     <!-- نموذج إضافة منتج -->
-    <div id="product-modal" class="modal">
-        <div class="modal-content">
-            <h2>إضافة منتج</h2>
-            <input type="text" id="product-name" placeholder="اسم المنتج">
-            <input type="text" id="product-price" placeholder="سعر المنتج">
-            <textarea id="product-description" placeholder="وصف المنتج"></textarea>
-            <input type="number" id="product-rating" min="1" max="5" placeholder="التقييم (1-5)">
-            <input type
-="file" id="product-main-image" accept="image/*">
-<input type="file" id="product-images" accept="image/*" multiple>
-<div class="action-buttons">
-<button onclick="addProduct()">إضافة</button>
-<button onclick="closeModal()">إلغاء</button>
+<div id="product-modal" class="modal">
+    <div class="modal-content">
+        <h2>إضافة منتج</h2>
+        <input type="text" id="product-name" placeholder="اسم المنتج">
+        <input type="text" id="product-price" placeholder="سعر المنتج">
+        <textarea id="product-description" placeholder="وصف المنتج"></textarea>
+        <input type="number" id="product-rating" min="1" max="5" placeholder="التقييم (1-5)">
+        <input type="file" id="product-main-image" accept="image/*">
+        <input type="file" id="product-images" accept="image/*" multiple>
+        <input type="text" id="product-id" placeholder="معرف المنتج (اختياري)">
+        <div class="action-buttons">
+            <button onclick="addProduct()">إضافة</button>
+            <button onclick="closeModal()">إلغاء</button>
+        </div>
+    </div>
 </div>
-</div>
-</div>
+
 
 </body>
 </html>
