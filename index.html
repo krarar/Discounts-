@@ -206,7 +206,7 @@
             const adsRef = database.ref('ads');
             const productsRef = database.ref('products');
 
-            // تحميل الإعلانات
+    // تحميل الإعلانات
 adsRef.once('value', function(snapshot) {
     const adsContainer = document.querySelector('.ads');
     snapshot.forEach(function(childSnapshot) {
@@ -223,12 +223,17 @@ adsRef.once('value', function(snapshot) {
             <img src="${ad.image}" alt="${ad.title}" class="banner-image">
         `;
         adElement.addEventListener('click', function() {
-            // هنا تحتاج إلى استخدام الرابط الصحيح لصفحة التفاصيل.
-            window.location.href = `details.html?id=${ad.productId}`;
+            // استخدم productId الموجود في الإعلان للانتقال إلى تفاصيل المنتج
+            if (ad.productId) {
+                window.location.href = `details.html?id=${ad.productId}`;
+            } else {
+                alert('No product linked to this ad.');
+            }
         });
         adsContainer.appendChild(adElement);
     });
 });
+
 
 
             // تحميل المنتجات
@@ -260,28 +265,31 @@ adsRef.once('value', function(snapshot) {
 
         // إضافة إعلان
         function addAd() {
-            const adTitle = document.getElementById('ad-title').value;
-            const adDescription = document.getElementById('ad-description').value;
-            const adImage = document.getElementById('ad-image').files[0];
+    const adTitle = document.getElementById('ad-title').value;
+    const adDescription = document.getElementById('ad-description').value;
+    const adImage = document.getElementById('ad-image').files[0];
+    const adProductId = document.getElementById('ad-product-id').value; // إضافة هذا السطر
 
-            const storageRef = storage.ref('ads/' + adImage.name);
-            const uploadTask = storageRef.put(adImage);
+    const storageRef = storage.ref('ads/' + adImage.name);
+    const uploadTask = storageRef.put(adImage);
 
-            uploadTask.on('state_changed', function(snapshot){}, function(error) {
-                console.error('Upload failed:', error);
-            }, function() {
-                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    const newAdRef = database.ref('ads').push();
-                    newAdRef.set({
-                        title: adTitle,
-                        description: adDescription,
-                        image: downloadURL
-                    });
-                    alert('Ad added successfully!');
-                    location.reload();
-                });
+    uploadTask.on('state_changed', function(snapshot){}, function(error) {
+        console.error('Upload failed:', error);
+    }, function() {
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            const newAdRef = database.ref('ads').push();
+            newAdRef.set({
+                title: adTitle,
+                description: adDescription,
+                image: downloadURL,
+                productId: adProductId // إضافة هذا السطر
             });
-        }
+            alert('Ad added successfully!');
+            location.reload();
+        });
+    });
+}
+
 
         // إضافة منتج
         function addProduct() {
