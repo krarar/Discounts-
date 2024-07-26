@@ -241,14 +241,15 @@ adsRef.once('value', function(snapshot) {
                     productElement.classList.add('product-card');
                     productElement.setAttribute('data-id', productId);
                     productElement.innerHTML = `
-                        <img src="${product.mainImage}" alt="${product.name}">
-                        <h3>${product.name}</h3>
-                        <p class="price">${product.price}</p>
-                        <div class="stars">${'★'.repeat(product.rating)}</div>
-                        <div class="actions">
-                            <button onclick="deleteProduct('${productId}')">Delete</button>
-                        </div>
-                    `;
+    <img src="${product.mainImage}" alt="${product.name}">
+    <h3>${product.name}</h3>
+    <p class="price">${product.price}</p>
+    <div class="stars">${'★'.repeat(product.rating)}</div>
+    <div class="actions">
+        <button onclick="deleteProduct('${productId}')">Delete</button>
+    </div>
+`;
+
                     productElement.addEventListener('click', function() {
                         window.location.href = `details.html?id=${productId}`;
                     });
