@@ -97,6 +97,7 @@
             border-radius: 10px;
             padding: 10px;
             cursor: pointer;
+            text-align: center;
         }
         .product-card img {
             width: 100%;
@@ -251,89 +252,115 @@
         };
 
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
 
-        // دالة لتحويل أول حرف من سلسلة نصية إلى حرف كبير
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
+        // الحصول على بيانات المنتج من الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
 
-        // وظيفة لإعادة توجيه المستخدم إلى صفحة الطلب
+        // جلب بيانات المنتج من قاعدة البيانات
+        firebase.database().ref('products/' + productId).once('value').then(function(snapshot) {
+            const product = snapshot.val();
+            if (product) {
+                document.getElementById('product-name').innerText = product.name;
+                document.getElementById('product-price').innerText = 'السعر: ' + product.price + ' د.ع';
+                document.getElementById('product-rating').innerText = 'التقييم: ' + '★'.repeat(product.rating);
+                document.getElementById('product-description').innerText = product.description;
+                document.getElementById('product-image').src = product.mainImage;
+
+                // عرض الصور الإضافية
+                const additionalImagesContainer = document.getElementById('additional-images');
+                product.images.forEach(imageUrl => {
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = 'Additional Image';
+                    img.addEventListener('click', function() {
+                        document.querySelectorAll('.additional-images img').forEach(img => img.classList.remove('selected'));
+                        img.classList.add('selected');
+                        localStorage.setItem('selectedImage', imageUrl); // تخزين الصورة المحددة
+                    });
+                    additionalImagesContainer.appendChild(img);
+                });
+
+                // تحديث روابط وسائل التواصل الاجتماعي
+                document.getElementById('facebook-link').href = product.facebookLink || 'https://www.facebook.com';
+                document.getElementById('twitter-link').href = product.twitterLink || 'https://www.twitter.com';
+                document.getElementById('instagram-link').href = product.instagramLink || 'https://www.instagram.com';
+                document.getElementById('whatsapp-link').href = product.whatsappLink || 'https://www.linkedin.com';
+                document.getElementById('telegram-link').href = product.telegramLink || 'https://www.linkedin.com';
+            }
+        });
+
+        // جلب المنتجات الأخرى من قاعدة البيانات
+        firebase.database().ref('products').once('value').then(function(snapshot) {
+            const productsContainer = document.querySelector('.products');
+            snapshot.forEach(function(childSnapshot) {
+                const product = childSnapshot.val();
+                const productId = childSnapshot.key;
+                const productElement = document.createElement('div');
+                productElement.classList.add('product-card');
+                productElement.setAttribute('data-id', productId);
+                productElement.innerHTML = `
+                    <img src="${product.mainImage}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">${product.price}</p>
+                    <div class="stars">${'★'.repeat(product.rating)}</div>
+                `;
+                productElement.addEventListener('click', function() {
+                    window.location.href = `details.html?id=${productId}`;
+                });
+                productsContainer.appendChild(productElement);
+            });
+        });
+
+        // الانتقال إلى صفحة طلب الشراء
         function redirectToOrderPage() {
-            // هنا يمكنك وضع الرابط إلى صفحة الطلب
-            window.location.href = "#";
+            const selectedImage = localStorage.getItem('selectedImage');
+            if (selectedImage) {
+                window.location.href = `order.html?id=${productId}&image=${encodeURIComponent(selectedImage)}`;
+            } else {
+                alert('يرجى تحديد صورة قبل الشراء.');
+            }
         }
 
-        // دالة لعرض نافذة بحث
+        // إعادة توجيه إلى الصفحة الرئيسية
+        function goHome() {
+            window.location.href = 'index.html'; // استبدل 'index.html' بعنوان الصفحة الرئيسية
+        }
+
+        // عرض مودال البحث
         function showSearchModal() {
-            document.getElementById('searchModal').style.display = 'flex';
+            showModal('searchModal');
         }
 
-        // دالة لإغلاق أي مودال
+        // وظيفة البحث عن منتج
+        function searchProduct() {
+            const query = document.getElementById('search-query').value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+            closeModal('searchModal');
+        }
+
+        // عرض المودال
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        // إخفاء المودال
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // دالة لإظهار نافذة إضافة إعلان
-        function showAdModal() {
-            // هنا يمكنك إضافة الكود لعرض نافذة إضافة الإعلان
-        }
-
-        // دالة لإظهار نافذة إضافة منتج
-        function showProductModal() {
-            // هنا يمكنك إضافة الكود لعرض نافذة إضافة المنتج
-        }
-
-        // دالة للانتقال إلى الصفحة الرئيسية
-        function goHome() {
-            window.location.href = "index.html";
-        }
-
-        // دالة للانتقال إلى صفحة تسجيل الدخول
+        // إعادة توجيه إلى صفحة تسجيل الدخول
         function goToLogin() {
-            window.location.href = "login.html";
-        }
-
-        // دالة للبحث عن منتج
-        function searchProduct() {
-            const query = document.getElementById('search-query').value.toLowerCase();
-            // هنا يمكنك إضافة الكود للبحث عن المنتجات في قاعدة البيانات
-        }
-
-        // دالة لعرض تفاصيل المنتج
-        function showProductDetails(productId) {
-            const productRef = db.ref('products/' + productId);
-            productRef.once('value', function(snapshot) {
-                const product = snapshot.val();
-                document.getElementById('product-image').src = product.imageUrl;
-                document.getElementById('product-name').innerText = capitalizeFirstLetter(product.name);
-                document.getElementById('product-price').innerText = product.price;
-                document.getElementById('product-rating').innerText = product.rating;
-                document.getElementById('product-description').innerText = product.description;
-
-                const additionalImagesDiv = document.getElementById('additional-images');
-                additionalImagesDiv.innerHTML = '';
-                product.additionalImages.forEach((image, index) => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = image;
-                    imgElement.alt = 'Image ' + (index + 1);
-                    imgElement.onclick = function() {
-                        document.getElementById('product-image').src = image;
-                    };
-                    additionalImagesDiv.appendChild(imgElement);
-                });
-            });
-        }
-
-        // استخراج معرف المنتج من URL واستدعاء وظيفة عرض تفاصيل المنتج
-        const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('productId');
-        if (productId) {
-            showProductDetails(productId);
-        } else {
-            alert("لم يتم العثور على معرف المنتج.");
+            window.location.href = 'login.html';
         }
     </script>
 </body>
-    </html>
-    
+</html>
