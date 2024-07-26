@@ -203,65 +203,63 @@
 
         // جلب البيانات من قاعدة البيانات
         window.onload = function() {
-            const adsRef = database.ref('ads');
-            const productsRef = database.ref('products');
+    const adsRef = database.ref('ads');
+    const productsRef = database.ref('products');
 
     // تحميل الإعلانات
-adsRef.once('value', function(snapshot) {
-    const adsContainer = document.querySelector('.ads');
-    snapshot.forEach(function(childSnapshot) {
-        const ad = childSnapshot.val();
-        const adId = childSnapshot.key;
-        const adElement = document.createElement('div');
-        adElement.classList.add('banner');
-        adElement.setAttribute('data-id', adId);
-        adElement.innerHTML = `
-            <div class="banner-content">
-                <h2>${ad.title}</h2>
-                <p>${ad.description}</p>
-            </div>
-            <img src="${ad.image}" alt="${ad.title}" class="banner-image">
-        `;
-        adElement.addEventListener('click', function() {
-            // استخدم productId الموجود في الإعلان للانتقال إلى تفاصيل المنتج
-            if (ad.productId) {
-                window.location.href = `details.html?id=${ad.productId}`;
-            } else {
-                alert('No product linked to this ad.');
-            }
-        });
-        adsContainer.appendChild(adElement);
-    });
-});
-
-
-
-            // تحميل المنتجات
-            productsRef.once('value', function(snapshot) {
-                const productsContainer = document.querySelector('.products');
-                snapshot.forEach(function(childSnapshot) {
-                    const product = childSnapshot.val();
-                    const productId = childSnapshot.key;
-                    const productElement = document.createElement('div');
-                    productElement.classList.add('product-card');
-                    productElement.setAttribute('data-id', productId);
-                    productElement.innerHTML = `
-    <img src="${product.mainImage}" alt="${product.name}">
-    <h3>${product.name}</h3>
-    <p class="price">${product.price}</p>
-    <div class="stars">${'★'.repeat(product.rating)}</div>
-    <div class="actions">
-        <button onclick="deleteProduct('${productId}')">Delete</button>
-    </div>
-`;
-
-                    productElement.addEventListener('click', function() {
-                        window.location.href = `details.html?id=${productId}`;
-                    });
-                    productsContainer.appendChild(productElement);
-                });
+    adsRef.once('value', function(snapshot) {
+        const adsContainer = document.querySelector('.ads');
+        snapshot.forEach(function(childSnapshot) {
+            const ad = childSnapshot.val();
+            const adId = childSnapshot.key;
+            const adElement = document.createElement('div');
+            adElement.classList.add('banner');
+            adElement.setAttribute('data-id', adId);
+            adElement.innerHTML = `
+                <div class="banner-content">
+                    <h2>${ad.title}</h2>
+                    <p>${ad.description}</p>
+                </div>
+                <img src="${ad.image}" alt="${ad.title}" class="banner-image">
+            `;
+            adElement.addEventListener('click', function() {
+                // استخدم productId الموجود في الإعلان للانتقال إلى تفاصيل المنتج
+                if (ad.productId) {
+                    window.location.href = `details.html?id=${ad.productId}`;
+                } else {
+                    alert('لا يوجد منتج مرتبط بهذا الإعلان.');
+                }
             });
-        }
+            adsContainer.appendChild(adElement);
+        });
+    });
+
+    // تحميل المنتجات
+    productsRef.once('value', function(snapshot) {
+        const productsContainer = document.querySelector('.products');
+        snapshot.forEach(function(childSnapshot) {
+            const product = childSnapshot.val();
+            const productId = childSnapshot.key;
+            const productElement = document.createElement('div');
+            productElement.classList.add('product-card');
+            productElement.setAttribute('data-id', productId);
+            productElement.innerHTML = `
+                <img src="${product.mainImage}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p class="price">${product.price}</p>
+                <div class="stars">${'★'.repeat(product.rating)}</div>
+                <div class="actions">
+                    <button onclick="deleteProduct('${productId}')">حذف</button>
+                </div>
+            `;
+            productElement.addEventListener('click', function() {
+                window.location.href = `details.html?id=${productId}`;
+            });
+            productsContainer.appendChild(productElement);
+        });
+    });
+}
+
 
         // إضافة إعلان
         function addAd() {
