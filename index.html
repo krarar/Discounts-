@@ -203,75 +203,72 @@
 
         // جلب البيانات من قاعدة البيانات
         window.onload = function() {
-    const adsRef = database.ref('ads');
-    const productsRef = database.ref('products');
-
- window.onload = function() {
-    const adsRef = database.ref('ads');
-    const productsRef = database.ref('products');
+            const adsRef = database.ref('ads');
+            const productsRef = database.ref('products');
 
     // تحميل الإعلانات
-    adsRef.once('value', function(snapshot) {
-        const adsContainer = document.querySelector('.ads');
-        snapshot.forEach(function(childSnapshot) {
-            const ad = childSnapshot.val();
-            const adId = childSnapshot.key;
-            const adElement = document.createElement('div');
-            adElement.classList.add('banner');
-            adElement.setAttribute('data-id', adId);
-            adElement.innerHTML = `
-                <div class="banner-content">
-                    <h2>${ad.title}</h2>
-                    <p>${ad.description}</p>
-                </div>
-                <img src="${ad.image}" alt="${ad.title}" class="banner-image">
-            `;
-            adElement.addEventListener('click', function() {
-                // استخدم اسم المنتج الموجود في الإعلان للانتقال إلى تفاصيل المنتج
-                if (ad.productName) {
-                    window.location.href = `details.html?name=${encodeURIComponent(ad.productName)}`;
-                } else {
-                    alert('لا يوجد منتج مرتبط بهذا الإعلان.');
-                }
-            });
-            adsContainer.appendChild(adElement);
+adsRef.once('value', function(snapshot) {
+    const adsContainer = document.querySelector('.ads');
+    snapshot.forEach(function(childSnapshot) {
+        const ad = childSnapshot.val();
+        const adId = childSnapshot.key;
+        const adElement = document.createElement('div');
+        adElement.classList.add('banner');
+        adElement.setAttribute('data-id', adId);
+        adElement.innerHTML = `
+            <div class="banner-content">
+                <h2>${ad.title}</h2>
+                <p>${ad.description}</p>
+            </div>
+            <img src="${ad.image}" alt="${ad.title}" class="banner-image">
+        `;
+        adElement.addEventListener('click', function() {
+            // استخدم productId الموجود في الإعلان للانتقال إلى تفاصيل المنتج
+            if (ad.productId) {
+                window.location.href = `details.html?id=${ad.productId}`;
+            } else {
+                alert('No product linked to this ad.');
+            }
         });
+        adsContainer.appendChild(adElement);
     });
+});
 
-    // تحميل المنتجات
-    productsRef.once('value', function(snapshot) {
-        const productsContainer = document.querySelector('.products');
-        snapshot.forEach(function(childSnapshot) {
-            const product = childSnapshot.val();
-            const productId = childSnapshot.key;
-            const productElement = document.createElement('div');
-            productElement.classList.add('product-card');
-            productElement.setAttribute('data-id', productId);
-            productElement.innerHTML = `
-                <img src="${product.mainImage}" alt="${product.name}">
-                <h3>${product.name}</h3>
-                <p class="price">${product.price}</p>
-                <div class="stars">${'★'.repeat(product.rating)}</div>
-                <div class="actions">
-                    <button onclick="deleteProduct('${productId}')">حذف</button>
-                </div>
-            `;
-            productElement.addEventListener('click', function() {
-                window.location.href = `details.html?name=${encodeURIComponent(product.name)}`;
+
+
+            // تحميل المنتجات
+            productsRef.once('value', function(snapshot) {
+                const productsContainer = document.querySelector('.products');
+                snapshot.forEach(function(childSnapshot) {
+                    const product = childSnapshot.val();
+                    const productId = childSnapshot.key;
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('product-card');
+                    productElement.setAttribute('data-id', productId);
+                    productElement.innerHTML = `
+    <img src="${product.mainImage}" alt="${product.name}">
+    <h3>${product.name}</h3>
+    <p class="price">${product.price}</p>
+    <div class="stars">${'★'.repeat(product.rating)}</div>
+    <div class="actions">
+        <button onclick="deleteProduct('${productId}')">Delete</button>
+    </div>
+`;
+
+                    productElement.addEventListener('click', function() {
+                        window.location.href = `details.html?id=${productId}`;
+                    });
+                    productsContainer.appendChild(productElement);
+                });
             });
-            productsContainer.appendChild(productElement);
-        });
-    });
-}
+        }
 
-
-
-       // إضافة إعلان
-function addAd() {
+        // إضافة إعلان
+        function addAd() {
     const adTitle = document.getElementById('ad-title').value;
     const adDescription = document.getElementById('ad-description').value;
     const adImage = document.getElementById('ad-image').files[0];
-    const adProductName = document.getElementById('ad-product-name').value; // إضافة هذا السطر
+    const adProductId = document.getElementById('ad-product-id').value; // إضافة هذا السطر
 
     const storageRef = storage.ref('ads/' + adImage.name);
     const uploadTask = storageRef.put(adImage);
@@ -285,14 +282,13 @@ function addAd() {
                 title: adTitle,
                 description: adDescription,
                 image: downloadURL,
-                productName: adProductName // إضافة هذا السطر
+                productId: adProductId // إضافة هذا السطر
             });
             alert('Ad added successfully!');
             location.reload();
         });
     });
 }
-
 
 
         // إضافة منتج
@@ -478,8 +474,7 @@ function addAd() {
         <input type="number" id="product-rating" min="1" max="5" placeholder="التقييم (1-5)">
         <input type="file" id="product-main-image" accept="image/*">
         <input type="file" id="product-images" accept="image/*" multiple>
-        <input type="text" id="ad-product-name" placeholder="اسم المنتج المرتبط (اختياري)">
-
+        <input type="text" id="product-id" placeholder="معرف المنتج (اختياري)">
         <div class="action-buttons">
             <button onclick="addProduct()">إضافة</button>
             <button onclick="closeModal()">إلغاء</button>
