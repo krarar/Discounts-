@@ -271,6 +271,7 @@
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     alert('تم تسجيل الدخول بنجاح!');
+                    window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
                 })
                 .catch((error) => {
                     alert('فشل تسجيل الدخول: ' + error.message);
@@ -282,6 +283,7 @@
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
                     alert('تم تسجيل الدخول عبر جيميل!');
+                    window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
                 })
                 .catch((error) => {
                     alert('فشل تسجيل الدخول: ' + error.message);
@@ -293,6 +295,7 @@
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
                     alert('تم تسجيل الدخول عبر فيسبوك!');
+                    window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
                 })
                 .catch((error) => {
                     alert('فشل تسجيل الدخول: ' + error.message);
