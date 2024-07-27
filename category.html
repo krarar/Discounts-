@@ -27,6 +27,7 @@
         }
         .header .material-icons {
             font-size: 1.5rem;
+            cursor: pointer;
         }
         .categories {
             display: grid;
@@ -45,6 +46,11 @@
         .category-card:hover {
             background-color: #29002B;
         }
+        .category-card img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
         .category-card h3 {
             margin: 0;
         }
@@ -61,11 +67,56 @@
         }
         .footer .material-icons {
             font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+        }
+        .modal-content input, .modal-content textarea, .modal-content button {
+            display: block;
+            width: 100%;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+        }
+        .modal-content input[type="file"] {
+            padding: 0;
+        }
+        .action-buttons {
+            text-align: center;
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .action-buttons button {
+            background-color: #BE00BE;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
@@ -79,17 +130,26 @@
 
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const storage = firebase.storage();
 
         window.onload = function() {
+            loadCategories();
+        }
+
+        function loadCategories() {
             const categoriesRef = database.ref('categories');
             categoriesRef.once('value', function(snapshot) {
                 const categoriesContainer = document.querySelector('.categories');
+                categoriesContainer.innerHTML = '';
                 snapshot.forEach(function(childSnapshot) {
                     const category = childSnapshot.val();
                     const categoryId = childSnapshot.key;
                     const categoryElement = document.createElement('div');
                     categoryElement.classList.add('category-card');
-                    categoryElement.innerHTML = `<h3>${category.name}</h3>`;
+                    categoryElement.innerHTML = `
+                        <img src="${category.image}" alt="${category.name}">
+                        <h3>${category.name}</h3>
+                    `;
                     categoryElement.onclick = function() {
                         window.location.href = `category.html?category=${categoryId}`;
                     };
@@ -97,24 +157,81 @@
                 });
             });
         }
+
+        // إضافة فئة جديدة
+        function addCategory() {
+            const categoryName = document.getElementById('category-name').value;
+            const categoryImage = document.getElementById('category-image').files[0];
+
+            const storageRef = storage.ref('categories/' + categoryImage.name);
+            const uploadTask = storageRef.put(categoryImage);
+
+            uploadTask.on('state_changed', function(snapshot){}, function(error) {
+                console.error('Upload failed:', error);
+            }, function() {
+                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    const newCategoryRef = database.ref('categories').push();
+                    newCategoryRef.set({
+                        name: categoryName,
+                        image: downloadURL
+                    });
+                    alert('Category added successfully!');
+                    closeModal();
+                    loadCategories();
+                });
+            });
+        }
+
+        // عرض نموذج إضافة فئة جديدة
+        function showCategoryModal() {
+            const categoryModal = document.getElementById('category-modal');
+            categoryModal.style.display = 'flex';
+        }
+
+        // إغلاق النموذج
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // الانتقال إلى الصفحة الرئيسية
+        function goHome() {
+            window.location.href = 'index.html';
+        }
     </script>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <i class="material-icons">account_circle</i>
-            <i class="material-icons">search</i>
+            <i class="material-icons" onclick="showCategoryModal()">add</i>
+            <i class="material-icons" onclick="goHome()">home</i>
         </div>
         <h2>الفئات</h2>
         <div class="categories">
             <!-- سيتم إدراج الفئات هنا من قاعدة البيانات -->
         </div>
         <div class="footer">
-            <i class="material-icons">home</i>
+            <i class="material-icons" onclick="goHome()">home</i>
+            <i class="material-icons" onclick="showSearchModal()">search</i>
             <i class="material-icons">favorite</i>
             <i class="material-icons">shopping_cart</i>
             <i class="material-icons">person</i>
         </div>
     </div>
+
+    <!-- نموذج إضافة فئة جديدة -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content">
+            <h2>إضافة فئة جديدة</h2>
+            <input type="text" id="category-name" placeholder="اسم الفئة">
+            <input type="file" id="category-image" accept="image/*">
+            <div class="action-buttons">
+                <button onclick="addCategory()">إضافة</button>
+                <button onclick="closeModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
