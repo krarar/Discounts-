@@ -3,97 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مفروشات الخيمة</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>تفاصيل المنتج</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* تأكد من أن الأنماط تتوافق مع التصميم المطلوب */
         body {
             font-family: Arial, sans-serif;
-            background-color: #050505;
+            background-color: #4A004A;
             color: #fff;
+            margin: 0;
+            padding: 0;
         }
         .container {
-            max-width: 100%;
+            padding: 20px;
+            max-width: 375px;
             margin: 0 auto;
-            padding: 1rem;
+            text-align: center;
         }
-        
-        .header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-        }
-        .header .material-icons {
-            font-size: 1.5rem;
-        }
-        .ads {
-            display: flex;
-            overflow-x: auto;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .banner {
-            background-color: #490d3f;
+        .product-details img.main-image {
+            width: 100%;
+            height: auto;
             border-radius: 10px;
-            padding: 1rem;
-            position: relative;
-            overflow: hidden;
-            height: 180px;
-            min-width: 300px;
-            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .banner-content {
-            position: relative;
-            z-index: 2;
+        .product-details .additional-images {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            overflow-x: auto; /* لتمكين التمرير الأفقي */
         }
-        .banner h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        .product-details .additional-images img {
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        .banner p {
-            margin-bottom: 1rem;
+        .product-details .additional-images img.selected {
+            border-color: #00FF00;
         }
-        .banner-image {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            width: 50%;
-            height: 100%;
-            object-fit: cover;
+        .product-details h1 {
+            margin: 20px 0 10px;
+            font-size: 24px;
+            color: #FFD700;
         }
-        .section-title {
-            color: #BE00BE;
-            font-size: 1.25rem;
-            margin: 1rem 0;
+        .product-details p {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .product-details .rating {
+            color: #FFD700;
+        }
+        .buy-button {
+            margin-top: 20px;
+            background-color: #FFD700;
+            color: #4A004A;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .buy-button:hover {
+            background-color: #D4A700;
+        }
+        .social-icons {
+            margin-top: 20px;
+        }
+        .social-icons a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #fff;
+        }
+        .social-icons i {
+            font-size: 40px;
+        }
+        .products-section {
+            margin-top: 30px;
+        }
+        .products-section h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #FFD700;
         }
         .products {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
+            gap: 15px;
         }
         .product-card {
             background-color: #1D001E;
             border-radius: 10px;
-            padding: 0.5rem;
-            position: relative;
+            padding: 10px;
             cursor: pointer;
+            text-align: center;
         }
         .product-card img {
             width: 100%;
             height: 150px;
             border-radius: 10px;
-            margin-bottom: 0.5rem;
+            margin-bottom: 10px;
             object-fit: cover;
         }
         .product-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
+            font-size: 14px;
+            margin-bottom: 5px;
         }
         .product-card .price {
             color: #BE00BE;
@@ -101,40 +118,29 @@
         }
         .stars {
             color: #FFD700;
-            font-size: 0.75rem;
+            font-size: 12px;
         }
-        .product-card .actions {
-            display: none;
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 0.25rem;
-            border-radius: 5px;
+        .header {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
         }
-        .product-card:hover .actions {
-            display: block;
-        }
-        .actions button {
-            background: #fff;
-            border: none;
-            padding: 0.5rem;
-            margin: 0.25rem;
+        .header i {
+            font-size: 30px;
             cursor: pointer;
         }
         .footer {
             display: flex;
             justify-content: space-around;
-            align-items: center;
-            padding: 0.5rem;
-            background-color: #1D001E;
             position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
+            width: 100%;
+            background-color: #4A004A;
+            padding: 10px 0;
         }
-        .footer .material-icons {
-            font-size: 1.5rem;
+        .footer i {
+            font-size: 30px;
+            cursor: pointer;
         }
         .modal {
             display: none;
@@ -144,47 +150,97 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
         .modal-content {
             background: #fff;
-            padding: 1rem;
-            border-radius: 5px;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
             width: 80%;
-            max-width: 500px;
+            max-width: 400px;
         }
-        .modal-content input, .modal-content textarea, .modal-content button {
-            display: block;
-            width: 100%;
-            margin: 0.5rem 0;
-            padding: 0.5rem;
+        .modal-content h2 {
+            margin-bottom: 15px;
         }
-        .modal-content input[type="file"] {
-            padding: 0;
+        .modal-content input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-        .action-buttons {
-            text-align: center;
-            margin-top: 1rem;
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-        }
-        .action-buttons button {
-            background-color: #BE00BE;
-            color: #fff;
+        .modal-content .action-buttons button {
+            background-color: #FFD700;
+            color: #4A004A;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .modal-content .action-buttons button:hover {
+            background-color: #D4A700;
         }
     </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <i class="material-icons" onclick="showAdModal()">add</i>
+            <i class="material-icons" onclick="showProductModal()">add</i>
+        </div>
+        <div class="product-details">
+            <img id="product-image" class="main-image" src="" alt="Product Image">
+            <h1 id="product-name">اسم المنتج</h1>
+            <p id="product-price">سعر المنتج</p>
+            <p id="product-rating" class="rating">تقييم المنتج</p>
+            <p id="product-description">وصف المنتج</p>
+            <div class="additional-images" id="additional-images">
+                <!-- الصور الإضافية تظهر هنا -->
+            </div>
+            <button class="buy-button" onclick="redirectToOrderPage()">اشترِ الآن</button>
+        </div>
+        <div class="social-icons">
+            <a href="#" id="facebook-link" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="#" id="twitter-link" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="#" id="instagram-link" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#" id="whatsapp-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" id="telegram-link" target="_blank"><i class="fab fa-telegram"></i></a>
+        </div>
+        <div class="products-section">
+            <h2 class="section-title">منتجات أخرى</h2>
+            <div class="products">
+                <!-- المنتجات الأخرى تظهر هنا -->
+            </div>
+        </div>
+    </div>
 
-    <!-- إضافة Firebase -->
+    <div class="footer">
+        <i class="material-icons" onclick="goHome()">home</i>
+        <i class="material-icons" onclick="showSearchModal()">search</i>
+        <i class="material-icons">shopping_cart</i>
+        <i class="material-icons" onclick="goToLogin()">account_circle</i>
+    </div>
+
+    <!-- مودال للبحث -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <h2>البحث في المنتجات</h2>
+            <input type="text" id="search-query" placeholder="ادخل اسم المنتج">
+            <div class="action-buttons">
+                <button onclick="searchProduct()">بحث</button>
+                <button onclick="closeModal('searchModal')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script>
         // تهيئة Firebase
         const firebaseConfig = {
@@ -196,293 +252,116 @@
             messagingSenderId: "278680662267",
             appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
         };
-
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const storage = firebase.storage();
 
-        // جلب البيانات من قاعدة البيانات
-        window.onload = function() {
-            const adsRef = database.ref('ads');
-            const productsRef = database.ref('products');
+        // الحصول على بيانات المنتج من الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('name');
 
-    // تحميل الإعلانات
-adsRef.once('value', function(snapshot) {
-    const adsContainer = document.querySelector('.ads');
-    snapshot.forEach(function(childSnapshot) {
-        const ad = childSnapshot.val();
-        const adId = childSnapshot.key;
-        const adElement = document.createElement('div');
-        adElement.classList.add('banner');
-        adElement.setAttribute('data-id', adId);
-        adElement.innerHTML = `
-            <div class="banner-content">
-                <h2>${ad.title}</h2>
-                <p>${ad.description}</p>
-            </div>
-            <img src="${ad.image}" alt="${ad.title}" class="banner-image">
-        `;
-        adElement.addEventListener('click', function() {
-            // استخدم productId الموجود في الإعلان للانتقال إلى تفاصيل المنتج
-            if (ad.productId) {
-                window.location.href = `details.html?id=${ad.productId}`;
+        // جلب بيانات المنتج من قاعدة البيانات
+        firebase.database().ref('products/' + productId).once('value').then(function(snapshot) {
+            const product = snapshot.val();
+            if (product) {
+                document.getElementById('product-name').innerText = product.name;
+                document.getElementById('product-price').innerText = 'السعر: ' + product.price + ' د.ع';
+                document.getElementById('product-rating').innerText = 'التقييم: ' + '★'.repeat(product.rating);
+                document.getElementById('product-description').innerText = product.description;
+                document.getElementById('product-image').src = product.mainImage;
+
+                // عرض الصور الإضافية
+                const additionalImagesContainer = document.getElementById('additional-images');
+                product.images.forEach(imageUrl => {
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = 'Additional Image';
+                    img.addEventListener('click', function() {
+                        document.querySelectorAll('.additional-images img').forEach(img => img.classList.remove('selected'));
+                        img.classList.add('selected');
+                        localStorage.setItem('selectedImage', imageUrl); // تخزين الصورة المحددة
+                    });
+                    additionalImagesContainer.appendChild(img);
+                });
+
+                // تحديث روابط وسائل التواصل الاجتماعي
+                document.getElementById('facebook-link').href = product.facebookLink || 'https://www.facebook.com';
+                document.getElementById('twitter-link').href = product.twitterLink || 'https://www.twitter.com';
+                document.getElementById('instagram-link').href = product.instagramLink || 'https://www.instagram.com';
+                document.getElementById('whatsapp-link').href = product.whatsappLink || 'https://www.whatsapp.com';
+                document.getElementById('telegram-link').href = product.telegramLink || 'https://www.telegram.org';
+            }
+        });
+
+        // جلب المنتجات الأخرى من قاعدة البيانات
+        firebase.database().ref('products').once('value').then(function(snapshot) {
+            const productsContainer = document.querySelector('.products');
+            snapshot.forEach(function(childSnapshot) {
+                const product = childSnapshot.val();
+                const productId = childSnapshot.key;
+                const productElement = document.createElement('div');
+                productElement.classList.add('product-card');
+                productElement.setAttribute('data-id', productId);
+                productElement.innerHTML = `
+                    <img src="${product.mainImage}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">${product.price}</p>
+                    <div class="stars">${'★'.repeat(product.rating)}</div>
+                `;
+                productElement.addEventListener('click', function() {
+                    window.location.href = `details.html?id=${productId}`;
+                });
+                productsContainer.appendChild(productElement);
+            });
+        });
+
+        // الانتقال إلى صفحة طلب الشراء
+        function redirectToOrderPage() {
+            const selectedImage = localStorage.getItem('selectedImage');
+            if (selectedImage) {
+                window.location.href = `order.html?id=${productId}&image=${encodeURIComponent(selectedImage)}`;
             } else {
-                alert('No product linked to this ad.');
-            }
-        });
-        adsContainer.appendChild(adElement);
-    });
-});
-
-
-
-            // تحميل المنتجات
-            productsRef.once('value', function(snapshot) {
-                const productsContainer = document.querySelector('.products');
-                snapshot.forEach(function(childSnapshot) {
-                    const product = childSnapshot.val();
-                    const productId = childSnapshot.key;
-                    const productElement = document.createElement('div');
-                    productElement.classList.add('product-card');
-                    productElement.setAttribute('data-id', productId);
-                    productElement.innerHTML = `
-    <img src="${product.mainImage}" alt="${product.name}">
-    <h3>${product.name}</h3>
-    <p class="price">${product.price}</p>
-    <div class="stars">${'★'.repeat(product.rating)}</div>
-    <div class="actions">
-        <button onclick="deleteProduct('${productId}')">Delete</button>
-    </div>
-`;
-
-                    productElement.addEventListener('click', function() {
-                        window.location.href = `details.html?id=${productId}`;
-                    });
-                    productsContainer.appendChild(productElement);
-                });
-            });
-        }
-
-        // إضافة إعلان
-        function addAd() {
-    const adTitle = document.getElementById('ad-title').value;
-    const adDescription = document.getElementById('ad-description').value;
-    const adImage = document.getElementById('ad-image').files[0];
-    const adProductId = document.getElementById('ad-product-id').value; // إضافة هذا السطر
-
-    const storageRef = storage.ref('ads/' + adImage.name);
-    const uploadTask = storageRef.put(adImage);
-
-    uploadTask.on('state_changed', function(snapshot){}, function(error) {
-        console.error('Upload failed:', error);
-    }, function() {
-        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            const newAdRef = database.ref('ads').push();
-            newAdRef.set({
-                title: adTitle,
-                description: adDescription,
-                image: downloadURL,
-                productId: adProductId // إضافة هذا السطر
-            });
-            alert('Ad added successfully!');
-            location.reload();
-        });
-    });
-}
-
-
-        // إضافة منتج
-        function addProduct() {
-            const productName = document.getElementById('product-name').value;
-            const productPrice = document.getElementById('product-price').value;
-            const productDescription = document.getElementById('product-description').value;
-            const productRating = parseInt(document.getElementById('product-rating').value);
-            const productMainImage = document.getElementById('product-main-image').files[0];
-            const productImages = document.getElementById('product-images').files;
-
-            let mainImageUrl = '';
-            const productImagesUrls = [];
-            let uploadCount = 0;
-
-            // رفع الصورة الرئيسية
-            const mainImageRef = storage.ref('products/' + productMainImage.name);
-            const mainUploadTask = mainImageRef.put(productMainImage);
-            mainUploadTask.on('state_changed', function(snapshot) {}, function(error) {
-                console.error('Upload failed:', error);
-            }, function() {
-                mainUploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    mainImageUrl = downloadURL;
-                    
-                    // رفع الصور الإضافية
-                    Array.from(productImages).forEach(file => {
-                        const storageRef = storage.ref('products/' + file.name);
-                        const uploadTask = storageRef.put(file);
-
-                        uploadTask.on('state_changed', function(snapshot) {}, function(error) {
-                            console.error('Upload failed:', error);
-                        }, function() {
-                            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                                productImagesUrls.push(downloadURL);
-                                uploadCount++;
-                                if (uploadCount === productImages.length) {
-                                    const newProductRef = database.ref('products').push();
-                                    newProductRef.set({
-                                        name: productName,
-                                        price: productPrice,
-                                        description: productDescription,
-                                        rating: productRating,
-                                        mainImage: mainImageUrl,
-                                        images: productImagesUrls
-                                    });
-                                    alert('Product added successfully!');
-                                    location.reload();
-                                }
-                            });
-                        });
-                    });
-                });
-            });
-        }
-
-        // حذف منتج
-        function deleteProduct(productId) {
-            if (confirm('Are you sure you want to delete this product?')) {
-                const productRef = database.ref('products/' + productId);
-                productRef.remove();
-                alert('Product deleted successfully!');
-                location.reload();
+                alert('يرجى تحديد صورة قبل الشراء.');
             }
         }
 
-        // عرض النموذج لإضافة إعلان
-        function showAdModal() {
-            const adModal = document.getElementById('ad-modal');
-            adModal.style.display = 'flex';
+        // إعادة توجيه إلى الصفحة الرئيسية
+        function goHome() {
+            window.location.href = 'index.html';
         }
 
-        // عرض النموذج لإضافة منتج
-        function showProductModal() {
-            const productModal = document.getElementById('product-modal');
-            productModal.style.display = 'flex';
+        // عرض مودال البحث
+        function showSearchModal() {
+            showModal('searchModal');
         }
 
-        // إغلاق النموذج
-        function closeModal() {
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.style.display = 'none';
+        // وظيفة البحث عن منتج
+        function searchProduct() {
+            const query = document.getElementById('search-query').value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
             });
+            closeModal('searchModal');
+        }
+
+        // عرض المودال
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        // إخفاء المودال
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // إعادة توجيه إلى صفحة تسجيل الدخول
+        function goToLogin() {
+            window.location.href = 'login.html';
         }
     </script>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <i class="material-icons" onclick="showAdModal()">add</i>
-            <i class="material-icons" onclick="showProductModal()">add</i>
-        </div>
-        <div class="ads"></div>
-        <h2 class="section-title">المنتجات</h2>
-        <div class="products"></div>
-    </div>
-        <div class="footer">
-            <i class="material-icons" onclick="goHome()">home</i>
-            <i class="material-icons" onclick="showSearchModal()">search</i>
-            <i class="material-icons">shopping_cart</i>
-            <i class="material-icons" onclick="goToLogin()">account_circle</i>
-        </div>
-        
-        <script>
-            // إعادة توجيه إلى صفحة تسجيل الدخول
-            function goToLogin() {
-                window.location.href = 'login.html';
-            }
-        </script>
-        
-        
-        <!-- مودال للبحث -->
-        <div id="searchModal" class="modal">
-            <div class="modal-content">
-                <h2>البحث في المنتجات</h2>
-                <input type="text" id="search-query" placeholder="ادخل اسم المنتج">
-                <div class="action-buttons">
-                    <button onclick="searchProduct()">بحث</button>
-                    <button onclick="closeModal('searchModal')">إلغاء</button>
-                </div>
-            </div>
-        </div>
-        
-        <script>
-            // إعادة توجيه إلى الصفحة الرئيسية
-            function goHome() {
-                window.location.href = 'index.html'; // استبدل 'index.html' بعنوان الصفحة الرئيسية
-            }
-        
-            // عرض مودال البحث
-            function showSearchModal() {
-                showModal('searchModal');
-            }
-        
-            // وظيفة البحث عن منتج
-            function searchProduct() {
-                const query = document.getElementById('search-query').value.toLowerCase();
-                const products = document.querySelectorAll('.product-card');
-                products.forEach(product => {
-                    const productName = product.querySelector('h3').textContent.toLowerCase();
-                    if (productName.includes(query)) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-                closeModal('searchModal');
-            }
-        
-            // عرض المودال
-            function showModal(modalId) {
-                document.getElementById(modalId).style.display = 'flex';
-            }
-        
-            // إخفاء المودال
-            function closeModal(modalId) {
-                document.getElementById(modalId).style.display = 'none';
-            }
-        </script>
-
-    <!-- نموذج إضافة إعلان -->
-    <div id="ad-modal" class="modal">
-    <div class="modal-content">
-        <h2>إضافة إعلان</h2>
-        <input type="text" id="ad-title" placeholder="عنوان الإعلان">
-        <textarea id="ad-description" placeholder="وصف الإعلان"></textarea>
-        <input type="file" id="ad-image" accept="image/*">
-        <input type="text" id="ad-product-id" placeholder="معرف المنتج المرتبط (اختياري)">
-        <div class="action-buttons">
-            <button onclick="addAd()">إضافة</button>
-            <button onclick="closeModal()">إلغاء</button>
-        </div>
-    </div>
-</div>
-
-
-    <!-- نموذج إضافة منتج -->
-<div id="product-modal" class="modal">
-    <div class="modal-content">
-        <h2>إضافة منتج</h2>
-        <input type="text" id="product-name" placeholder="اسم المنتج">
-        <input type="text" id="product-price" placeholder="سعر المنتج">
-        <textarea id="product-description" placeholder="وصف المنتج"></textarea>
-        <input type="number" id="product-rating" min="1" max="5" placeholder="التقييم (1-5)">
-        <input type="file" id="product-main-image" accept="image/*">
-        <input type="file" id="product-images" accept="image/*" multiple>
-        <input type="text" id="product-id" placeholder="معرف المنتج (اختياري)">
-        <div class="action-buttons">
-            <button onclick="addProduct()">إضافة</button>
-            <button onclick="closeModal()">إلغاء</button>
-        </div>
-    </div>
-</div>
-
-
 </body>
 </html>
-```
