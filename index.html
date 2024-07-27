@@ -263,7 +263,7 @@
     const adTitle = document.getElementById('ad-title').value;
     const adDescription = document.getElementById('ad-description').value;
     const adImage = document.getElementById('ad-image').files[0];
-    const adProductId = document.getElementById('ad-product-id').value; // إضافة هذا السطر
+    const adProductId = document.getElementById('ad-name').value; // إضافة هذا السطر
 
     const storageRef = storage.ref('ads/' + adImage.name);
     const uploadTask = storageRef.put(adImage);
@@ -450,7 +450,7 @@
         <input type="text" id="ad-title" placeholder="عنوان الإعلان">
         <textarea id="ad-description" placeholder="وصف الإعلان"></textarea>
         <input type="file" id="ad-image" accept="image/*">
-        <input type="text" id="ad-product-id" placeholder="معرف المنتج المرتبط (اختياري)">
+        <input type="text" id="ad-name" placeholder="معرف المنتج المرتبط (اختياري)">
         <div class="action-buttons">
             <button onclick="addAd()">إضافة</button>
             <button onclick="closeModal()">إلغاء</button>
@@ -469,7 +469,7 @@
         <input type="number" id="product-rating" min="1" max="5" placeholder="التقييم (1-5)">
         <input type="file" id="product-main-image" accept="image/*">
         <input type="file" id="product-images" accept="image/*" multiple>
-        <input type="text" id="product-id" placeholder="معرف المنتج (اختياري)">
+        <input type="text" id="product-name" placeholder="معرف المنتج (اختياري)">
         <div class="action-buttons">
             <button onclick="addProduct()">إضافة</button>
             <button onclick="closeModal()">إلغاء</button>
