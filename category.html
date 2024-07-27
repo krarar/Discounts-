@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الفئات - مفروشات الخيمة</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+        }
+        .header .material-icons {
+            font-size: 1.5rem;
+        }
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .category-card {
+            background-color: #1D001E;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .category-card:hover {
+            background-color: #29002B;
+        }
+        .category-card h3 {
+            margin: 0;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: #1D001E;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .footer .material-icons {
+            font-size: 1.5rem;
+        }
+    </style>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        window.onload = function() {
+            const categoriesRef = database.ref('categories');
+            categoriesRef.once('value', function(snapshot) {
+                const categoriesContainer = document.querySelector('.categories');
+                snapshot.forEach(function(childSnapshot) {
+                    const category = childSnapshot.val();
+                    const categoryId = childSnapshot.key;
+                    const categoryElement = document.createElement('div');
+                    categoryElement.classList.add('category-card');
+                    categoryElement.innerHTML = `<h3>${category.name}</h3>`;
+                    categoryElement.onclick = function() {
+                        window.location.href = `category.html?category=${categoryId}`;
+                    };
+                    categoriesContainer.appendChild(categoryElement);
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <i class="material-icons">account_circle</i>
+            <i class="material-icons">search</i>
+        </div>
+        <h2>الفئات</h2>
+        <div class="categories">
+            <!-- سيتم إدراج الفئات هنا من قاعدة البيانات -->
+        </div>
+        <div class="footer">
+            <i class="material-icons">home</i>
+            <i class="material-icons">favorite</i>
+            <i class="material-icons">shopping_cart</i>
+            <i class="material-icons">person</i>
+        </div>
+    </div>
+</body>
+</html>
