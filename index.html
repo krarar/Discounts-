@@ -202,7 +202,7 @@
         const storage = firebase.storage();
 
         // جلب البيانات من قاعدة البيانات
-        window.onload = function() {
+     window.onload = function() {
     const adsRef = database.ref('ads');
     const productsRef = database.ref('products');
 
@@ -211,10 +211,8 @@
         const adsContainer = document.querySelector('.ads');
         snapshot.forEach(function(childSnapshot) {
             const ad = childSnapshot.val();
-            const adId = childSnapshot.key;
             const adElement = document.createElement('div');
             adElement.classList.add('banner');
-            adElement.setAttribute('data-id', adId);
             adElement.innerHTML = `
                 <div class="banner-content">
                     <h2>${ad.title}</h2>
@@ -223,9 +221,9 @@
                 <img src="${ad.image}" alt="${ad.title}" class="banner-image">
             `;
             adElement.addEventListener('click', function() {
-                // استخدم productId الموجود في الإعلان للانتقال إلى تفاصيل المنتج
-                if (ad.productId) {
-                    window.location.href = `details.html?id=${ad.productId}`;
+                // استخدم اسم المنتج الموجود في الإعلان للانتقال إلى تفاصيل المنتج
+                if (ad.productName) {
+                    window.location.href = `details.html?name=${encodeURIComponent(ad.productName)}`;
                 } else {
                     alert('لا يوجد منتج مرتبط بهذا الإعلان.');
                 }
@@ -239,26 +237,25 @@
         const productsContainer = document.querySelector('.products');
         snapshot.forEach(function(childSnapshot) {
             const product = childSnapshot.val();
-            const productId = childSnapshot.key;
             const productElement = document.createElement('div');
             productElement.classList.add('product-card');
-            productElement.setAttribute('data-id', productId);
             productElement.innerHTML = `
                 <img src="${product.mainImage}" alt="${product.name}">
                 <h3>${product.name}</h3>
                 <p class="price">${product.price}</p>
                 <div class="stars">${'★'.repeat(product.rating)}</div>
                 <div class="actions">
-                    <button onclick="deleteProduct('${productId}')">حذف</button>
+                    <button onclick="deleteProduct('${childSnapshot.key}')">حذف</button>
                 </div>
             `;
             productElement.addEventListener('click', function() {
-                window.location.href = `details.html?id=${productId}`;
+                window.location.href = `details.html?name=${encodeURIComponent(product.name)}`;
             });
             productsContainer.appendChild(productElement);
         });
     });
 }
+
 
 
         // إضافة إعلان
