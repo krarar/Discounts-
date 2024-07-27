@@ -228,26 +228,29 @@
             const file = document.getElementById("imageInput").files[0];
             const width = document.getElementById("imageWidth").value || 'auto';
             const height = document.getElementById("imageHeight").value || 'auto';
-            
-            if (file) {
-                const storageRef = firebase.storage().ref('images/' + file.name);
-                storageRef.put(file).then(() => {
-                    storageRef.getDownloadURL().then(url => {
-                        firebase.database().ref('data').push({
-                            text: text,
-                            imageUrl: url,
-                            width: width,
-                            height: height
-                        }).then(() => {
-                            setBackgroundImage(url, width, height);
-                            alert("تم الحفظ بنجاح!");
-                            closePopup();
-                        });
-                    });
-                });
-            } else {
+
+            if (!file) {
                 alert("يرجى اختيار صورة!");
+                return;
             }
+
+            const storageRef = firebase.storage().ref('images/' + file.name);
+            storageRef.put(file).then(() => {
+                return storageRef.getDownloadURL();
+            }).then(url => {
+                return firebase.database().ref('data').push({
+                    text: text,
+                    imageUrl: url,
+                    width: width,
+                    height: height
+                });
+            }).then(() => {
+                setBackgroundImage(url, width, height);
+                alert("تم الحفظ بنجاح!");
+                closePopup();
+            }).catch(error => {
+                alert("حدث خطأ أثناء حفظ البيانات: " + error.message);
+            });
         }
 
         function setBackgroundImage(url, width, height) {
@@ -269,7 +272,7 @@
             const password = document.getElementById('password').value;
 
             firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
+                .then(() => {
                     alert('تم تسجيل الدخول بنجاح!');
                     window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
                 })
@@ -279,26 +282,26 @@
         }
 
         function loginWithGoogle() {
-            var provider = new firebase.auth.GoogleAuthProvider();
+            const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
-                .then((result) => {
+                .then(() => {
                     alert('تم تسجيل الدخول عبر جيميل!');
                     window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
                 })
                 .catch((error) => {
-                    alert('فشل تسجيل الدخول: ' + error.message);
+                    alert('فشل تسجيل الدخول عبر جيميل: ' + error.message);
                 });
         }
 
         function loginWithFacebook() {
-            var provider = new firebase.auth.FacebookAuthProvider();
+            const provider = new firebase.auth.FacebookAuthProvider();
             firebase.auth().signInWithPopup(provider)
-                .then((result) => {
+                .then(() => {
                     alert('تم تسجيل الدخول عبر فيسبوك!');
                     window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
                 })
                 .catch((error) => {
-                    alert('فشل تسجيل الدخول: ' + error.message);
+                    alert('فشل تسجيل الدخول عبر فيسبوك: ' + error.message);
                 });
         }
 
@@ -307,7 +310,7 @@
             const password = document.getElementById('signupPassword').value;
 
             firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
+                .then(() => {
                     alert('تم إنشاء الحساب بنجاح!');
                     document.getElementById('signup-page').style.display = 'none';
                     document.querySelector('.login-box').style.display = 'block';
