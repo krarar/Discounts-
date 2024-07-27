@@ -3,74 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>واجهة المستخدم</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>واجهة متجر إلكتروني</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #f0f0f0; /* لون الخلفية في حال وجود فراغ */
+        }
+        .header {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 20px;
+            z-index: 1;
+        }
+        .btn-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+        .text-container {
+            position: absolute;
+            bottom: 20px; /* تعديل الموقع من الأسفل */
+            right: 20px;  /* تعديل الموقع من اليمين */
+            text-align: center;
+        }
+        .text-content {
+            font-size: 20px; /* التحكم في حجم النص */
+            color: blue; /* التحكم في لون النص */
+            text-decoration: none; /* إزالة الخط تحت النص */
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px; /* المسافة بين النص والصورة */
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            color: #fff; /* لون النص داخل الزر */
+        }
+        .text-content img {
+            width: 20px; /* عرض الصورة */
+            height: 20px; /* ارتفاع الصورة */
+        }
+        .text-content:hover {
+            background: linear-gradient(45deg, #0056b3, #003d80);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        .text-content:active {
+            background: linear-gradient(45deg, #003d80, #0056b3);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(0);
+        }
+        .btn {
+            padding: 12px 24px;
+            font-size: 18px;
+            color: #fff;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        .btn:hover {
+            background: linear-gradient(45deg, #0056b3, #003d80);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            background: linear-gradient(45deg, #003d80, #0056b3);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(0);
+        }
+        #popup {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        .login-box {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .login-box button:hover {
+            background: #0056b3;
+        }
+        .login-box .social-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .login-box .social-buttons button {
+            flex: 1;
+            margin: 0 5px;
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .login-box .social-buttons .google {
+            background: #db4437;
+            color: white;
+        }
+        .login-box .social-buttons .facebook {
+            background: #4267b2;
+            color: white;
+        }
+        .login-box a {
+            display: block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .login-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="header">
-        <i class="fas fa-bars icon" id="sidebarToggle"></i>
-        <div class="title">اسم المتجر</div>
-        <i class="fas fa-search icon"></i>
+    <div class="header">واجهة متجر إلكتروني محترف</div>
+
+    <div class="btn-container">
+        <button class="btn" onclick="openPopup()">إضافة نص وصورة</button>
     </div>
 
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="ابحث...">
+    <!-- النص في صف واحد -->
+    <div class="text-container">
+        <span class="text-content" onclick="openNewPage()">انقر هنا
+            <img src="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/pngwing.com%20(2).png?alt=media&token=830156cc-4c7a-41f8-9fc1-dc69a511c6a2" alt="Icon"> <!-- رابط للصورة -->
+        </span>
     </div>
 
-    <div class="announcement-bar">
-        <div class="announcement-slider" id="announcementSlider">
-            <!-- Placeholder for dynamic ads -->
+    <!-- مربع تسجيل الدخول -->
+    <div class="login-box">
+        <h2>تسجيل الدخول</h2>
+        <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+        <input type="password" id="password" placeholder="كلمة المرور" required>
+        <button onclick="login()">تسجيل الدخول</button>
+        <div class="social-buttons">
+            <button class="google" onclick="loginWithGoogle()">تسجيل الدخول بجيميل</button>
+            <button class="facebook" onclick="loginWithFacebook()">تسجيل الدخول بفيسبوك</button>
+        </div>
+        <a href="#" onclick="showSignup()">إنشاء حساب</a>
+    </div>
+
+    <div id="popup">
+        <div>
+            <input type="text" id="textInput" placeholder="أدخل النص">
+        </div>
+        <div>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+        <div>
+            <input type="number" id="imageWidth" placeholder="أدخل عرض الصورة بالبكسل">
+        </div>
+        <div>
+            <input type="number" id="imageHeight" placeholder="أدخل ارتفاع الصورة بالبكسل">
+        </div>
+        <div>
+            <button onclick="saveData()">حفظ</button>
+            <button onclick="closePopup()">إغلاق</button>
         </div>
     </div>
 
-    <div class="filters">
-        <button class="filter-button">كهربائيات</button>
-        <button class="filter-button">أثاث</button>
-        <button class="filter-button">ملابس</button>
-        <button class="filter-button">سيارات</button>
+    <!-- صفحة إنشاء الحساب -->
+    <div id="signup-page" style="display:none;">
+        <div class="login-box">
+            <h2>إنشاء حساب</h2>
+            <input type="email" id="signupEmail" placeholder="البريد الإلكتروني" required>
+            <input type="password" id="signupPassword" placeholder="كلمة المرور" required>
+            <button onclick="signup()">إنشاء حساب</button>
+            <a href="#" onclick="showLogin()">عودة لتسجيل الدخول</a>
+        </div>
     </div>
 
-    <div class="categories" id="categories">
-        <!-- Placeholder for dynamic categories -->
-    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+        firebase.initializeApp(firebaseConfig);
 
-    <div class="footer">
-        <i class="fas fa-home icon"></i>
-        <i class="fas fa-search icon"></i>
-        <i class="fas fa-heart icon"></i>
-        <i class="fas fa-user icon"></i>
-    </div>
+        function openPopup() {
+            document.getElementById("popup").style.display = "block";
+        }
 
-    <div class="sidebar" id="sidebar">
-        <i class="fas fa-times close-btn" id="closeSidebar"></i>
-        <a href="#">الصفحة الرئيسية</a>
-        <a href="#">المنتجات</a>
-        <a href="#">الإعدادات</a>
-        <a href="#">تسجيل الخروج</a>
-    </div>
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
 
-    <div class="settings-panel" id="settingsPanel">
-        <h2>إعدادات</h2>
-        <label for="bgColor">اختر لون الخلفية:</label>
-        <input type="color" id="bgColor" name="bgColor">
-        <label for="fontSize">حجم الخط:</label>
-        <input type="range" id="fontSize" name="fontSize" min="12" max="30">
-        <button id="applySettings">تطبيق</button>
-    </div>
+        function openNewPage() {
+            window.location.href = 'in1dex.html'; // رابط للصفحة الجديدة
+        }
 
-    <div class="add-item-panel" id="addItemPanel">
-        <h2>إضافة منتج</h2>
-        <label for="itemName">اسم المنتج:</label>
-        <input type="text" id="itemName">
-        <label for="itemImage">صورة المنتج:</label>
-        <input type="file" id="itemImage">
-        <label for="itemUrl">رابط المنتج:</label>
-        <input type="url" id="itemUrl">
-        <button id="saveItem">حفظ</button>
-    </div>
+        function saveData() {
+            const text = document.getElementById("textInput").value;
+            const file = document.getElementById("imageInput").files[0];
+            const width = document.getElementById("imageWidth").value || 'auto';
+            const height = document.getElementById("imageHeight").value || 'auto';
 
-    <script src="script.js"></script>
+            if (!file) {
+                alert("يرجى اختيار صورة!");
+                return;
+            }
+
+            const storageRef = firebase.storage().ref('images/' + file.name);
+            storageRef.put(file).then(() => {
+                return storageRef.getDownloadURL();
+            }).then(url => {
+                return firebase.database().ref('data').push({
+                    text: text,
+                    imageUrl: url,
+                    width: width,
+                    height: height
+                });
+            }).then(() => {
+                setBackgroundImage(url, width, height);
+                alert("تم الحفظ بنجاح!");
+                closePopup();
+            }).catch(error => {
+                alert("حدث خطأ أثناء حفظ البيانات: " + error.message);
+            });
+        }
+
+        function setBackgroundImage(url, width, height) {
+            document.body.style.backgroundImage = `url(${url})`;
+            document.body.style.backgroundSize = `${width}px ${height}px`;
+            document.body.style.backgroundPosition = "center";
+            document.body.style.backgroundRepeat = "no-repeat";
+        }
+
+        firebase.database().ref('data').limitToLast(1).on('value', snapshot => {
+            snapshot.forEach(data => {
+                const { imageUrl, width, height } = data.val();
+                setBackgroundImage(imageUrl, width, height);
+            });
+        });
+
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    alert('تم تسجيل الدخول بنجاح!');
+                    window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
+                })
+                .catch((error) => {
+                    alert('فشل تسجيل الدخول: ' + error.message);
+                });
+        }
+
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+                .then(() => {
+                    alert('تم تسجيل الدخول عبر جيميل!');
+                    window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
+                })
+                .catch((error) => {
+                    alert('فشل تسجيل الدخول عبر جيميل: ' + error.message);
+                });
+        }
+
+        function loginWithFacebook() {
+            const provider = new firebase.auth.FacebookAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+                .then(() => {
+                    alert('تم تسجيل الدخول عبر فيسبوك!');
+                    window.location.href = 'in1dex.html'; // توجيه المستخدم إلى الصفحة الجديدة عند النجاح
+                })
+                .catch((error) => {
+                    alert('فشل تسجيل الدخول عبر فيسبوك: ' + error.message);
+                });
+        }
+
+        function signup() {
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    alert('تم إنشاء الحساب بنجاح!');
+                    document.getElementById('signup-page').style.display = 'none';
+                    document.querySelector('.login-box').style.display = 'block';
+                })
+                .catch((error) => {
+                    alert('فشل إنشاء الحساب: ' + error.message);
+                });
+        }
+
+        function showSignup() {
+            document.querySelector('.login-box').style.display = 'none';
+            document.getElementById('signup-page').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.querySelector('.login-box').style.display = 'block';
+            document.getElementById('signup-page').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
