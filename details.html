@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,22 +8,26 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #4A004A;
-            color: #fff;
+            background-color: #332929;
+            color: #333;
             margin: 0;
             padding: 0;
+            padding-bottom: 60px; /* مساحة للـ footer و header السفلي */
         }
         .container {
             padding: 20px;
             max-width: 375px;
             margin: 0 auto;
             text-align: center;
+            background-color: #252222;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .product-details img.main-image {
             width: 100%;
             height: auto;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .product-details .additional-images {
             display: flex;
@@ -37,27 +41,27 @@
             margin: 0 5px;
             cursor: pointer;
             border: 2px solid transparent;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .product-details .additional-images img.selected {
-            border-color: #00FF00; /* اللون الأخضر */
+            border-color: #4A90E2; /* لون أزرق متناسق */
         }
         .product-details h1 {
             margin: 20px 0 10px;
             font-size: 24px;
-            color: #FFD700;
+            color: #f0eaea;
         }
         .product-details p {
             margin-bottom: 15px;
             font-size: 18px;
         }
         .product-details .rating {
-            color: #FFD700;
+            color: #00ff37;
         }
         .buy-button {
             margin-top: 20px;
-            background-color: #FFD700;
-            color: #4A004A;
+            background-color: #d5ec05;
+            color: #2b2626;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -66,7 +70,7 @@
             transition: background-color 0.3s ease;
         }
         .buy-button:hover {
-            background-color: #D4A700;
+            background-color: #e8edf3;
         }
         .social-icons {
             margin-top: 20px;
@@ -74,7 +78,7 @@
         .social-icons a {
             margin: 0 10px;
             text-decoration: none;
-            color: #fff;
+            color: #4A90E2;
         }
         .social-icons i {
             font-size: 40px;
@@ -85,7 +89,7 @@
         .products-section h2 {
             font-size: 20px;
             margin-bottom: 15px;
-            color: #FFD700;
+            color: #333;
         }
         .products {
             display: grid;
@@ -93,11 +97,12 @@
             gap: 15px;
         }
         .product-card {
-            background-color: #1D001E;
+            background-color: #2e2626;
             border-radius: 10px;
             padding: 10px;
             cursor: pointer;
             text-align: center;
+            box-shadow: 0 2px 4px rgb(236, 202, 5);
         }
         .product-card img {
             width: 100%;
@@ -109,9 +114,10 @@
         .product-card h3 {
             font-size: 14px;
             margin-bottom: 5px;
+            color: #09e61b;
         }
         .product-card .price {
-            color: #BE00BE;
+            color: #E53935;
             font-weight: bold;
         }
         .stars {
@@ -121,7 +127,14 @@
         .header {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 20px;
+            position: fixed;
+            bottom: 50px; /* مكان للـ footer */
+            left: 0;
+            width: 100%;
+            background-color: #4A90E2;
+            padding: 10px;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
         }
         .header i {
             font-size: 30px;
@@ -133,8 +146,9 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: #4A004A;
-            padding: 10px 0;
+            background-color: #4A90E2;
+            padding: 10px;
+            color: #fff;
         }
         .footer i {
             font-size: 30px;
@@ -153,7 +167,7 @@
         }
         .modal-content {
             background: #fff;
-            color: #000;
+            color: #333;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
@@ -171,8 +185,8 @@
             border-radius: 5px;
         }
         .modal-content .action-buttons button {
-            background-color: #FFD700;
-            color: #4A004A;
+            background-color: #4A90E2;
+            color: #fff;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
@@ -182,16 +196,12 @@
             transition: background-color 0.3s ease;
         }
         .modal-content .action-buttons button:hover {
-            background-color: #D4A700;
+            background-color: #e2e5e7;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <i class="material-icons" 
-            <i class="material-icons" 
-        </div>
         <div class="product-details">
             <img id="product-image" class="main-image" src="" alt="Product Image">
             <h1 id="product-name">اسم المنتج</h1>
@@ -218,8 +228,6 @@
         </div>
     </div>
 
-    
-
     <!-- مودال للبحث -->
     <div id="searchModal" class="modal">
         <div class="modal-content">
@@ -230,6 +238,13 @@
                 <button onclick="closeModal('searchModal')">إلغاء</button>
             </div>
         </div>
+    </div>
+
+   
+    <div class="footer">
+        <i class="fa fa-home" onclick="goHome()"></i>
+        <i class="fa fa-search" onclick="showSearchModal()"></i>
+        <i class="fa fa-user" onclick="goToLogin()"></i>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -280,8 +295,8 @@
                 document.getElementById('facebook-link').href = product.facebookLink || 'https://www.facebook.com';
                 document.getElementById('twitter-link').href = product.twitterLink || 'https://www.twitter.com';
                 document.getElementById('instagram-link').href = product.instagramLink || 'https://www.instagram.com';
-                document.getElementById('whatsapp-link').href = product.whatsappLink || 'https://www.linkedin.com';
-                document.getElementById('telegram-link').href = product.telegramLink || 'https://www.linkedin.com';
+                document.getElementById('whatsapp-link').href = product.whatsappLink || 'https://www.whatsapp.com';
+                document.getElementById('telegram-link').href = product.telegramLink || 'https://www.telegram.org';
             }
         });
 
@@ -358,6 +373,4 @@
         }
     </script>
 </body>
-    </html>
-
-    
+</html>
