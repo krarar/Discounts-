@@ -1,27 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>مفروشات الخيمة</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHq+6XXxHfXCdj1EilG5QdPjfQxs57uDDvb8Z/um3z4f4Usy1C/WSP5l9TbLzt+FPf9mGqZw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        :root {
+            --primary-color: #880E4F;
+            --secondary-color: #ffffff;
+            --background-color: #1B1B1B;
+            --card-color: #333333;
+            --text-color: #E0E0E0;
+            --accent-color: #FFC107;
+            --highlight-color: #B71C1C;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
+            background-color: var(--background-color);
+            color: var(--text-color);
             font-family: Arial, sans-serif;
-            background-color: #050505;
-            color: #fff;
         }
         .container {
             max-width: 100%;
             margin: 0 auto;
             padding: 1rem;
         }
-        
         .header {
             display: flex;
             justify-content: flex-end;
@@ -31,6 +40,7 @@
         }
         .header .material-icons {
             font-size: 1.5rem;
+            cursor: pointer;
         }
         .ads {
             display: flex;
@@ -39,7 +49,7 @@
             margin-bottom: 1rem;
         }
         .banner {
-            background-color: #490d3f;
+            background-color: var(--card-color);
             border-radius: 10px;
             padding: 1rem;
             position: relative;
@@ -55,6 +65,7 @@
         .banner h2 {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
+            color: var(--accent-color);
         }
         .banner p {
             margin-bottom: 1rem;
@@ -68,21 +79,26 @@
             object-fit: cover;
         }
         .section-title {
-            color: #BE00BE;
+            color: var(--accent-color);
             font-size: 1.25rem;
             margin: 1rem 0;
         }
         .products {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 1rem;
         }
         .product-card {
-            background-color: #1D001E;
+            background-color: var(--card-color);
             border-radius: 10px;
             padding: 0.5rem;
             position: relative;
             cursor: pointer;
+            border: 2px solid var(--accent-color);
+            transition: transform 0.3s;
+        }
+        .product-card:hover {
+            transform: scale(1.05);
         }
         .product-card img {
             width: 100%;
@@ -96,7 +112,7 @@
             margin-bottom: 0.25rem;
         }
         .product-card .price {
-            color: #BE00BE;
+            color: var(--accent-color);
             font-weight: bold;
         }
         .stars {
@@ -127,14 +143,19 @@
             justify-content: space-around;
             align-items: center;
             padding: 0.5rem;
-            background-color: #1D001E;
+            background-color: var(--card-color);
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
         }
-        .footer .material-icons {
+        .footer-icon {
+            color: var(--text-color);
             font-size: 1.5rem;
+            text-decoration: none;
+        }
+        .footer-icon:hover {
+            color: var(--accent-color);
         }
         .modal {
             display: none;
@@ -148,18 +169,20 @@
             align-items: center;
         }
         .modal-content {
-            background: #fff;
+            background: var(--background-color);
             padding: 1rem;
             border-radius: 5px;
             text-align: center;
             width: 80%;
             max-width: 500px;
+            color: var(--text-color);
         }
         .modal-content input, .modal-content textarea, .modal-content button {
             display: block;
             width: 100%;
             margin: 0.5rem 0;
             padding: 0.5rem;
+            border-radius: 5px;
         }
         .modal-content input[type="file"] {
             padding: 0;
@@ -172,15 +195,14 @@
             justify-content: center;
         }
         .action-buttons button {
-            background-color: #BE00BE;
-            color: #fff;
+            background-color: var(--highlight-color);
+            color: var(--secondary-color);
             border: none;
             padding: 0.5rem 1rem;
             border-radius: 5px;
             cursor: pointer;
         }
     </style>
-
     <!-- إضافة Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -206,35 +228,33 @@
             const adsRef = database.ref('ads');
             const productsRef = database.ref('products');
 
-    // تحميل الإعلانات
-adsRef.once('value', function(snapshot) {
-    const adsContainer = document.querySelector('.ads');
-    snapshot.forEach(function(childSnapshot) {
-        const ad = childSnapshot.val();
-        const adId = childSnapshot.key;
-        const adElement = document.createElement('div');
-        adElement.classList.add('banner');
-        adElement.setAttribute('data-id', adId);
-        adElement.innerHTML = `
-            <div class="banner-content">
-                <h2>${ad.title}</h2>
-                <p>${ad.description}</p>
-            </div>
-            <img src="${ad.image}" alt="${ad.title}" class="banner-image">
-        `;
-        adElement.addEventListener('click', function() {
-            // استخدم productId الموجود في الإعلان للانتقال إلى تفاصيل المنتج
-            if (ad.productId) {
-                window.location.href = `details.html?id=${ad.productId}`;
-            } else {
-                alert('No product linked to this ad.');
-            }
-        });
-        adsContainer.appendChild(adElement);
-    });
-});
-
-
+            // تحميل الإعلانات
+            adsRef.once('value', function(snapshot) {
+                const adsContainer = document.querySelector('.ads');
+                snapshot.forEach(function(childSnapshot) {
+                    const ad = childSnapshot.val();
+                    const adId = childSnapshot.key;
+                    const adElement = document.createElement('div');
+                    adElement.classList.add('banner');
+                    adElement.setAttribute('data-id', adId);
+                    adElement.innerHTML = `
+                        <div class="banner-content">
+                            <h2>${ad.title}</h2>
+                            <p>${ad.description}</p>
+                        </div>
+                        <img src="${ad.image}" alt="${ad.title}" class="banner-image">
+                    `;
+                    adElement.addEventListener('click', function() {
+                        // استخدم productId الموجود في الإعلان للانتقال إلى تفاصيل المنتج
+                        if (ad.productId) {
+                            window.location.href = `details.html?id=${ad.productId}`;
+                        } else {
+                            alert('No product linked to this ad.');
+                        }
+                    });
+                    adsContainer.appendChild(adElement);
+                });
+            });
 
             // تحميل المنتجات
             productsRef.once('value', function(snapshot) {
@@ -246,14 +266,14 @@ adsRef.once('value', function(snapshot) {
                     productElement.classList.add('product-card');
                     productElement.setAttribute('data-id', productId);
                     productElement.innerHTML = `
-    <img src="${product.mainImage}" alt="${product.name}">
-    <h3>${product.name}</h3>
-    <p class="price">${product.price}</p>
-    <div class="stars">${'★'.repeat(product.rating)}</div>
-    <div class="actions">
-        <button onclick="deleteProduct('${productId}')">Delete</button>
-    </div>
-`;
+                        <img src="${product.mainImage}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p class="price">${product.price}</p>
+                        <div class="stars">${'★'.repeat(product.rating)}</div>
+                        <div class="actions">
+                            <button onclick="deleteProduct('${productId}')">حذف</button>
+                        </div>
+                    `;
 
                     productElement.addEventListener('click', function() {
                         window.location.href = `details.html?id=${productId}`;
@@ -265,80 +285,61 @@ adsRef.once('value', function(snapshot) {
 
         // إضافة إعلان
         function addAd() {
-    const adTitle = document.getElementById('ad-title').value;
-    const adDescription = document.getElementById('ad-description').value;
-    const adImage = document.getElementById('ad-image').files[0];
-    const adProductId = document.getElementById('ad-product-id').value; // إضافة هذا السطر
+            const adTitle = document.getElementById('ad-title').value;
+            const adDescription = document.getElementById('ad-description').value;
+            const adImage = document.getElementById('ad-image').files[0];
+            const adProductId = document.getElementById('ad-product-id').value;
 
-    const storageRef = storage.ref('ads/' + adImage.name);
-    const uploadTask = storageRef.put(adImage);
+            const storageRef = storage.ref('ads/' + adImage.name);
+            const uploadTask = storageRef.put(adImage);
 
-    uploadTask.on('state_changed', function(snapshot){}, function(error) {
-        console.error('Upload failed:', error);
-    }, function() {
-        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            const newAdRef = database.ref('ads').push();
-            newAdRef.set({
-                title: adTitle,
-                description: adDescription,
-                image: downloadURL,
-                productId: adProductId // إضافة هذا السطر
+            uploadTask.on('state_changed', function(snapshot) {
+                // تحميل progress
+            }, function(error) {
+                console.error('Upload failed:', error);
+            }, function() {
+                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    const newAd = {
+                        title: adTitle,
+                        description: adDescription,
+                        image: downloadURL,
+                        productId: adProductId
+                    };
+                    const adsRef = database.ref('ads');
+                    adsRef.push(newAd).then(function() {
+                        alert('Ad added successfully!');
+                        document.getElementById('ad-modal').style.display = 'none';
+                    });
+                });
             });
-            alert('Ad added successfully!');
-            location.reload();
-        });
-    });
-}
-
+        }
 
         // إضافة منتج
         function addProduct() {
             const productName = document.getElementById('product-name').value;
             const productPrice = document.getElementById('product-price').value;
-            const productDescription = document.getElementById('product-description').value;
-            const productRating = parseInt(document.getElementById('product-rating').value);
+            const productRating = document.getElementById('product-rating').value;
             const productMainImage = document.getElementById('product-main-image').files[0];
-            const productImages = document.getElementById('product-images').files;
 
-            let mainImageUrl = '';
-            const productImagesUrls = [];
-            let uploadCount = 0;
+            const storageRef = storage.ref('products/' + productMainImage.name);
+            const uploadTask = storageRef.put(productMainImage);
 
-            // رفع الصورة الرئيسية
-            const mainImageRef = storage.ref('products/' + productMainImage.name);
-            const mainUploadTask = mainImageRef.put(productMainImage);
-            mainUploadTask.on('state_changed', function(snapshot) {}, function(error) {
+            uploadTask.on('state_changed', function(snapshot) {
+                // تحميل progress
+            }, function(error) {
                 console.error('Upload failed:', error);
             }, function() {
-                mainUploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    mainImageUrl = downloadURL;
-                    
-                    // رفع الصور الإضافية
-                    Array.from(productImages).forEach(file => {
-                        const storageRef = storage.ref('products/' + file.name);
-                        const uploadTask = storageRef.put(file);
-
-                        uploadTask.on('state_changed', function(snapshot) {}, function(error) {
-                            console.error('Upload failed:', error);
-                        }, function() {
-                            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                                productImagesUrls.push(downloadURL);
-                                uploadCount++;
-                                if (uploadCount === productImages.length) {
-                                    const newProductRef = database.ref('products').push();
-                                    newProductRef.set({
-                                        name: productName,
-                                        price: productPrice,
-                                        description: productDescription,
-                                        rating: productRating,
-                                        mainImage: mainImageUrl,
-                                        images: productImagesUrls
-                                    });
-                                    alert('Product added successfully!');
-                                    location.reload();
-                                }
-                            });
-                        });
+                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    const newProduct = {
+                        name: productName,
+                        price: productPrice,
+                        rating: parseInt(productRating),
+                        mainImage: downloadURL
+                    };
+                    const productsRef = database.ref('products');
+                    productsRef.push(newProduct).then(function() {
+                        alert('Product added successfully!');
+                        document.getElementById('product-modal').style.display = 'none';
                     });
                 });
             });
@@ -346,30 +347,12 @@ adsRef.once('value', function(snapshot) {
 
         // حذف منتج
         function deleteProduct(productId) {
-            if (confirm('Are you sure you want to delete this product?')) {
-                const productRef = database.ref('products/' + productId);
-                productRef.remove();
+            const productsRef = database.ref('products/' + productId);
+            productsRef.remove().then(function() {
                 alert('Product deleted successfully!');
-                location.reload();
-            }
-        }
-
-        // عرض النموذج لإضافة إعلان
-        function showAdModal() {
-            const adModal = document.getElementById('ad-modal');
-            adModal.style.display = 'flex';
-        }
-
-        // عرض النموذج لإضافة منتج
-        function showProductModal() {
-            const productModal = document.getElementById('product-modal');
-            productModal.style.display = 'flex';
-        }
-
-        // إغلاق النموذج
-        function closeModal() {
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.style.display = 'none';
+                window.location.reload();
+            }).catch(function(error) {
+                console.error('Delete failed:', error);
             });
         }
     </script>
@@ -377,112 +360,50 @@ adsRef.once('value', function(snapshot) {
 <body>
     <div class="container">
         <div class="header">
-            <i class="material-icons" onclick="showAdModal()">add</i>
-            <i class="material-icons" onclick="showProductModal()">add</i>
+            <span class="material-icons" onclick="document.getElementById('product-modal').style.display='flex'">add</span>
+            <span class="material-icons" onclick="document.getElementById('ad-modal').style.display='flex'">add_circle</span>
         </div>
+
         <div class="ads"></div>
-        <h2 class="section-title">المنتجات</h2>
+
+        <div class="section-title">المنتجات</div>
         <div class="products"></div>
-    </div>
+
         <div class="footer">
-            <i class="material-icons" onclick="goHome()">home</i>
-            <i class="material-icons" onclick="showSearchModal()">search</i>
-            <i class="material-icons">shopping_cart</i>
-            <i class="material-icons" onclick="goToLogin()">account_circle</i>
+            <a href="#" class="footer-icon"><span class="material-icons">home</span></a>
+            <a href="#" class="footer-icon"><span class="material-icons">shopping_cart</span></a>
+            <a href="#" class="footer-icon"><span class="material-icons">person</span></a>
         </div>
-        
-        <script>
-            // إعادة توجيه إلى صفحة تسجيل الدخول
-            function goToLogin() {
-                window.location.href = 'login.html';
-            }
-        </script>
-        
-        
-        <!-- مودال للبحث -->
-        <div id="searchModal" class="modal">
-            <div class="modal-content">
-                <h2>البحث في المنتجات</h2>
-                <input type="text" id="search-query" placeholder="ادخل اسم المنتج">
-                <div class="action-buttons">
-                    <button onclick="searchProduct()">بحث</button>
-                    <button onclick="closeModal('searchModal')">إلغاء</button>
-                </div>
+    </div>
+
+    <!-- Modal for adding product -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <h2>إضافة منتج</h2>
+            <input type="text" id="product-name" placeholder="اسم المنتج" required>
+            <input type="number" id="product-price" placeholder="السعر" required>
+            <input type="number" id="product-rating" placeholder="التقييم (من 5)" max="5" min="1" required>
+            <input type="file" id="product-main-image" accept="image/*" required>
+            <div class="action-buttons">
+                <button onclick="addProduct()">إضافة منتج</button>
+                <button onclick="document.getElementById('product-modal').style.display='none'">إلغاء</button>
             </div>
         </div>
-        
-        <script>
-            // إعادة توجيه إلى الصفحة الرئيسية
-            function goHome() {
-                window.location.href = 'index.html'; // استبدل 'index.html' بعنوان الصفحة الرئيسية
-            }
-        
-            // عرض مودال البحث
-            function showSearchModal() {
-                showModal('searchModal');
-            }
-        
-            // وظيفة البحث عن منتج
-            function searchProduct() {
-                const query = document.getElementById('search-query').value.toLowerCase();
-                const products = document.querySelectorAll('.product-card');
-                products.forEach(product => {
-                    const productName = product.querySelector('h3').textContent.toLowerCase();
-                    if (productName.includes(query)) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-                closeModal('searchModal');
-            }
-        
-            // عرض المودال
-            function showModal(modalId) {
-                document.getElementById(modalId).style.display = 'flex';
-            }
-        
-            // إخفاء المودال
-            function closeModal(modalId) {
-                document.getElementById(modalId).style.display = 'none';
-            }
-        </script>
+    </div>
 
-    <!-- نموذج إضافة إعلان -->
+    <!-- Modal for adding ad -->
     <div id="ad-modal" class="modal">
-    <div class="modal-content">
-        <h2>إضافة إعلان</h2>
-        <input type="text" id="ad-title" placeholder="عنوان الإعلان">
-        <textarea id="ad-description" placeholder="وصف الإعلان"></textarea>
-        <input type="file" id="ad-image" accept="image/*">
-        <input type="text" id="ad-product-id" placeholder="معرف المنتج المرتبط (اختياري)">
-        <div class="action-buttons">
-            <button onclick="addAd()">إضافة</button>
-            <button onclick="closeModal()">إلغاء</button>
+        <div class="modal-content">
+            <h2>إضافة إعلان</h2>
+            <input type="text" id="ad-title" placeholder="عنوان الإعلان" required>
+            <textarea id="ad-description" placeholder="وصف الإعلان" required></textarea>
+            <input type="file" id="ad-image" accept="image/*" required>
+            <input type="text" id="ad-product-id" placeholder="معرف المنتج المرتبط" required>
+            <div class="action-buttons">
+                <button onclick="addAd()">إضافة إعلان</button>
+                <button onclick="document.getElementById('ad-modal').style.display='none'">إلغاء</button>
+            </div>
         </div>
     </div>
-</div>
-
-
-    <!-- نموذج إضافة منتج -->
-<div id="product-modal" class="modal">
-    <div class="modal-content">
-        <h2>إضافة منتج</h2>
-        <input type="text" id="product-name" placeholder="اسم المنتج">
-        <input type="text" id="product-price" placeholder="سعر المنتج">
-        <textarea id="product-description" placeholder="وصف المنتج"></textarea>
-        <input type="number" id="product-rating" min="1" max="5" placeholder="التقييم (1-5)">
-        <input type="file" id="product-main-image" accept="image/*">
-        <input type="file" id="product-images" accept="image/*" multiple>
-        <input type="text" id="product-id" placeholder="معرف المنتج (اختياري)">
-        <div class="action-buttons">
-            <button onclick="addProduct()">إضافة</button>
-            <button onclick="closeModal()">إلغاء</button>
-        </div>
-    </div>
-</div>
-
-
 </body>
 </html>
-```
