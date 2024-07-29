@@ -21,6 +21,14 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            padding-bottom: 60px; /* مساحة للفوتر الثابت */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* لضمان أن الفوتر في الأسفل */
+        }
+
+        .content {
+            flex: 1; /* يملأ المساحة المتاحة بين الهيدر والفوتر */
         }
 
         .carousel {
@@ -100,6 +108,7 @@
             color: var(--text-color);
             transition: transform 0.3s;
             box-sizing: border-box;
+            cursor: pointer;
         }
 
         .product-card:hover {
@@ -153,6 +162,7 @@
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
+            z-index: 1000;
         }
 
         .footer i {
@@ -165,103 +175,215 @@
             color: var(--accent-color);
         }
 
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .header i {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .header i:hover {
+            color: var(--accent-color);
+        }
+
+        .search-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-modal .modal-content {
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .search-modal .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--accent-color);
+            border-radius: 4px;
+            color: var(--text-color);
+            background-color: var(--card-color);
+        }
+
+        .search-modal .modal-content button {
+            background-color: var(--highlight-color);
+            color: var(--secondary-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .search-modal .modal-content button:hover {
+            background-color: #f1f1f1;
+            color: var(--highlight-color);
+        }
+
         @media (max-width: 768px) {
             .carousel {
                 height: 200px;
             }
 
             .grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
             }
         }
     </style>
 </head>
 <body>
-    <!-- شريط التمرير التلقائي (Carousel) -->
-    <div class="carousel">
-        <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" class="active" alt="Image 1">
-        <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 2">
-        <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 3">
-        <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 4">
-        <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 5">
-        <div class="carousel-content">
-            <h1>Welcome To Nyazek Store</h1>
-            <p>Get your 25% discount Now</p>
-            <button>SHOP NOW</button>
+    <div class="content">
+        <!-- شريط التمرير التلقائي (Carousel) -->
+        <div class="carousel">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" class="active" alt="Image 1" data-url="index.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 2" data-url="order.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 3" data-url="orders.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 4" data-url="details.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 5" data-url="details.html">
+            <div class="carousel-content">
+                <h1>Welcome To Nyazek Store</h1>
+                <p>Get your 25% discount Now</p>
+                <button id="shop-now-button">SHOP NOW</button>
+            </div>
+        </div>
+
+       <!-- شريط البحث -->
+<div class="search-modal" id="search-modal">
+    <div class="modal-content">
+        <input type="text" id="search-input" placeholder="Search for products...">
+        <button onclick="closeSearch()">Close</button>
+        <button onclick="performSearch()">Search</button>
+    </div>
+</div>
+
+
+        <!-- عنوان قسم المنتجات الجديدة -->
+        <h2 class="section-title">New Product</h2>
+        <div class="grid-container">
+            <!-- بطاقة المنتج 1 -->
+            <div class="product-card" onclick="location.href='in1dex.html'">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
+                <h3> Name</h3>
+                <p>$24.95</p>
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐</span>
+                    <span class="favorite">❤️</span>
+                </div>
+            </div>
+            <!-- بطاقة المنتج 2 -->
+            <div class="product-card" onclick="location.href='in1dex.html'">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
+                <h3>Product Name</h3>
+                <p>$24.95</p>
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐</span>
+                    <span class="favorite">❤️</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- عنوان قسم المنتجات الأكثر شعبية -->
+        <h2 class="section-title">Most Popular</h2>
+        <div class="grid-container">
+            <!-- بطاقة المنتج 3 -->
+            <div class="product-card" onclick="location.href='in1dex.html'">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
+                <h3>Girls at the Front</h3>
+                <p>$24.95</p>
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐</span>
+                    <span class="favorite">❤️</span>
+                </div>
+            </div>
+            <!-- بطاقة المنتج 4 -->
+            <div class="product-card" onclick="location.href='in1dex.html'">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
+                <h3>Girls at the Front</h3>
+                <p>$24.95</p>
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐</span>
+                    <span class="favorite">❤️</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- عنوان قسم المنتجات الجديدة -->
-    <h2 class="section-title">New Product</h2>
-    <div class="grid-container">
-        <!-- بطاقة المنتج 1 -->
-        <div class="product-card" onclick="location.href='in1dex.html'">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
-            <h3>Product Name</h3>
-            <p>$24.95</p>
-            <div class="rating">
-                <span>⭐⭐⭐⭐⭐</span>
-                <span class="favorite">❤️</span>
-            </div>
-        </div>
-        <!-- بطاقة المنتج 2 -->
-        <div class="product-card" onclick="location.href='in1dex.html'">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
-            <h3>Product Name</h3>
-            <p>$24.95</p>
-            <div class="rating">
-                <span>⭐⭐⭐⭐⭐</span>
-                <span class="favorite">❤️</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- عنوان قسم المنتجات الأكثر شعبية -->
-    <h2 class="section-title">Most Popular</h2>
-    <div class="grid-container">
-        <!-- بطاقة المنتج 3 -->
-        <div class="product-card" onclick="location.href='in1dex.html'">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
-            <h3>Girls at the Front</h3>
-            <p>$24.95</p>
-            <div class="rating">
-                <span>⭐⭐⭐⭐⭐</span>
-                <span class="favorite">❤️</span>
-            </div>
-        </div>
-        <!-- بطاقة المنتج 4 -->
-        <div class="product-card" onclick="location.href='in1dex.html'">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
-            <h3>Girls at the Front</h3>
-            <p>$24.95</p>
-            <div class="rating">
-                <span>⭐⭐⭐⭐⭐</span>
-                <span class="favorite">❤️</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- الفوتر (الجزء السفلي من الصفحة) -->
+    <!-- شريط الأدوات السفلي -->
     <div class="footer">
-        <i class="fa fa-home"></i>
-        <i class="fa fa-heart"></i>
-        <i class="fa fa-search"></i>
-        <i class="fa fa-shopping-cart"></i>
-        <i class="fa fa-user"></i>
+        <i class="fa fa-home" onclick="location.href='home.html'"></i>
+        <i class="fa fa-search" onclick="openSearch()"></i>
+        <i class="fa fa-shopping-cart" onclick="location.href='cart.html'"></i>
+        <i class="fa fa-user" onclick="location.href='profile.html'"></i>
     </div>
 
     <script>
         let currentIndex = 0;
         const images = document.querySelectorAll('.carousel img');
         const totalImages = images.length;
-
+    
         function showNextImage() {
             images[currentIndex].classList.remove('active');
             currentIndex = (currentIndex + 1) % totalImages;
             images[currentIndex].classList.add('active');
         }
-
+    
         setInterval(showNextImage, 3000); // تغيير الصورة كل 3 ثواني
+    
+        function openSearch() {
+            document.getElementById('search-modal').style.display = 'flex';
+        }
+    
+        function closeSearch() {
+            document.getElementById('search-modal').style.display = 'none';
+        }
+    
+        function performSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const productCards = document.querySelectorAll('.product-card');
+    
+            productCards.forEach(card => {
+                const productName = card.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+    
+            closeSearch(); // إغلاق شريط البحث بعد إجراء البحث
+        }
+    
+        document.getElementById('shop-now-button').addEventListener('click', function() {
+            const activeImage = document.querySelector('.carousel img.active');
+            const url = activeImage.getAttribute('data-url');
+            if (url) {
+                window.location.href = url;
+            }
+        });
     </script>
+    
 </body>
 </html>
