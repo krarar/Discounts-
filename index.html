@@ -169,10 +169,27 @@
             color: var(--secondary-color);
             font-size: 1.5rem;
             cursor: pointer;
+            position: relative;
         }
 
         .footer i:hover {
             color: var(--accent-color);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--highlight-color);
+            color: var(--secondary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
         }
 
         .header {
@@ -333,9 +350,11 @@
 
     <!-- شريط الأدوات السفلي -->
     <div class="footer">
-        <i class="fa fa-home" onclick="location.href='home.html'"></i>
+        <i class="fa fa-home" onclick="location.href='index.html'"></i>
         <i class="fa fa-search" onclick="openSearch()"></i>
-        <i class="fa fa-shopping-cart" onclick="location.href='cart.html'"></i>
+        <i class="fa fa-bell" onclick="location.href='notifications.html'">
+            <div id="notification-badge" class="notification-badge">0</div>
+        </i>
         <i class="fa fa-user" onclick="location.href='profile.html'"></i>
     </div>
 
@@ -383,6 +402,17 @@
                 window.location.href = url;
             }
         });
+
+        // وظيفة لتحديث عدد الإشعارات
+        let notificationCount = 0;
+
+        function updateNotificationCount(count) {
+            notificationCount += count;
+            document.getElementById('notification-badge').textContent = notificationCount;
+        }
+
+        // لتحديث العدد عند إضافة منتج جديد (يمكنك استدعاء هذه الوظيفة عند إضافة منتج جديد)
+        updateNotificationCount(1); // مثال: زيادة العدد بواحد
     </script>
     
 </body>
