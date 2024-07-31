@@ -75,6 +75,27 @@
             cursor: pointer;
             font-size: 16px;
         }
+        .order .whatsapp-container {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .order input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            width: calc(50% - 120px);
+            margin-right: 10px;
+        }
+        .order .country-code {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            width: 20%;
+            margin-right: 10px;
+        }
         .footer {
             display: flex;
             justify-content: space-around;
@@ -116,7 +137,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-    // تهيئة Firebase
+        // تهيئة Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
             authDomain: "messageemeapp.firebaseapp.com",
@@ -158,9 +179,14 @@
                         <p>ملاحظات: ${order.notes}</p>
                         <p>اسم المنتج: ${order.productName}</p>
                         <p>سعر المنتج: ${order.productPrice} د.ع</p>
+                        <p>القياس: ${order.size}</p>
                         <img src="${order.productImage}" alt="صورة المنتج">
                         <p>التقييم: ${'★'.repeat(order.productRating)}</p>
-                        <button onclick="sendOrderToWhatsApp('${order.name}', '${order.phone}', '${order.productName}', '${order.productPrice}', '${order.productImage}')">إرسال عبر واتساب</button>
+                        <div class="whatsapp-container">
+                            <input type="text" id="country-code-${orderSnapshot.key}" placeholder="رمز الدولة" />
+                            <input type="text" id="whatsapp-number-${orderSnapshot.key}" placeholder="رقم الواتساب" />
+                            <button onclick="sendOrderToWhatsApp('${orderSnapshot.key}')">إرسال عبر واتساب</button>
+                        </div>
                     `;
                     ordersContainer.appendChild(orderElement);
                 });
@@ -181,14 +207,35 @@
             });
         }
 
-        function sendOrderToWhatsApp(name, phone, productName, productPrice, productImage) {
-            const message = `الاسم: ${name}\nرقم الهاتف: ${phone}\nاسم المنتج: ${productName}\nسعر المنتج: ${productPrice} د.ع\n${productImage}`;
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappNumber = prompt("أدخل رقم الواتساب الذي ترغب بإرسال الطلب إليه (مع رمز الدولة):");
-            if (whatsappNumber) {
-                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-                window.open(whatsappUrl, '_blank');
+        function sendOrderToWhatsApp(orderKey) {
+            const countryCode = document.getElementById(`country-code-${orderKey}`).value.trim();
+            const whatsappNumber = document.getElementById(`whatsapp-number-${orderKey}`).value.trim();
+
+            if (!countryCode || !whatsappNumber) {
+                alert('يرجى إدخال رقم الواتساب مع رمز الدولة.');
+                return;
             }
+
+            firebase.database().ref(`orders/${orderKey}`).once('value').then(snapshot => {
+                const order = snapshot.val();
+                const message = `
+                الاسم: ${order.name}\n
+                الدولة: ${order.country}\n
+                المحافظة: ${order.province}\n
+                العنوان: ${order.address}\n
+                أقرب نقطة دالة: ${order.landmark}\n
+                رقم الهاتف: ${order.phone}\n
+                ملاحظات: ${order.notes}\n
+                اسم المنتج: ${order.productName}\n
+                سعر المنتج: ${order.productPrice} د.ع\n
+                القياس: ${order.size}\n
+                تقييم المنتج: ${'★'.repeat(order.productRating)}\n
+                صورة المنتج: ${order.productImage}\n
+                `;
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/${countryCode}${whatsappNumber}?text=${encodedMessage}`;
+                window.open(whatsappUrl, '_blank');
+            });
         }
 
         loadOrders(); // استدعاء الدالة عند تحميل الصفحة
