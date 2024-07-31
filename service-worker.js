@@ -4,8 +4,8 @@ const urlsToCache = [
   '/index.html', // ملف HTML الرئيسي
   '/styles.css', // ملف CSS
   '/script.js', // ملف JavaScript
-  '/storage/emulated/0/متجر 1/ملفات التثبيت/Cjdowner-Cryptocurrency-ICON.512.png', // أيقونة التطبيق
-  '/storage/emulated/0/متجر 1/ملفات التثبيت/Cjdowner-Cryptocurrency-ICON.512.png' // أيقونة التطبيق
+  'https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png', // أيقونة التطبيق
+  'https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png' // أيقونة التطبيق
 ];
 
 self.addEventListener('install', event => {
