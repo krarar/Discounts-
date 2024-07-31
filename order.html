@@ -4,43 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طلب المنتج</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #4A004A;
-            color: #fff;
+            background-color: #1e1e1e;
+            color: #f0f0f0;
             margin: 0;
             padding: 0;
+            padding-bottom: 60px; /* مساحة للـ footer و header السفلي */
         }
         .container {
             padding: 20px;
-            max-width: 375px;
+            max-width: 500px;
             margin: 0 auto;
             text-align: center;
+            background-color: #292929;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .order-form {
-            background-color: #1D001E;
+            background-color: #292929;
             padding: 20px;
             border-radius: 10px;
         }
         .order-form input, .order-form select {
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             padding: 10px;
             border: none;
             border-radius: 5px;
             font-size: 16px;
+            background-color: #333;
+            color: #f0f0f0;
+        }
+        .order-form input::placeholder, .order-form select {
+            color: #ccc;
         }
         .order-form button {
-            background-color: #FFD700;
+            background-color: #ff6347;
             border: none;
             padding: 15px;
             border-radius: 5px;
-            color: #4A004A;
+            color: #ffffff;
             font-size: 18px;
             cursor: pointer;
             margin-top: 10px;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+        .order-form button:hover {
+            background-color: #ff4500;
+            transform: scale(1.05);
         }
         .order-form img {
             width: 100%;
@@ -49,20 +63,50 @@
             margin-top: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #ff6347;
+            padding: 10px;
+            color: #fff;
+        }
+        .footer i {
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        @media only screen and (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                margin: 0 10px;
+            }
+            .order-form input, .order-form select {
+                font-size: 14px;
+                padding: 8px;
+            }
+            .order-form button {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>طلب المنتج</h1>
+        <p>يرجى ملء التفاصيل أدناه لإتمام طلبك:</p>
         <div class="order-form">
-            <input type="text" id="name" placeholder="الاسم" required>
+            <input type="text" id="name" placeholder="الاسم الكامل" required>
             <select id="country" required>
                 <option value="" disabled selected>اختر الدولة</option>
                 <option value="العراق">العراق</option>
                 <option value="السعودية">السعودية</option>
                 <option value="الأردن">الأردن</option>
                 <option value="مصر">مصر</option>
-                <option value="الامارات">الإمارات</option>
+                <option value="الإمارات">الإمارات</option>
                 <!-- يمكنك إضافة المزيد من الدول هنا -->
             </select>
             <select id="province" required>
@@ -80,17 +124,23 @@
             </select>
             <input type="text" id="landmark" placeholder="أقرب نقطة دالة" required>
             <input type="text" id="phone" placeholder="رقم الهاتف" required>
-            <input type="text" id="notes" placeholder="ملاحظات" required>
-            <img id="product-image" src="" alt="Product Image">
+            <input type="text" id="notes" placeholder="ملاحظات إضافية (اختياري)">
+            <img id="product-image" src="" alt="صورة المنتج">
             <button onclick="submitOrder()">إرسال الطلب</button>
-            <button onclick="redirectToOrdersPage()">عرض الطلبات</button> <!-- زر عرض الطلبات -->
+            <button onclick="redirectToOrdersPage()">عرض الطلبات</button>
         </div>
+    </div>
+
+    <div class="footer">
+        <i class="fa fa-home" onclick="goHome()"></i>
+        <i class="fa fa-search" onclick="showSearchModal()"></i>
+        <i class="fa fa-user" onclick="goToLogin()"></i>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        // تهيئة Firebase
+               // تهيئة Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
             authDomain: "messageemeapp.firebaseapp.com",
@@ -145,6 +195,18 @@
             const productImage = document.getElementById('product-image');
             productImage.src = selectedImage || 'default-image-url'; // وضع URL افتراضي إذا لم يتم تحديد صورة
         });
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function showSearchModal() {
+            alert('هذه الميزة غير متاحة حالياً.');
+        }
+
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
     </script>
 </body>
 </html>
