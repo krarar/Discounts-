@@ -66,6 +66,15 @@
             margin-top: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
+        .order button {
+            background-color: #FFD700;
+            border: none;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
         .footer {
             display: flex;
             justify-content: space-around;
@@ -151,6 +160,7 @@
                         <p>سعر المنتج: ${order.productPrice} د.ع</p>
                         <img src="${order.productImage}" alt="صورة المنتج">
                         <p>التقييم: ${'★'.repeat(order.productRating)}</p>
+                        <button onclick="sendOrderToWhatsApp('${order.name}', '${order.phone}', '${order.productName}', '${order.productPrice}', '${order.productImage}')">إرسال عبر واتساب</button>
                     `;
                     ordersContainer.appendChild(orderElement);
                 });
@@ -169,6 +179,16 @@
                     order.style.display = 'none';
                 }
             });
+        }
+
+        function sendOrderToWhatsApp(name, phone, productName, productPrice, productImage) {
+            const message = `الاسم: ${name}\nرقم الهاتف: ${phone}\nاسم المنتج: ${productName}\nسعر المنتج: ${productPrice} د.ع\n${productImage}`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappNumber = prompt("أدخل رقم الواتساب الذي ترغب بإرسال الطلب إليه (مع رمز الدولة):");
+            if (whatsappNumber) {
+                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+                window.open(whatsappUrl, '_blank');
+            }
         }
 
         loadOrders(); // استدعاء الدالة عند تحميل الصفحة
