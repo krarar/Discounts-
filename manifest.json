@@ -1,20 +1,15 @@
 {
-  "short_name": "Nyazek", // الاسم القصير للتطبيق (يظهر تحت الأيقونة عند تثبيت التطبيق)
-  "name": "Nyazek Store", // الاسم الكامل للتطبيق
+  "short_name": "Nyazek Store",
+  "name": "Nyazek Store PWA",
   "icons": [
     {
-      "src": "https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png", // مسار أيقونة التطبيق بحجم 192x192
-      "sizes": "192x192", // حجم الأيقونة
-      "type": "image/png" // نوع الملف
-    },
-    {
-      "src": "https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png", // مسار أيقونة التطبيق بحجم 512x512
-      "sizes": "512x512", // حجم الأيقونة
-      "type": "image/png" // نوع الملف
+      "src": "https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
-  "start_url": "/index.html", // صفحة البدء للتطبيق
-  "display": "standalone", // وضع العرض للتطبيق (كتطبيق مستقل)
-  "background_color": "#1B1B1B", // لون الخلفية للتطبيق
-  "theme_color": "#880E4F" // لون الشريط العلوي للتطبيق في المتصفح
+  "start_url": "/index.html",
+  "display": "standalone",
+  "theme_color": "#880E4F",
+  "background_color": "#1B1B1B"
 }
