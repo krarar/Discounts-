@@ -6,24 +6,30 @@
     <title>مفروشات الخيمة</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-    
+        :root {
+            --primary-color: #880E4F;
+            --secondary-color: #ffffff;
+            --background-color: #1B1B1B;
+            --card-color: #333333;
+            --text-color: #E0E0E0;
+            --accent-color: #FFC107;
+            --highlight-color: #B71C1C;
+        }
         * {
-       
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
+            background-color: var(--background-color);
+            color: var(--text-color);
             font-family: Arial, sans-serif;
-            background-color: #050505;
-            color: #fff;
         }
         .container {
             max-width: 100%;
             margin: 0 auto;
             padding: 1rem;
         }
-        
         .header {
             display: flex;
             justify-content: flex-end;
@@ -33,6 +39,7 @@
         }
         .header .material-icons {
             font-size: 1.5rem;
+            cursor: pointer;
         }
         .ads {
             display: flex;
@@ -41,7 +48,7 @@
             margin-bottom: 1rem;
         }
         .banner {
-            background-color: #490d3f;
+            background-color: var(--card-color);
             border-radius: 10px;
             padding: 1rem;
             position: relative;
@@ -57,6 +64,7 @@
         .banner h2 {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
+            color: var(--accent-color);
         }
         .banner p {
             margin-bottom: 1rem;
@@ -70,21 +78,26 @@
             object-fit: cover;
         }
         .section-title {
-            color: #BE00BE;
+            color: var(--accent-color);
             font-size: 1.25rem;
             margin: 1rem 0;
         }
         .products {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 1rem;
         }
         .product-card {
-            background-color: #1D001E;
+            background-color: var(--card-color);
             border-radius: 10px;
             padding: 0.5rem;
             position: relative;
             cursor: pointer;
+            border: 2px solid var(--accent-color);
+            transition: transform 0.3s;
+        }
+        .product-card:hover {
+            transform: scale(1.05);
         }
         .product-card img {
             width: 100%;
@@ -98,7 +111,7 @@
             margin-bottom: 0.25rem;
         }
         .product-card .price {
-            color: #BE00BE;
+            color: var(--accent-color);
             font-weight: bold;
         }
         .stars {
@@ -129,14 +142,19 @@
             justify-content: space-around;
             align-items: center;
             padding: 0.5rem;
-            background-color: #1D001E;
+            background-color: var(--card-color);
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
         }
-        .footer .material-icons {
+        .footer-icon {
+            color: var(--text-color);
             font-size: 1.5rem;
+            text-decoration: none;
+        }
+        .footer-icon:hover {
+            color: var(--accent-color);
         }
         .modal {
             display: none;
@@ -150,18 +168,20 @@
             align-items: center;
         }
         .modal-content {
-            background: #fff;
+            background: var(--background-color);
             padding: 1rem;
             border-radius: 5px;
             text-align: center;
             width: 80%;
             max-width: 500px;
+            color: var(--text-color);
         }
         .modal-content input, .modal-content textarea, .modal-content button {
             display: block;
             width: 100%;
             margin: 0.5rem 0;
             padding: 0.5rem;
+            border-radius: 5px;
         }
         .modal-content input[type="file"] {
             padding: 0;
@@ -174,15 +194,14 @@
             justify-content: center;
         }
         .action-buttons button {
-            background-color: #BE00BE;
-            color: #fff;
+            background-color: var(--highlight-color);
+            color: var(--secondary-color);
             border: none;
             padding: 0.5rem 1rem;
             border-radius: 5px;
             cursor: pointer;
         }
     </style>
-
     <!-- إضافة Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -487,4 +506,3 @@ adsRef.once('value', function(snapshot) {
 
 </body>
 </html>
-```
