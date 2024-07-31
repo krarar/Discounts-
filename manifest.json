@@ -3,12 +3,12 @@
   "name": "Nyazek Store", // الاسم الكامل للتطبيق
   "icons": [
     {
-      "src": "/storage/emulated/0/متجر 1/ملفات التثبيت/Cjdowner-Cryptocurrency-ICON.512.png", // مسار أيقونة التطبيق بحجم 192x192
+      "src": "https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png", // مسار أيقونة التطبيق بحجم 192x192
       "sizes": "192x192", // حجم الأيقونة
       "type": "image/png" // نوع الملف
     },
     {
-      "src": "/storage/emulated/0/متجر 1/ملفات التثبيت/Cjdowner-Cryptocurrency-ICON.512.png", // مسار أيقونة التطبيق بحجم 512x512
+      "src": "https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png", // مسار أيقونة التطبيق بحجم 512x512
       "sizes": "512x512", // حجم الأيقونة
       "type": "image/png" // نوع الملف
     }
