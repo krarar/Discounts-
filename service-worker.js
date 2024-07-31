@@ -1,25 +1,32 @@
-const CACHE_NAME = 'nyazek-store-cache-v1'; // اسم الذاكرة المؤقتة
+const CACHE_NAME = 'nyazek-store-cache-v1';
 const urlsToCache = [
-  '/', // الصفحة الرئيسية
-  '/index.html', // ملف HTML الرئيسي
-  '/styles.css', // ملف CSS
-  '/script.js', // ملف JavaScript
-  'https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png', // أيقونة التطبيق
-  'https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png' // أيقونة التطبيق
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/styles/main.css',
+  '/scripts/main.js',
+  'https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png'
 ];
 
-self.addEventListener('install', event => {
-  // تثبيت Service Worker وتخزين الموارد في الذاكرة المؤقتة
+self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+      .then(function(cache) {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
+      })
   );
 });
 
-self.addEventListener('fetch', event => {
-  // اعتراض الطلبات وإعادة الموارد من الذاكرة المؤقتة إذا كانت موجودة
+self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request)
-      .then(response => response || fetch(event.request))
+      .then(function(response) {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
+      }
+    )
   );
 });
