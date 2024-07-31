@@ -7,36 +7,107 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #4A004A;
-            color: #fff;
+            background-color: #1e1e1e;
+            color: #f0f0f0;
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
             padding: 20px;
+            background-color: #292929;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .filter-container label, .filter-container select {
+            margin: 5px 0;
+        }
+        .filter-container select {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            background-color: #444;
+            color: #fff;
         }
         .order {
-            background-color: #1D001E;
+            background-color: #333;
             margin-bottom: 20px;
             padding: 20px;
             border-radius: 10px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .order:hover {
+            transform: translateY(-5px);
         }
         .order h2 {
-            margin: 0;
-            font-size: 20px;
+            margin: 0 0 10px 0;
+            font-size: 22px;
             color: #FFD700;
         }
         .order p {
             margin: 5px 0;
             font-size: 16px;
+            line-height: 1.6;
+        }
+        .order img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #ff6347;
+            padding: 10px;
+            color: #fff;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .footer i {
+            font-size: 30px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>الطلبات المقدمة</h1>
-    <div id="orders-container"></div>
+    <div class="container">
+        <h1>الطلبات المقدمة</h1>
+        <div class="filter-container">
+            <label for="time-filter">عرض الطلبات:</label>
+            <select id="time-filter" onchange="filterOrders()">
+                <option value="all">جميع الطلبات</option>
+                <option value="daily">اليومي</option>
+                <option value="weekly">قبل أسبوع</option>
+                <option value="monthly">قبل شهر</option>
+            </select>
+        </div>
+        <div id="orders-container"></div>
+    </div>
+
+    <div class="footer">
+        <i class="fa fa-home" onclick="goHome()"></i>
+        <i class="fa fa-search" onclick="showSearchModal()"></i>
+        <i class="fa fa-user" onclick="goToLogin()"></i>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        // تهيئة Firebase
+    // تهيئة Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
             authDomain: "messageemeapp.firebaseapp.com",
@@ -49,7 +120,6 @@
 
         firebase.initializeApp(firebaseConfig);
 
-        // استرجاع وعرض الطلبات من قاعدة البيانات
         function loadOrders() {
             firebase.database().ref('orders').on('value', function(snapshot) {
                 const ordersContainer = document.getElementById('orders-container');
@@ -57,9 +127,18 @@
 
                 snapshot.forEach(function(orderSnapshot) {
                     const order = orderSnapshot.val();
-                    const orderElement = document.createElement('div');
-                    orderElement.className = 'order';
+                    const orderDate = new Date(order.date);
+                    const now = new Date();
+                    const differenceInTime = now.getTime() - orderDate.getTime();
+                    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
 
+                    let timeCategory = 'other';
+                    if (differenceInDays <= 1) timeCategory = 'daily';
+                    else if (differenceInDays <= 7) timeCategory = 'weekly';
+                    else if (differenceInDays <= 30) timeCategory = 'monthly';
+
+                    const orderElement = document.createElement('div');
+                    orderElement.className = `order ${timeCategory}`;
                     orderElement.innerHTML = `
                         <h2>الاسم: ${order.name}</h2>
                         <p>الدولة: ${order.country}</p>
@@ -70,16 +149,41 @@
                         <p>ملاحظات: ${order.notes}</p>
                         <p>اسم المنتج: ${order.productName}</p>
                         <p>سعر المنتج: ${order.productPrice} د.ع</p>
-                        <img src="${order.productImage}" alt="صورة المنتج" style="width: 100%; border-radius: 10px;">
+                        <img src="${order.productImage}" alt="صورة المنتج">
                         <p>التقييم: ${'★'.repeat(order.productRating)}</p>
                     `;
-
                     ordersContainer.appendChild(orderElement);
                 });
+
+                filterOrders(); // تطبيق الفلترة عند تحميل الطلبات
+            });
+        }
+
+        function filterOrders() {
+            const filter = document.getElementById('time-filter').value;
+            const orders = document.querySelectorAll('.order');
+            orders.forEach(order => {
+                if (filter === 'all' || order.classList.contains(filter)) {
+                    order.style.display = 'block';
+                } else {
+                    order.style.display = 'none';
+                }
             });
         }
 
         loadOrders(); // استدعاء الدالة عند تحميل الصفحة
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function showSearchModal() {
+            alert('هذه الميزة غير متاحة حالياً.');
+        }
+
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
     </script>
 </body>
 </html>
