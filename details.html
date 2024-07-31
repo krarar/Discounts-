@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: #f0f0f0;
+            background-color: #332929;
+            color: #333;
             margin: 0;
             padding: 0;
             padding-bottom: 60px; /* مساحة للـ footer و header السفلي */
@@ -19,15 +19,15 @@
             max-width: 375px;
             margin: 0 auto;
             text-align: center;
-            background-color: #292929;
+            background-color: #252222;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .product-details img.main-image {
             width: 100%;
             height: auto;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .product-details .additional-images {
             display: flex;
@@ -41,27 +41,27 @@
             margin: 0 5px;
             cursor: pointer;
             border: 2px solid transparent;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .product-details .additional-images img.selected {
-            border-color: #ff6347; /* لون برتقالي متناسق */
+            border-color: #4A90E2; /* لون أزرق متناسق */
         }
         .product-details h1 {
             margin: 20px 0 10px;
             font-size: 24px;
-            color: #f0f0f0;
+            color: #f0eaea;
         }
         .product-details p {
             margin-bottom: 15px;
             font-size: 18px;
         }
         .product-details .rating {
-            color: #ffd700;
+            color: #00ff37;
         }
         .buy-button {
             margin-top: 20px;
-            background-color: #ff6347;
-            color: #ffffff;
+            background-color: #d5ec05;
+            color: #2b2626;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -70,7 +70,7 @@
             transition: background-color 0.3s ease;
         }
         .buy-button:hover {
-            background-color: #ff4500;
+            background-color: #e8edf3;
         }
         .social-icons {
             margin-top: 20px;
@@ -78,7 +78,7 @@
         .social-icons a {
             margin: 0 10px;
             text-decoration: none;
-            color: #ff6347;
+            color: #4A90E2;
         }
         .social-icons i {
             font-size: 40px;
@@ -89,7 +89,7 @@
         .products-section h2 {
             font-size: 20px;
             margin-bottom: 15px;
-            color: #f0f0f0;
+            color: #333;
         }
         .products {
             display: grid;
@@ -97,12 +97,12 @@
             gap: 15px;
         }
         .product-card {
-            background-color: #333;
+            background-color: #2e2626;
             border-radius: 10px;
             padding: 10px;
             cursor: pointer;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgb(236, 202, 5);
         }
         .product-card img {
             width: 100%;
@@ -114,7 +114,7 @@
         .product-card h3 {
             font-size: 14px;
             margin-bottom: 5px;
-            color: #ff6347;
+            color: #09e61b;
         }
         .product-card .price {
             color: #E53935;
@@ -131,7 +131,7 @@
             bottom: 50px; /* مكان للـ footer */
             left: 0;
             width: 100%;
-            background-color: #ff6347;
+            background-color: #4A90E2;
             padding: 10px;
             color: #fff;
             border-radius: 10px 10px 0 0;
@@ -146,7 +146,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: #ff6347;
+            background-color: #4A90E2;
             padding: 10px;
             color: #fff;
         }
@@ -185,7 +185,7 @@
             border-radius: 5px;
         }
         .modal-content .action-buttons button {
-            background-color: #ff6347;
+            background-color: #4A90E2;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -196,7 +196,7 @@
             transition: background-color 0.3s ease;
         }
         .modal-content .action-buttons button:hover {
-            background-color: #ff4500;
+            background-color: #e2e5e7;
         }
     </style>
 </head>
@@ -250,7 +250,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-      // تهيئة Firebase
+        // تهيئة Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
             authDomain: "messageemeapp.firebaseapp.com",
@@ -260,105 +260,117 @@
             messagingSenderId: "278680662267",
             appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
         };
+
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
 
-        // استرجاع تفاصيل المنتج
-        function fetchProductDetails(productId) {
-            const productRef = database.ref('products/' + productId);
-            productRef.once('value').then(snapshot => {
-                const product = snapshot.val();
-                document.getElementById('product-image').src = product.mainImageUrl;
+        // الحصول على بيانات المنتج من الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        // جلب بيانات المنتج من قاعدة البيانات
+        firebase.database().ref('products/' + productId).once('value').then(function(snapshot) {
+            const product = snapshot.val();
+            if (product) {
                 document.getElementById('product-name').innerText = product.name;
-                document.getElementById('product-price').innerText = product.price + ' $';
-                document.getElementById('product-rating').innerText = '⭐️'.repeat(product.rating) + ' ' + product.rating + ' نجوم';
+                document.getElementById('product-price').innerText = 'السعر: ' + product.price + ' د.ع';
+                document.getElementById('product-rating').innerText = 'التقييم: ' + '★'.repeat(product.rating);
                 document.getElementById('product-description').innerText = product.description;
-                // استرجاع الصور الإضافية
-                const additionalImages = document.getElementById('additional-images');
-                additionalImages.innerHTML = '';
-                product.additionalImages.forEach((image, index) => {
+                document.getElementById('product-image').src = product.mainImage;
+
+                // عرض الصور الإضافية
+                const additionalImagesContainer = document.getElementById('additional-images');
+                product.images.forEach(imageUrl => {
                     const img = document.createElement('img');
-                    img.src = image;
-                    img.onclick = () => changeMainImage(image);
-                    if (index === 0) img.classList.add('selected');
-                    additionalImages.appendChild(img);
+                    img.src = imageUrl;
+                    img.alt = 'Additional Image';
+                    img.addEventListener('click', function() {
+                        document.querySelectorAll('.additional-images img').forEach(img => img.classList.remove('selected'));
+                        img.classList.add('selected');
+                        localStorage.setItem('selectedImage', imageUrl); // تخزين الصورة المحددة
+                    });
+                    additionalImagesContainer.appendChild(img);
                 });
+
+                // تحديث روابط وسائل التواصل الاجتماعي
+                document.getElementById('facebook-link').href = product.facebookLink || 'https://www.facebook.com';
+                document.getElementById('twitter-link').href = product.twitterLink || 'https://www.twitter.com';
+                document.getElementById('instagram-link').href = product.instagramLink || 'https://www.instagram.com';
+                document.getElementById('whatsapp-link').href = product.whatsappLink || 'https://www.whatsapp.com';
+                document.getElementById('telegram-link').href = product.telegramLink || 'https://www.telegram.org';
+            }
+        });
+
+        // جلب المنتجات الأخرى من قاعدة البيانات
+        firebase.database().ref('products').once('value').then(function(snapshot) {
+            const productsContainer = document.querySelector('.products');
+            snapshot.forEach(function(childSnapshot) {
+                const product = childSnapshot.val();
+                const productId = childSnapshot.key;
+                const productElement = document.createElement('div');
+                productElement.classList.add('product-card');
+                productElement.setAttribute('data-id', productId);
+                productElement.innerHTML = `
+                    <img src="${product.mainImage}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">${product.price}</p>
+                    <div class="stars">${'★'.repeat(product.rating)}</div>
+                `;
+                productElement.addEventListener('click', function() {
+                    window.location.href = `details.html?id=${productId}`;
+                });
+                productsContainer.appendChild(productElement);
             });
-        }
+        });
 
-        // تغيير الصورة الرئيسية
-        function changeMainImage(imageUrl) {
-            document.getElementById('product-image').src = imageUrl;
-            document.querySelectorAll('.additional-images img').forEach(img => img.classList.remove('selected'));
-            event.target.classList.add('selected');
-        }
-
-        // إعادة التوجيه لصفحة الطلب
+        // الانتقال إلى صفحة طلب الشراء
         function redirectToOrderPage() {
-            const productName = document.getElementById('product-name').innerText;
-            window.location.href = 'order.html?product=' + encodeURIComponent(productName);
+            const selectedImage = localStorage.getItem('selectedImage');
+            if (selectedImage) {
+                window.location.href = `order.html?id=${productId}&image=${encodeURIComponent(selectedImage)}`;
+            } else {
+                alert('يرجى تحديد صورة قبل الشراء.');
+            }
         }
 
-        // الانتقال إلى الصفحة الرئيسية
+        // إعادة توجيه إلى الصفحة الرئيسية
         function goHome() {
-            window.location.href = 'index.html';
+            window.location.href = 'index.html'; // استبدل 'index.html' بعنوان الصفحة الرئيسية
         }
 
-        // إظهار مودال البحث
+        // عرض مودال البحث
         function showSearchModal() {
-            document.getElementById('searchModal').style.display = 'flex';
+            showModal('searchModal');
         }
 
-        // إغلاق مودال
+        // وظيفة البحث عن منتج
+        function searchProduct() {
+            const query = document.getElementById('search-query').value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+            closeModal('searchModal');
+        }
+
+        // عرض المودال
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        // إخفاء المودال
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // البحث عن منتج
-        function searchProduct() {
-            const query = document.getElementById('search-query').value;
-            window.location.href = 'search.html?query=' + encodeURIComponent(query);
-        }
-
-        // الانتقال إلى صفحة تسجيل الدخول
+        // إعادة توجيه إلى صفحة تسجيل الدخول
         function goToLogin() {
             window.location.href = 'login.html';
         }
-
-        // استرجاع المنتجات الأخرى
-        function fetchOtherProducts() {
-            const productsRef = database.ref('products');
-            productsRef.limitToLast(5).once('value').then(snapshot => {
-                const productsContainer = document.querySelector('.products-section .products');
-                productsContainer.innerHTML = '';
-                snapshot.forEach(productSnapshot => {
-                    const product = productSnapshot.val();
-                    const productCard = document.createElement('div');
-                    productCard.classList.add('product-card');
-                    productCard.onclick = () => {
-                        fetchProductDetails(productSnapshot.key);
-                        window.scrollTo(0, 0);
-                    };
-                    productCard.innerHTML = `
-                        <img src="${product.mainImageUrl}" alt="${product.name}">
-                        <h3>${product.name}</h3>
-                        <p class="price">${product.price} $</p>
-                        <div class="stars">${'⭐️'.repeat(product.rating)}</div>
-                    `;
-                    productsContainer.appendChild(productCard);
-                });
-            });
-        }
-
-        // تحميل تفاصيل المنتج والمنتجات الأخرى عند تحميل الصفحة
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get('product');
-            if (productId) {
-                fetchProductDetails(productId);
-            }
-            fetchOtherProducts();
-        };
     </script>
 </body>
 </html>
