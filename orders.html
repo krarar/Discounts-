@@ -45,6 +45,7 @@
             border-radius: 10px;
             transition: transform 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
         .order:hover {
             transform: translateY(-5px);
@@ -95,6 +96,16 @@
             font-size: 16px;
             width: 20%;
             margin-right: 10px;
+        }
+        .order .new-order {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ff0000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
         }
         .footer {
             display: flex;
@@ -167,9 +178,14 @@
                     else if (differenceInDays <= 7) timeCategory = 'weekly';
                     else if (differenceInDays <= 30) timeCategory = 'monthly';
 
+                    const isNew = !order.sent; // تحديد إذا كان الطلب جديدًا
+
                     const orderElement = document.createElement('div');
                     orderElement.className = `order ${timeCategory}`;
-                    orderElement.innerHTML = `
+                    if (isNew) {
+                        orderElement.innerHTML = `<div class="new-order">جديد</div>`; // علامة الطلب الجديد
+                    }
+                    orderElement.innerHTML += `
                         <h2>الاسم: ${order.name}</h2>
                         <p>الدولة: ${order.country}</p>
                         <p>المحافظة: ${order.province}</p>
@@ -188,7 +204,7 @@
                             <button onclick="sendOrderToWhatsApp('${orderSnapshot.key}')">إرسال عبر واتساب</button>
                         </div>
                     `;
-                    ordersContainer.appendChild(orderElement);
+                    ordersContainer.prepend(orderElement); // إدراج الطلبات الجديدة في البداية
                 });
 
                 filterOrders(); // تطبيق الفلترة عند تحميل الطلبات
@@ -235,6 +251,11 @@
                 const encodedMessage = encodeURIComponent(message);
                 const whatsappUrl = `https://wa.me/${countryCode}${whatsappNumber}?text=${encodedMessage}`;
                 window.open(whatsappUrl, '_blank');
+
+                // تحديث قاعدة البيانات لإزالة العلامة الجديدة
+                firebase.database().ref(`orders/${orderKey}`).update({ sent: true });
+                // إزالة علامة الطلب الجديد
+                document.querySelector(`.order .new-order`).remove();
             });
         }
 
