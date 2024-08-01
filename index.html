@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ربط ملف تعريف التطبيق (Manifest) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="manifest" href="manifest.json" />
     <!-- دعم لنظام iOS -->
     <link rel="apple-touch-icon" href="images/icons/icon-72x72.png" />
@@ -18,12 +20,9 @@
     <meta charset="UTF-8" />
     <!-- إعدادات العرض والمساحة المتاحة -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- تحسين التوافق مع متصفح Internet Explorer -->
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <!-- ربط ملف التنسيق الخارجي -->
     <link rel="stylesheet" href="css/style.css" />
-    <title>Dev'Coffee PWA</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --primary-color: #880E4F; /* لون خلفية الفوتر */
@@ -289,141 +288,157 @@
                 grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
             }
         }
-
-        /* إضافة أنماط للنظام */
-        nav {
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
-            padding: 10px;
-            text-align: center;
-        }
-
-        nav h1 {
-            margin: 0;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        nav ul li {
-            cursor: pointer;
-            padding: 5px 10px;
-        }
-
-        nav ul li:hover {
-            background-color: var(--accent-color);
-            color: var(--background-color);
-        }
     </style>
 </head>
 <body>
-    <!-- الهيدر -->
-    <header class="header">
-        <i class="fa fa-home" onclick="location.href='index.html'"></i>
-        <i class="fa fa-search" onclick="openSearch()"></i>
-        <i class="fa fa-shopping-cart" onclick="location.href='cart.html'">
-            <div class="notification-badge">5</div>
-        </i>
-        <i class="fa fa-user" onclick="location.href='profile.html'"></i>
-    </header>
-
-    <!-- المحتوى الرئيسي -->
     <div class="content">
-        <!-- السلايدر -->
+        <!-- شريط التمرير التلقائي (Carousel) -->
         <div class="carousel">
-            <img src="https://via.placeholder.com/800x300" alt="Slide 1" class="active" data-url="index.html">
-            <img src="https://via.placeholder.com/800x300" alt="Slide 2" data-url="index.html">
-            <img src="https://via.placeholder.com/800x300" alt="Slide 3" data-url="index.html">
-            <img src="https://via.placeholder.com/800x300" alt="Slide 4" data-url="cart.html">
+        <img src="https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png" alt="Product Image">
+
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" class="active" alt="Image 1" data-url="index.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 2" data-url="order.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 3" data-url="orders.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 4" data-url="details.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 5" data-url="details.html">
             <div class="carousel-content">
-                <h1>Welcome to Our Store!</h1>
-                <p>Find the best products for you</p>
-                <button onclick="location.href='index.html'">Shop Now</button>
+                <h1>Welcome To Nyazek Store</h1>
+                <p>Get your 25% discount Now</p>
+                <button id="shop-now-button">SHOP NOW</button>
             </div>
         </div>
 
-        <!-- شبكة عرض المنتجات -->
+       <!-- شريط البحث -->
+<div class="search-modal" id="search-modal">
+    <div class="modal-content">
+        <input type="text" id="search-input" placeholder="Search for products...">
+        <button onclick="closeSearch()">Close</button>
+        <button onclick="performSearch()">Search</button>
+    </div>
+</div>
+
+
+        <!-- عنوان قسم المنتجات الجديدة -->
+        <h2 class="section-title">New Product</h2>
         <div class="grid-container">
-            <!-- بطاقة منتج -->
-            <div class="product-card" onclick="location.href='product.html'">
-                <img src="https://via.placeholder.com/400" alt="Product Image">
-                <h3>Product Name</h3>
-                <p>$99.99</p>
+            <!-- بطاقة المنتج 1 -->
+            <div class="product-card" onclick="location.href='in1dex.html'">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
+                <h3> Name</h3>
+                <p>$24.95</p>
                 <div class="rating">
-                    <span>4.5</span>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-half-alt"></i>
-                    <i class="fa fa-heart favorite" onclick="addToFavorites(event)"></i>
+                    <span>⭐⭐⭐⭐⭐</span>
+                    <span class="favorite">❤️</span>
                 </div>
             </div>
-            <!-- أضف بطاقات أخرى هنا -->
+            <!-- بطاقة المنتج 2 -->
+            <div class="product-card" onclick="location.href='in1dex.html'">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
+                <h3>Product Name</h3>
+                <p>$24.95</p>
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐</span>
+                    <span class="favorite">❤️</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- عنوان قسم المنتجات الأكثر شعبية -->
+        <h2 class="section-title">Most Popular</h2>
+        <div class="grid-container">
+            <!-- بطاقة المنتج 3 -->
+            <div class="product-card" onclick="location.href='in1dex.html'">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
+                <h3>Girls at the Front</h3>
+                <p>$24.95</p>
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐</span>
+                    <span class="favorite">❤️</span>
+                </div>
+            </div>
+            <!-- بطاقة المنتج 4 -->
+            <div class="product-card" onclick="location.href='in1dex.html'">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
+                <h3>Girls at the Front</h3>
+                <p>$24.95</p>
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐</span>
+                    <span class="favorite">❤️</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- الفوتر -->
+    <!-- شريط الأدوات السفلي -->
     <div class="footer">
         <i class="fa fa-home" onclick="location.href='index.html'"></i>
-        <i class="fa fa-shopping-cart" onclick="location.href='cart.html'">
-            <div class="notification-badge">5</div>
+        <i class="fa fa-search" onclick="openSearch()"></i>
+        <i class="fa fa-bell" onclick="location.href='notifications.html'">
+            <div id="notification-badge" class="notification-badge">0</div>
         </i>
-        <i class="fa fa-heart" onclick="location.href='favorites.html'"></i>
         <i class="fa fa-user" onclick="location.href='profile.html'"></i>
     </div>
 
-    <!-- نافذة البحث -->
-    <div class="search-modal" id="searchModal">
-        <div class="modal-content">
-            <input type="text" placeholder="Search...">
-            <button onclick="search()">Search</button>
-            <button onclick="closeSearch()">Close</button>
-        </div>
-    </div>
+    <script>
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.carousel img');
+        const totalImages = images.length;
+    
+        function showNextImage() {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % totalImages;
+            images[currentIndex].classList.add('active');
+        }
+    
+        setInterval(showNextImage, 3000); // تغيير الصورة كل 3 ثواني
+    
+        function openSearch() {
+            document.getElementById('search-modal').style.display = 'flex';
+        }
+    
+        function closeSearch() {
+            document.getElementById('search-modal').style.display = 'none';
+        }
+    
+        function performSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const productCards = document.querySelectorAll('.product-card');
+    
+            productCards.forEach(card => {
+                const productName = card.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+    
+            closeSearch(); // إغلاق شريط البحث بعد إجراء البحث
+        }
+    
+        document.getElementById('shop-now-button').addEventListener('click', function() {
+            const activeImage = document.querySelector('.carousel img.active');
+            const url = activeImage.getAttribute('data-url');
+            if (url) {
+                window.location.href = url;
+            }
+        });
 
+        // وظيفة لتحديث عدد الإشعارات
+        let notificationCount = 0;
+
+        function updateNotificationCount(count) {
+            notificationCount += count;
+            document.getElementById('notification-badge').textContent = notificationCount;
+        }
+
+        // لتحديث العدد عند إضافة منتج جديد (يمكنك استدعاء هذه الوظيفة عند إضافة منتج جديد)
+        updateNotificationCount(1); // مثال: زيادة العدد بواحد
+    </script>
+    </main>
     <!-- ربط ملف الجافا سكريبت -->
     <script src="js/app.js"></script>
-    <script>
-        // Carousel functionality
-        const slides = document.querySelectorAll('.carousel img');
-        let currentSlide = 0;
 
-        function showSlide(index) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (index + slides.length) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }
-
-        setInterval(() => {
-            showSlide(currentSlide + 1);
-        }, 3000);
-
-        // Search modal
-        function openSearch() {
-            document.getElementById('searchModal').style.display = 'flex';
-        }
-
-        function closeSearch() {
-            document.getElementById('searchModal').style.display = 'none';
-        }
-
-        function search() {
-            const query = document.querySelector('.search-modal input').value;
-            alert('Searching for: ' + query);
-        }
-
-        // Add to favorites functionality
-        function addToFavorites(event) {
-            event.stopPropagation();
-            alert('Added to favorites');
-        }
-    </script>
+    
 </body>
 </html>
