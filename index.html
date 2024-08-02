@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="manifest" href="manifest.json" /><!-- دعم لنظام iOS -->
-<link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ads%2F%D8%AA%D8%B5%D9%85%D9%8A%D9%85-%D9%85%D8%AA%D8%AC%D8%B1-%D8%A7%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A.jpg?alt=media&token=0b48f422-d863-4a43-98f9-c5f43c2d531b&size=72" />
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ads%2F%D8%AA%D8%B5%D9%85%D9%8A%D9%85-%D9%85%D8%AA%D8%AC%D8%B1-%D8%A7%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A.jpg?alt=media&token=0b48f422-d863-4a43-98f9-c5f43c2d531b&size=72" />
 <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ads%2F%D8%AA%D8%B5%D9%85%D9%8A%D9%85-%D9%85%D8%AA%D8%AC%D8%B1-%D8%A7%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A.jpg?alt=media&token=0b48f422-d863-4a43-98f9-c5f43c2d531b&size=96" />
 <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ads%2F%D8%AA%D8%B5%D9%85%D9%8A%D9%85-%D9%85%D8%AA%D8%AC%D8%B1-%D8%A7%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A.jpg?alt=media&token=0b48f422-d863-4a43-98f9-c5f43c2d531b&size=128" />
 <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ads%2F%D8%AA%D8%B5%D9%85%D9%8A%D9%85-%D9%85%D8%AA%D8%AC%D8%B1-%D8%A7%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A.jpg?alt=media&token=0b48f422-d863-4a43-98f9-c5f43c2d531b&size=144" />
@@ -13,229 +10,194 @@
 <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ads%2F%D8%AA%D8%B5%D9%85%D9%8A%D9%85-%D9%85%D8%AA%D8%AC%D8%B1-%D8%A7%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A.jpg?alt=media&token=0b48f422-d863-4a43-98f9-c5f43c2d531b&size=192" />
 <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ads%2F%D8%AA%D8%B5%D9%85%D9%8A%D9%85-%D9%85%D8%AA%D8%AC%D8%B1-%D8%A7%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A.jpg?alt=media&token=0b48f422-d863-4a43-98f9-c5f43c2d531b&size=384" />
 <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/messageemeapp.appspot.com/o/ads%2F%D8%AA%D8%B5%D9%85%D9%8A%D9%85-%D9%85%D8%AA%D8%AC%D8%B1-%D8%A7%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A.jpg?alt=media&token=0b48f422-d863-4a43-98f9-c5f43c2d531b&size=512" />
-<meta name="apple-mobile-web-app-status-bar" content="#db4938" />
-<meta name="theme-color" content="#db4938" />
-
-    <meta name="apple-mobile-web-app-status-bar" content="#db4938" />
-    <meta name="theme-color" content="#db4938" />
-    <!-- تعيين ترميز الصفحة -->
-    <meta charset="UTF-8" />
-    <!-- إعدادات العرض والمساحة المتاحة -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <!-- ربط ملف التنسيق الخارجي -->
-    <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover</title>
     <style>
-        :root {
-            --primary-color: #880E4F; /* لون خلفية الفوتر */
-            --secondary-color: #ffffff; /* لون النص الثانوي */
-            --background-color: #1B1B1B; /* لون خلفية الصفحة */
-            --card-color: #333333; /* لون خلفية بطاقات المنتجات */
-            --text-color: #E0E0E0; /* لون النص الرئيسي */
-            --accent-color: #FFC107; /* لون السعر والأيقونات */
-            --highlight-color: #B71C1C; /* لون الأزرار */
-        }
-
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            font-family: Arial, sans-serif;
+        body, html {
             margin: 0;
             padding: 0;
-            padding-bottom: 60px; /* مساحة للفوتر الثابت */
+            font-family: 'Arial Black', sans-serif;
+            background-color: #1a1c1f;
+            color: #f3ecec;
+        }
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            background-color: #2b2929;
+            padding-bottom: 80px;
+        }
+        header {
             display: flex;
-            flex-direction: column;
-            min-height: 100vh; /* لضمان أن الفوتر في الأسفل */
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
         }
-
-        .content {
-            flex: 1; /* يملأ المساحة المتاحة بين الهيدر والفوتر */
+        .logo {
+            font-size: 40px;
+            font-weight: bold;
+            color: #d9ff02;
         }
-
+        .icons {
+            display: flex;
+            gap: 10px;
+        }
+        .icon {
+            font-size: 24px;
+            color: #e4dada;
+            cursor: pointer;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #0e0f0f;
+            border-radius: 25px;
+            padding: 10px;
+            margin: 20px 0;
+        }
+        .search-bar input {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            padding-left: 10px;
+            font-size: 16px;
+            outline: none;
+            color: #fc0909;
+        }
+        .search-icon {
+            font-size: 20px;
+            color: #e40909;
+        }
+        .categories {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .category {
+            text-align: center;
+        }
+        .category img {
+            width: 60px;
+            height: 60px;
+            border-radius: 70%;
+            object-fit: cover;
+            margin-bottom: 5px;
+        }
+        .category p {
+            margin: 0;
+            font-size: 16px;
+            color: #e25c3a;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .product {
+            background-color: #f1f1f8;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .product-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 5px;
+            background-color: rgba(10, 10, 10, 0.479);
+        }
+        .product-name {
+            font-size: 16px;
+            margin: 0;
+            color: #fdfdfd;
+        }
+        .product-type {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 10px 5;
+        }
+        .product-rating {
+            font-size: 14px;
+            color: #ffbb00;
+        }
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #eff1ef;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #000000;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .footer i {
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .footer i:hover {
+            color: #ffbb00;
+        }
         .carousel {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 200px;
             overflow: hidden;
-            border-radius: 8px;
-            margin: 20px auto;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
         }
-
         .carousel img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             position: absolute;
             top: 0;
-            left: 100%;
-            transition: left 1s ease-in-out;
-        }
-
-        .carousel img.active {
             left: 0;
+            opacity: 0;
+            transition: opacity 1s;
         }
-
+        .carousel img.active {
+            opacity: 1;
+        }
         .carousel-content {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            color: var(--secondary-color);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            z-index: 1;
+            color: rgb(22, 21, 21);
         }
-
         .carousel-content h1 {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 0;
+            font-size: 25px;
+            margin: 25px;
         }
-
         .carousel-content p {
-            font-size: 1rem;
+            font-size: 20px;
             margin: 10px 0;
         }
-
         .carousel-content button {
-            background-color: var(--highlight-color);
-            color: var(--secondary-color);
             padding: 10px 20px;
+            background-color: #e7f709;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .carousel-content button:hover {
-            background-color: #f1f1f1;
-            color: var(--highlight-color);
-        }
-
-        /* إعدادات الشبكة لعرض المنتجات */
-        .grid-container {
-            display: grid;
-            gap: 0;
-            padding: 0;
-            grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
-        }
-
-        /* إعدادات بطاقة المنتج */
-        .product-card {
-            background-color: var(--card-color);
-            border: 2px solid var(--accent-color);
             border-radius: 5px;
-            padding: 10px;
-            text-align: center;
-            color: var(--text-color);
-            transition: transform 0.3s;
-            box-sizing: border-box;
             cursor: pointer;
         }
-
-        .product-card:hover {
-            transform: scale(1.05);
+        .carousel-content button:hover {
+            background-color: #c7d709;
         }
-
-        .product-card img {
-            width: 100%;
-            aspect-ratio: 2/2;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .product-card h3 {
-            margin-top: 25px;
-            font-size: 1.25rem;
-        }
-
-        .product-card p {
-            margin: 5px 0;
-            font-size: 1.1rem;
-            color: var(--accent-color);
-        }
-
-        .product-card .rating {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .product-card .rating span {
-            margin-right: 5px;
-        }
-
-        .product-card .rating i {
-            color: var(--accent-color);
-        }
-
-        .product-card .favorite {
-            margin-left: 10px;
-            cursor: pointer;
-        }
-
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: var(--primary-color);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 1000;
-        }
-
-        .footer i {
-            color: var(--secondary-color);
-            font-size: 1.5rem;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .footer i:hover {
-            color: var(--accent-color);
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: var(--highlight-color);
-            color: var(--secondary-color);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: var(--primary-color);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 1000;
-        }
-
-        .header i {
-            color: var(--secondary-color);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .header i:hover {
-            color: var(--accent-color);
-        }
-
-        .search-modal {
+        /* Search Modal */
+        #search-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -245,202 +207,177 @@
             background-color: rgba(0, 0, 0, 0.5);
             align-items: center;
             justify-content: center;
+            z-index: 1001;
         }
-
-        .search-modal .modal-content {
-            background-color: var(--card-color);
+        #search-modal .modal-content {
+            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .search-modal .modal-content input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid var(--accent-color);
-            border-radius: 4px;
-            color: var(--text-color);
-            background-color: var(--card-color);
-        }
-
-        .search-modal .modal-content button {
-            background-color: var(--highlight-color);
-            color: var(--secondary-color);
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-right: 10px;
-        }
-
-        .search-modal .modal-content button:hover {
-            background-color: #f1f1f1;
-            color: var(--highlight-color);
-        }
-
-        @media (max-width: 768px) {
-            .carousel {
-                height: 200px;
-            }
-
-            .grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-            }
+            width: 80%;
+            max-width: 600px;
         }
     </style>
 </head>
 <body>
-    <div class="content">
-        <!-- شريط التمرير التلقائي (Carousel) -->
+    <header>
+        <div class="logo">Discover</div>
+        <div class="icons">
+            <span class="icon">☰</span>
+            <span class="icon">🛒</span>
+        </div>
+    </header>
+    <div class="container">
+        <!-- Carousel -->
         <div class="carousel">
-        <img src="https://github.com/krarar/index0/blob/main/Cjdowner-Cryptocurrency-ICON.512.png" alt="Product Image">
-
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" class="active" alt="Image 1" data-url="index.html">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 2" data-url="order.html">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 3" data-url="orders.html">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 4" data-url="details.html">
-            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 5" data-url="details.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/%D9%82%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%AC%D9%88%D9%87%D8%B1%D8%A7%D8%AA%2FAdobe_Express_20240515_1734040_1.png?alt=media&token=757c0796-66f6-47e9-bffd-d4fb22e3cffb" class="active" alt="Image 1" data-url="in1dex.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 2" data-url="in1dex.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 3" data-url="in1dex.html">
+            <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Image 4" data-url="in1dex.html">
             <div class="carousel-content">
-                <h1>Welcome To Nyazek Store</h1>
-                <p>Get your 25% discount Now</p>
+                <h1>Welcome to Our Store</h1>
+                <p>Exclusive Sale 25% discount Now</p>
                 <button id="shop-now-button">SHOP NOW</button>
             </div>
         </div>
-
-       <!-- شريط البحث -->
-<div class="search-modal" id="search-modal">
-    <div class="modal-content">
-        <input type="text" id="search-input" placeholder="Search for products...">
-        <button onclick="closeSearch()">Close</button>
-        <button onclick="performSearch()">Search</button>
-    </div>
-</div>
-
-
-        <!-- عنوان قسم المنتجات الجديدة -->
-        <h2 class="section-title">New Product</h2>
-        <div class="grid-container">
-            <!-- بطاقة المنتج 1 -->
-            <div class="product-card" onclick="location.href='in1dex.html'">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
-                <h3> Name</h3>
-                <p>$24.95</p>
-                <div class="rating">
-                    <span>⭐⭐⭐⭐⭐</span>
-                    <span class="favorite">❤️</span>
+        <div class="categories">
+            <div class="category" data-url="in1dex.html">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Woman">
+                <p>Woman</p>
+            </div>
+            <div class="category" data-url="in1dex.html">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Men">
+                <p>Men</p>
+            </div>
+            <div class="category" data-url="in1dex.html">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Kid">
+                <p>Kid</p>
+            </div>
+            <div class="category" data-url="in1dex.html">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Shoes">
+                <p>Shoes</p>
+            </div>
+        </div>
+        
+        
+        <div class="search-bar">
+            <i class="fa fa-search" onclick="openSearch()"></i>
+            <input type="text" placeholder="Search for products">
+        </div>
+        
+        <div class="products">
+            <div class="product" data-url="in1dex.html">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product 1">
+                <div class="product-info">
+                    <h3 class="product-name">Berrylush</h3>
+                    <p class="product-type">Casual Cotton Dress</p>
+                    <p class="product-rating">⭐ 4.5</p>
+                    <p class="product-price">$120</p>
                 </div>
             </div>
-            <!-- بطاقة المنتج 2 -->
-            <div class="product-card" onclick="location.href='in1dex.html'">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
-                <h3>Product Name</h3>
-                <p>$24.95</p>
-                <div class="rating">
-                    <span>⭐⭐⭐⭐⭐</span>
-                    <span class="favorite">❤️</span>
+            <div class="product" data-url="in1dex.html">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product 2">
+                <div class="product-info">
+                    <h3 class="product-name">Berrylush</h3>
+                    <p class="product-type">Casual Cotton Dress</p>
+                    <p class="product-rating">⭐ 4.5</p>
+                    <p class="product-price">$120</p>
+                </div>
+            </div>
+            <div class="product" data-url="product3.html">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product 3">
+                <div class="product-info">
+                    <h3 class="product-name">Berrylush</h3>
+                    <p class="product-type">Casual Cotton Dress</p>
+                    <p class="product-rating">⭐ 4.5</p>
+                    <p class="product-price">$120</p>
+                </div>
+            </div>
+            <div class="product" data-url="in1dex.html">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product 4">
+                <div class="product-info">
+                    <h3 class="product-name">Berrylush</h3>
+                    <p class="product-type">Casual Cotton Dress</p>
+                    <p class="product-rating">⭐ 4.5</p>
+                    <p class="product-price">$120</p>
                 </div>
             </div>
         </div>
-
-        <!-- عنوان قسم المنتجات الأكثر شعبية -->
-        <h2 class="section-title">Most Popular</h2>
-        <div class="grid-container">
-            <!-- بطاقة المنتج 3 -->
-            <div class="product-card" onclick="location.href='in1dex.html'">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
-                <h3>Girls at the Front</h3>
-                <p>$24.95</p>
-                <div class="rating">
-                    <span>⭐⭐⭐⭐⭐</span>
-                    <span class="favorite">❤️</span>
-                </div>
-            </div>
-            <!-- بطاقة المنتج 4 -->
-            <div class="product-card" onclick="location.href='in1dex.html'">
-                <img src="https://firebasestorage.googleapis.com/v0/b/chatapp-e6143.appspot.com/o/ads%2F1720736479851.jpg?alt=media&token=c7379cf2-1996-4ec2-bf87-2bfb48cc383e" alt="Product Image">
-                <h3>Girls at the Front</h3>
-                <p>$24.95</p>
-                <div class="rating">
-                    <span>⭐⭐⭐⭐⭐</span>
-                    <span class="favorite">❤️</span>
-                </div>
-            </div>
-        </div>
     </div>
-
-    <!-- شريط الأدوات السفلي -->
+    
+    <!-- Footer -->
     <div class="footer">
         <i class="fa fa-home" onclick="location.href='index.html'"></i>
         <i class="fa fa-search" onclick="openSearch()"></i>
-        <i class="fa fa-bell" onclick="location.href='notifications.html'">
-            <div id="notification-badge" class="notification-badge">0</div>
-        </i>
-        <i class="fa fa-user" onclick="location.href='profile.html'"></i>
+        <i class="fa fa-shopping-cart" onclick="location.href='in1dex.html'"></i>
+        <i class="fa fa-user" onclick="location.href='in1dex.html'"></i>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="search-modal">
+        <div class="modal-content">
+            <h2>Search</h2>
+            <input type="text" placeholder="Search...">
+            <button onclick="document.getElementById('search-modal').style.display='none'">Close</button>
+        </div>
     </div>
 
     <script>
         let currentIndex = 0;
         const images = document.querySelectorAll('.carousel img');
         const totalImages = images.length;
-    
+
         function showNextImage() {
             images[currentIndex].classList.remove('active');
             currentIndex = (currentIndex + 1) % totalImages;
             images[currentIndex].classList.add('active');
         }
-    
-        setInterval(showNextImage, 3000); // تغيير الصورة كل 3 ثواني
-    
+
+        setInterval(showNextImage, 3000);
+
         function openSearch() {
             document.getElementById('search-modal').style.display = 'flex';
         }
-    
-        function closeSearch() {
-            document.getElementById('search-modal').style.display = 'none';
-        }
-    
-        function performSearch() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const productCards = document.querySelectorAll('.product-card');
-    
-            productCards.forEach(card => {
-                const productName = card.querySelector('h3').textContent.toLowerCase();
-                if (productName.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-    
-            closeSearch(); // إغلاق شريط البحث بعد إجراء البحث
-        }
-    
-        document.getElementById('shop-now-button').addEventListener('click', function() {
-            const activeImage = document.querySelector('.carousel img.active');
-            const url = activeImage.getAttribute('data-url');
+
+        document.getElementById('shop-now-button').addEventListener('click', () => {
+            window.location.href = 'shop.html';
+        });
+
+        // Function to handle click on product image
+        function handleProductClick(event) {
+            const productElement = event.currentTarget;
+            const url = productElement.getAttribute('data-url');
             if (url) {
                 window.location.href = url;
             }
-        });
-
-        // وظيفة لتحديث عدد الإشعارات
-        let notificationCount = 0;
-
-        function updateNotificationCount(count) {
-            notificationCount += count;
-            document.getElementById('notification-badge').textContent = notificationCount;
         }
 
-        // لتحديث العدد عند إضافة منتج جديد (يمكنك استدعاء هذه الوظيفة عند إضافة منتج جديد)
-        updateNotificationCount(1); // مثال: زيادة العدد بواحد
-    </script>
-    </main>
-    <!-- ربط ملف الجافا سكريبت -->
-    <script src="js/app.js"></script>
+        // Add click event to all product elements
+        document.querySelectorAll('.product').forEach(product => {
+            product.addEventListener('click', handleProductClick);
+        });
+        // Function to handle click on category element
+    function handleCategoryClick(event) {
+        const categoryElement = event.currentTarget;
+        const url = categoryElement.getAttribute('data-url');
+        if (url) {
+            window.location.href = url;
+        }
+    }
 
+    // Add click event to all category elements
+    document.querySelectorAll('.category').forEach(category => {
+        category.addEventListener('click', handleCategoryClick);
+    });
+
+    // Existing code for handling product clicks and carousel logic...
+
+</script>
+</main>
+<!-- ربط ملف الجافا سكريبت -->
+<script src="js/app.js"></script>
+
+    
+    
     
 </body>
 </html>
