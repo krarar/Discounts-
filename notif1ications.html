@@ -12,26 +12,28 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
         }
         .form-container, .notifications-container {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 45%;
-            height: calc(100vh - 40px);
-            overflow-y: auto;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
         }
         .form-container h2, .notifications-container h2 {
             margin-top: 0;
         }
         .form-container input {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 10px;
             margin: 10px 0;
             border-radius: 4px;
             border: 1px solid #ccc;
+            box-sizing: border-box;
         }
         .form-container button {
             width: 48%;
@@ -71,7 +73,7 @@
         }
         .notification-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(248, 246, 246, 0.493);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
         .notification-item img {
             width: 50px;
@@ -92,7 +94,7 @@
             color: #555;
         }
         .new-notification {
-            background-color: yellow;
+            background-color: #f0f8ff;
         }
         .new-badge {
             position: absolute;
@@ -131,19 +133,19 @@
 </head>
 <body>
     <div class="form-container">
-        <h2>Add New Notification</h2>
-        <input type="text" id="itemName" placeholder="Notification Title">
-        <input type="text" id="itemDetails" placeholder="Notification Details">
-        <input type="text" id="itemImage" placeholder="Image URL">
-        <input type="text" id="itemLink" placeholder="Notification Link">
-        <button class="add-button" onclick="addItem()">Add</button>
-        <button class="cancel-button" onclick="clearInputs()">Clear</button>
+        <h2>إضافة إشعار جديد</h2>
+        <input type="text" id="itemName" placeholder="عنوان الإشعار">
+        <input type="text" id="itemDetails" placeholder="تفاصيل الإشعار">
+        <input type="text" id="itemImage" placeholder="رابط صورة">
+        <input type="text" id="itemLink" placeholder="رابط الإشعار">
+        <button class="add-button" onclick="addItem()">إضافة</button>
+        <button class="cancel-button" onclick="clearInputs()">مسح</button>
     </div>
 
     <div class="notifications-container">
-        <h2>Notifications</h2>
+        <h2>الإشعارات</h2>
         <div id="notifications-container">
-            <!-- Notifications will be displayed here -->
+            <!-- سيتم عرض الإشعارات هنا -->
         </div>
     </div>
 
@@ -177,6 +179,7 @@
             const itemDetails = document.getElementById('itemDetails').value;
             const itemImage = document.getElementById('itemImage').value;
             const itemLink = document.getElementById('itemLink').value;
+            const timestamp = new Date().toLocaleString();
 
             if (itemName && itemDetails && itemImage && itemLink) {
                 const newNotificationRef = database.ref('notifications').push();
@@ -184,18 +187,19 @@
                     name: itemName,
                     details: itemDetails,
                     image: itemImage,
-                    link: itemLink
+                    link: itemLink,
+                    timestamp: timestamp
                 }, (error) => {
                     if (error) {
-                        alert('Failed to add notification. Please try again.');
+                        alert('فشل في إضافة الإشعار. حاول مرة أخرى.');
                     } else {
                         clearInputs();
                         displayNotifications();
-                        alert('Notification added successfully!');
+                        alert('تمت إضافة الإشعار بنجاح!');
                     }
                 });
             } else {
-                alert('Please fill out all fields.');
+                alert('يرجى ملء جميع الحقول.');
             }
         }
 
@@ -216,10 +220,11 @@
                         <div class="notification-content">
                             <h4 class="notification-title">${notification.name}</h4>
                             <p class="notification-text">${notification.details}</p>
+                            <p class="notification-timestamp">${notification.timestamp}</p>
                         </div>
-                        <button class="edit-button" onclick="editNotification('${notification.id}'); event.stopPropagation();">Edit</button>
-                        <button class="delete-button" onclick="deleteNotification('${notification.id}'); event.stopPropagation();">Delete</button>
-                        <span class="new-badge">New</span>
+                        <button class="edit-button" onclick="editNotification('${notification.id}'); event.stopPropagation();">تعديل</button>
+                        <button class="delete-button" onclick="deleteNotification('${notification.id}'); event.stopPropagation();">حذف</button>
+                        <span class="new-badge">جديد</span>
                     `;
                     item.onclick = () => window.location.href = notification.link;
                     container.appendChild(item);
@@ -233,7 +238,7 @@
                     displayNotifications();
                 })
                 .catch((error) => {
-                    alert('Failed to delete notification. Please try again.');
+                    alert('فشل في حذف الإشعار. حاول مرة أخرى.');
                 });
         }
 
