@@ -320,72 +320,80 @@
         </div>
     </div>
   
-    <!-- شريط الأدوات السفلي -->
+    <!-- Footer -->
     <div class="footer">
         <i class="fa fa-home" onclick="location.href='index.html'"></i>
         <i class="fa fa-search" onclick="openSearch()"></i>
-        <i class="fa fa-bell notification" onclick="location.href='notifications.html'">
+        <i class="fa fa-bell notification" onclick="goToNotifications()">
             <span id="notification-badge" class="notification-badge">0</span>
         </i>
         <i class="fa fa-user" onclick="location.href='profile.html'"></i>
     </div>
 
+    
+
+    <!-- Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function updateNotificationDisplay() {
+            database.ref('notifications').once('value').then((snapshot) => {
+                const notifications = snapshot.val() || {};
+                const notificationArray = Object.keys(notifications).map(key => notifications[key]);
+                document.getElementById('notification-badge').textContent = notificationArray.length;
+                document.getElementById('notification-badge').style.display = notificationArray.length > 0 ? 'flex' : 'none';
+            });
+        }
 
         function goToNotifications() {
-            window.location.href = 'notifications.html';
+            // Set all notifications as read
+            database.ref('notifications').update({
+                read: true // or use other appropriate logic for marking notifications as read
+            }).then(() => {
+                window.location.href = 'notifications.html';
+            });
         }
 
-        function updateNotificationCount() {
-            const count = localStorage.getItem('notificationCount') || 0;
-            document.getElementById('notification-count').innerText = count;
-        }
-
-        // تحديث عدد الإشعارات عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', updateNotificationCount);
-        // وظيفة لجلب عدد الإشعارات من Local Storage وتحديث العرض
-        function updateNotificationDisplay() {
-            const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-            const badge = document.getElementById('notification-badge');
-            badge.textContent = notifications.length;
-            badge.style.display = notifications.length > 0 ? 'flex' : 'none';
-        }
-
-        // تحديث العرض عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', (event) => {
+        document.addEventListener('DOMContentLoaded', () => {
             updateNotificationDisplay();
+            setInterval(showNextImage, 3000); // Change image every 3 seconds
         });
-        
 
-        // تحديث العرض عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', (event) => {
-            updateNotificationDisplay();
-        });
         let currentIndex = 0;
         const images = document.querySelectorAll('.carousel img');
         const totalImages = images.length;
-    
+
         function showNextImage() {
             images[currentIndex].classList.remove('active');
             currentIndex = (currentIndex + 1) % totalImages;
             images[currentIndex].classList.add('active');
         }
-    
-        setInterval(showNextImage, 3000); // تغيير الصورة كل 3 ثواني
-    
+
         function openSearch() {
             document.getElementById('search-modal').style.display = 'flex';
         }
-    
+
         function closeSearch() {
             document.getElementById('search-modal').style.display = 'none';
         }
-    
+
         function addItem() {
-    
-            closeSearch(); // إغلاق شريط البحث بعد إجراء البحث
+            closeSearch(); // Close search bar after performing search
         }
-    
+
         document.getElementById('shop-now-button').addEventListener('click', function() {
             const activeImage = document.querySelector('.carousel img.active');
             const url = activeImage.getAttribute('data-url');
@@ -394,21 +402,6 @@
             }
         });
 
-        // وظيفة لتحديث عدد الإشعارات
-        let notificationCount = 0;
-
-        function updateNotificationCount(count) {
-            notificationCount += count;
-            document.getElementById('notification-badge').textContent = notificationCount;
-        }
-
-        // لتحديث العدد عند إضافة منتج جديد (يمكنك استدعاء هذه الوظيفة عند إضافة منتج جديد)
-        updateNotificationCount(1); // مثال: زيادة العدد بواحد
     </script>
-    </main>
-    <!-- ربط ملف الجافا سكريبت -->
-    <script src="js/app.js"></script>
-
-    
 </body>
 </html>
