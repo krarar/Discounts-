@@ -65,6 +65,13 @@
             display: flex;
             align-items: center;
             position: relative;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            touch-action: pan-y;
+        }
+        .notification-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(248, 246, 246, 0.493);
         }
         .notification-item img {
             width: 50px;
@@ -136,11 +143,28 @@
     <div class="notifications-container">
         <h2>Notifications</h2>
         <div id="notifications-container">
-            <!-- سيتم هنا عرض الإشعارات -->
+            <!-- Notifications will be displayed here -->
         </div>
     </div>
 
+    <!-- Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         function clearInputs() {
             document.getElementById('itemName').value = '';
             document.getElementById('itemDetails').value = '';
@@ -153,63 +177,75 @@
             const itemDetails = document.getElementById('itemDetails').value;
             const itemImage = document.getElementById('itemImage').value;
             const itemLink = document.getElementById('itemLink').value;
+
             if (itemName && itemDetails && itemImage && itemLink) {
-                let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-                notifications.push({
+                const newNotificationRef = database.ref('notifications').push();
+                newNotificationRef.set({
                     name: itemName,
                     details: itemDetails,
                     image: itemImage,
                     link: itemLink
+                }, (error) => {
+                    if (error) {
+                        alert('Failed to add notification. Please try again.');
+                    } else {
+                        clearInputs();
+                        displayNotifications();
+                        alert('Notification added successfully!');
+                    }
                 });
-                localStorage.setItem('notifications', JSON.stringify(notifications));
-                clearInputs();
-                displayNotifications();
-                alert('Notification added successfully!');
             } else {
                 alert('Please fill out all fields.');
             }
         }
 
         function displayNotifications() {
-            const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
             const container = document.getElementById('notifications-container');
             container.innerHTML = '';
-            notifications.reverse().forEach((notification, index) => {
-                const item = document.createElement('div');
-                item.className = 'notification-item';
-                if (index === 0) {
-                    item.classList.add('new-notification');
-                }
-                item.innerHTML = `
-                    <img src="${notification.image}" alt="${notification.name}">
-                    <div class="notification-content">
-                        <h4 class="notification-title">${notification.name}</h4>
-                        <p class="notification-text">${notification.details}</p>
-                    </div>
-                    <button class="edit-button" onclick="editNotification(${notifications.length - 1 - index})">Edit</button>
-                    <button class="delete-button" onclick="deleteNotification(${notifications.length - 1 - index})">Delete</button>
-                    <span class="new-badge">New</span>
-                `;
-                item.onclick = () => window.location.href = notification.link;
-                container.appendChild(item);
+            database.ref('notifications').once('value').then((snapshot) => {
+                const notifications = snapshot.val() || {};
+                const notificationArray = Object.keys(notifications).map(key => ({ id: key, ...notifications[key] }));
+                notificationArray.reverse().forEach((notification, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'notification-item';
+                    if (index === 0) {
+                        item.classList.add('new-notification');
+                    }
+                    item.innerHTML = `
+                        <img src="${notification.image}" alt="${notification.name}">
+                        <div class="notification-content">
+                            <h4 class="notification-title">${notification.name}</h4>
+                            <p class="notification-text">${notification.details}</p>
+                        </div>
+                        <button class="edit-button" onclick="editNotification('${notification.id}'); event.stopPropagation();">Edit</button>
+                        <button class="delete-button" onclick="deleteNotification('${notification.id}'); event.stopPropagation();">Delete</button>
+                        <span class="new-badge">New</span>
+                    `;
+                    item.onclick = () => window.location.href = notification.link;
+                    container.appendChild(item);
+                });
             });
         }
 
-        function deleteNotification(index) {
-            let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-            notifications.splice(index, 1);
-            localStorage.setItem('notifications', JSON.stringify(notifications));
-            displayNotifications();
+        function deleteNotification(id) {
+            database.ref('notifications/' + id).remove()
+                .then(() => {
+                    displayNotifications();
+                })
+                .catch((error) => {
+                    alert('Failed to delete notification. Please try again.');
+                });
         }
 
-        function editNotification(index) {
-            let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-            const notification = notifications[index];
-            document.getElementById('itemName').value = notification.name;
-            document.getElementById('itemDetails').value = notification.details;
-            document.getElementById('itemImage').value = notification.image;
-            document.getElementById('itemLink').value = notification.link;
-            deleteNotification(index);
+        function editNotification(id) {
+            database.ref('notifications/' + id).once('value').then((snapshot) => {
+                const notification = snapshot.val();
+                document.getElementById('itemName').value = notification.name;
+                document.getElementById('itemDetails').value = notification.details;
+                document.getElementById('itemImage').value = notification.image;
+                document.getElementById('itemLink').value = notification.link;
+                deleteNotification(id);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', displayNotifications);
