@@ -4,26 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Notifications</title>
+    <title>Manage Notifications</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #69344a;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-container, .notifications-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+        .form-container h2, .notifications-container h2 {
+            margin-top: 0;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .form-container button {
+            width: 48%;
+            padding: 10px;
+            margin: 10px 1%;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-container .add-button {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .form-container .add-button:hover {
+            background-color: #218838;
+        }
+        .form-container .cancel-button {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .form-container .cancel-button:hover {
+            background-color: #c82333;
         }
         .notification-item {
             background-color: #fff;
             padding: 15px;
             margin-bottom: 10px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgb(14, 13, 13);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             position: relative;
             cursor: pointer;
-            text-decoration: none;
-            color: black;
             transition: transform 0.2s, box-shadow 0.2s;
             touch-action: pan-y;
         }
@@ -50,34 +92,65 @@
             color: #555;
         }
         .new-notification {
-            border-left: 5px solid red;
+            background-color: yellow;
         }
         .new-badge {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 10px;
+            right: 10px;
             background-color: red;
-            color: rgb(248, 252, 249);
-            border-top-left-radius: 50%;
-            border: 1rem solid;
-            background-clip: content-box;
-            border-bottom-right-radius: 20px;
-            padding: 5px 10px;
+            color: white;
+            border-radius: 50%;
+            padding: 5px;
             font-size: 12px;
-            font-weight: bold;
-            text-align: center;
+        }
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        .edit-button {
+            background-color: #ffc107;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .edit-button:hover {
+            background-color: #e0a800;
         }
     </style>
 </head>
 <body>
-    <h1 style="color: rgb(245, 19, 19);">Notifications</h1>
-    <div id="notifications-container">
-        <!-- Notifications will be displayed here -->
+    <div class="form-container">
+        <h2>Add New Notification</h2>
+        <input type="text" id="itemName" placeholder="Notification Title">
+        <input type="text" id="itemDetails" placeholder="Notification Details">
+        <input type="text" id="itemImage" placeholder="Image URL">
+        <input type="text" id="itemLink" placeholder="Notification Link">
+        <button class="add-button" onclick="addItem()">Add</button>
+        <button class="cancel-button" onclick="clearInputs()">Clear</button>
+    </div>
+
+    <div class="notifications-container">
+        <h2>Notifications</h2>
+        <div id="notifications-container">
+            <!-- Notifications will be displayed here -->
+        </div>
     </div>
 
     <!-- Firebase scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script>
         // Initialize Firebase
         const firebaseConfig = {
@@ -92,6 +165,40 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        function clearInputs() {
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemDetails').value = '';
+            document.getElementById('itemImage').value = '';
+            document.getElementById('itemLink').value = '';
+        }
+
+        function addItem() {
+            const itemName = document.getElementById('itemName').value;
+            const itemDetails = document.getElementById('itemDetails').value;
+            const itemImage = document.getElementById('itemImage').value;
+            const itemLink = document.getElementById('itemLink').value;
+
+            if (itemName && itemDetails && itemImage && itemLink) {
+                const newNotificationRef = database.ref('notifications').push();
+                newNotificationRef.set({
+                    name: itemName,
+                    details: itemDetails,
+                    image: itemImage,
+                    link: itemLink
+                }, (error) => {
+                    if (error) {
+                        alert('Failed to add notification. Please try again.');
+                    } else {
+                        clearInputs();
+                        displayNotifications();
+                        alert('Notification added successfully!');
+                    }
+                });
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+
         function displayNotifications() {
             const container = document.getElementById('notifications-container');
             container.innerHTML = '';
@@ -99,58 +206,25 @@
                 const notifications = snapshot.val() || {};
                 const notificationArray = Object.keys(notifications).map(key => ({ id: key, ...notifications[key] }));
                 notificationArray.reverse().forEach((notification, index) => {
-                    const item = document.createElement('a');
+                    const item = document.createElement('div');
                     item.className = 'notification-item';
-                    item.href = notification.link;
-                    item.setAttribute('data-id', notification.id);
-
                     if (index === 0) {
                         item.classList.add('new-notification');
-                        item.innerHTML = `
-                            <span class="new-badge">New</span>
-                            <img src="${notification.image}" alt="${notification.name}">
-                            <div class="notification-content">
-                                <h4 class="notification-title">${notification.name}</h4>
-                                <p class="notification-text">${notification.details}</p>
-                            </div>
-                        `;
-                    } else {
-                        item.innerHTML = `
-                            <img src="${notification.image}" alt="${notification.name}">
-                            <div class="notification-content">
-                                <h4 class="notification-title">${notification.name}</h4>
-                                <p class="notification-text">${notification.details}</p>
-                            </div>
-                        `;
                     }
-                    item.addEventListener('touchstart', handleTouchStart);
-                    item.addEventListener('touchmove', handleTouchMove);
-                    item.addEventListener('touchend', handleTouchEnd);
+                    item.innerHTML = `
+                        <img src="${notification.image}" alt="${notification.name}">
+                        <div class="notification-content">
+                            <h4 class="notification-title">${notification.name}</h4>
+                            <p class="notification-text">${notification.details}</p>
+                        </div>
+                        <button class="edit-button" onclick="editNotification('${notification.id}'); event.stopPropagation();">Edit</button>
+                        <button class="delete-button" onclick="deleteNotification('${notification.id}'); event.stopPropagation();">Delete</button>
+                        <span class="new-badge">New</span>
+                    `;
+                    item.onclick = () => window.location.href = notification.link;
                     container.appendChild(item);
                 });
             });
-        }
-
-        let startX, startY, moveX, moveY;
-
-        function handleTouchStart(event) {
-            const touch = event.touches[0];
-            startX = touch.clientX;
-            startY = touch.clientY;
-        }
-
-        function handleTouchMove(event) {
-            const touch = event.touches[0];
-            moveX = touch.clientX - startX;
-            moveY = touch.clientY - startY;
-        }
-
-        function handleTouchEnd(event) {
-            if (Math.abs(moveX) > 50 && Math.abs(moveY) < 30) {
-                const item = event.currentTarget;
-                const id = item.getAttribute('data-id');
-                deleteNotification(id);
-            }
         }
 
         function deleteNotification(id) {
@@ -163,28 +237,18 @@
                 });
         }
 
-        function markAllAsRead() {
-            database.ref('notifications').once('value').then((snapshot) => {
-                const notifications = snapshot.val() || {};
-                const updates = {};
-                for (const id in notifications) {
-                    if (notifications[id].read !== true) {
-                        updates[id] = { ...notifications[id], read: true };
-                    }
-                }
-                return database.ref('notifications').update(updates);
-            }).then(() => {
-                displayNotifications();
-            }).catch((error) => {
-                console.error('Failed to mark all notifications as read:', error);
+        function editNotification(id) {
+            database.ref('notifications/' + id).once('value').then((snapshot) => {
+                const notification = snapshot.val();
+                document.getElementById('itemName').value = notification.name;
+                document.getElementById('itemDetails').value = notification.details;
+                document.getElementById('itemImage').value = notification.image;
+                document.getElementById('itemLink').value = notification.link;
+                deleteNotification(id);
             });
         }
 
-        // Mark notifications as read on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            markAllAsRead();
-            displayNotifications();
-        });
+        document.addEventListener('DOMContentLoaded', displayNotifications);
     </script>
 </body>
 </html>
