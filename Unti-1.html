@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قصص فيديو</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .stories-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0;
+            scrollbar-width: none;
+        }
+        .stories-container::-webkit-scrollbar {
+            display: none;
+        }
+        .story, .add-story {
+            flex: 0 0 auto;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 15px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .story-border {
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+        .story-content, .add-story-content {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .story-content video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .story p, .add-story p {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 5px;
+            color: #262626;
+        }
+        .add-story-content {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            color: #007bff;
+        }
+        .swal2-input {
+            margin: 5px 0;
+        }
+        .story-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .story-viewer video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .story-nav {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            cursor: pointer;
+        }
+        .story-nav.prev {
+            left: 0;
+        }
+        .story-nav.next {
+            right: 0;
+        }
+        .close-viewer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+        }
+    </style>
+    <!-- Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="stories-container" id="stories-container">
+        <!-- القصص ستتم إضافتها هنا ديناميكيًا عبر Firebase -->
+    </div>
+
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+            authDomain: "messageemeapp.firebaseapp.com",
+            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+            projectId: "messageemeapp",
+            storageBucket: "messageemeapp.appspot.com",
+            messagingSenderId: "278680662267",
+            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        let stories = [];
+        let currentStoryIndex = 0;
+
+        function loadStories() {
+            const container = document.getElementById('stories-container');
+            const storageRef = storage.ref();
+            const storiesRef = storageRef.child('stories');
+
+            storiesRef.listAll().then(result => {
+                container.innerHTML = '';
+                stories = [];
+
+                const addStoryElement = document.createElement('div');
+                addStoryElement.className = 'add-story';
+                addStoryElement.innerHTML = `
+                    <div class="add-story-content">+</div>
+                    <p>إضافة قصة</p>
+                `;
+                container.appendChild(addStoryElement);
+                addStoryElement.addEventListener('click', addStory);
+
+                result.items.forEach((storyRef, index) => {
+                    storyRef.getDownloadURL().then(url => {
+                        const storyElement = document.createElement('div');
+                        storyElement.className = 'story';
+                        storyElement.dataset.video = url;
+                        storyElement.dataset.index = index;
+                        storyElement.innerHTML = `
+                            <div class="story-border"></div>
+                            <div class="story-content">
+                                <video src="${url}" muted loop playsinline></video>
+                            </div>
+                            <p>قصتك</p>
+                        `;
+                        container.appendChild(storyElement);
+                        stories.push({ url, ref: storyRef });
+                    });
+                });
+            }).catch(error => {
+                console.error('Error loading stories:', error);
+            });
+        }
+
+        function addStory() {
+            Swal.fire({
+                title: 'إضافة فيديو',
+                html: `
+                    <input id="video-title" class="swal2-input" placeholder="عنوان الفيديو">
+                    <input type="file" id="video-file" accept="video/*" class="swal2-input">
+                `,
+                confirmButtonText: 'رفع الفيديو',
+                showCancelButton: true,
+                cancelButtonText: 'إلغاء',
+                preConfirm: () => {
+                    const file = document.getElementById('video-file').files[0];
+                    const title = document.getElementById('video-title').value;
+
+                    if (!file || !title) {
+                        Swal.showValidationMessage('يرجى إدخال جميع المعلومات');
+                        return;
+                    }
+
+                    const storageRef = firebase.storage().ref();
+                    const videoRef = storageRef.child(`stories/${title}`);
+                    return videoRef.put(file).then(() => {
+                        Swal.fire('نجاح', 'تم رفع الفيديو بنجاح', 'success');
+                        loadStories();
+                    }).catch(error => {
+                        Swal.fire('خطأ', 'فشل رفع الفيديو', 'error');
+                    });
+                }
+            });
+        }
+
+        function deleteStory(storyRef, storyElement) {
+            storyRef.delete().then(() => {
+                storyElement.remove();
+                Swal.fire('نجاح', 'تم حذف الفيديو بنجاح', 'success');
+            }).catch(error => {
+                Swal.fire('خطأ', 'فشل حذف الفيديو', 'error');
+            });
+        }
+
+        function showStoryViewer(index) {
+            currentStoryIndex = index;
+            const viewer = document.createElement('div');
+            viewer.className = 'story-viewer';
+            viewer.innerHTML = `
+                <video src="${stories[index].url}" controls autoplay></video>
+                <div class="story-nav prev"></div>
+                <div class="story-nav next"></div>
+                <div class="close-viewer">&times;</div>
+            `;
+            document.body.appendChild(viewer);
+
+            const video = viewer.querySelector('video');
+            const prevNav = viewer.querySelector('.story-nav.prev');
+            const nextNav = viewer.querySelector('.story-nav.next');
+            const closeBtn = viewer.querySelector('.close-viewer');
+
+            prevNav.addEventListener('click', () => {
+                if (currentStoryIndex > 0) {
+                    currentStoryIndex--;
+                    video.src = stories[currentStoryIndex].url;
+                }
+            });
+
+            nextNav.addEventListener('click', () => {
+                if (currentStoryIndex < stories.length - 1) {
+                    currentStoryIndex++;
+                    video.src = stories[currentStoryIndex].url;
+                }
+            });
+
+            closeBtn.addEventListener('click', () => {
+                document.body.removeChild(viewer);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStories();
+
+            document.addEventListener('click', (event) => {
+                const story = event.target.closest('.story');
+                if (story) {
+                    const index = parseInt(story.dataset.index);
+                    showStoryViewer(index);
+                }
+            });
+
+            document.addEventListener('contextmenu', (event) => {
+                const story = event.target.closest('.story');
+                if (story) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'حذف الفيديو',
+                        text: "هل أنت متأكد أنك تريد حذف هذا الفيديو؟",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'حذف',
+                        cancelButtonText: 'إلغاء',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const index = parseInt(story.dataset.index);
+                            const storyRef = stories[index].ref;
+                            deleteStory(storyRef, story);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
