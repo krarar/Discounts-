@@ -173,6 +173,197 @@
         font-size: 20px;
         cursor: pointer;
     }
+    .notification-badge {
+        background-color: rgb(255, 4, 17);
+        color: rgb(255, 255, 255);
+        border-radius: 50%;
+        padding: 1px 1;
+        position: absolute;
+        top: 0px;
+        right: 100;
+        display: none;
+    }
+    .notifications-container {
+        display: none;
+        background-color: #10aa437c;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        top: 40px; left: 40px;
+        right: 4em;
+        width: 300px;
+    }
+    .notification-item {
+        border-bottom: dashed red;
+        padding: 10px 0;
+    }
+    .notification-item img {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+        .search-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-modal.active {
+            display: flex;
+        }
+
+        .search-modal input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 4px;
+        }
+        
+ 
+        .content {
+            flex: 1;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            transition: left 1s ease-in-out;
+        }
+
+        .carousel img.active {
+            left: 0;
+        }
+
+        .carousel-content {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: var(--secondary-color);
+            text-align: center;
+            z-index: 1;
+        }
+
+        .carousel-content h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .carousel-content p {
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .carousel-content button {
+            background-color: var(--highlight-color);
+            color: var(--secondary-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .carousel-content button:hover {
+            background-color: #f1f1f1;
+            color: var(--highlight-color);
+        }
+
+        .grid-container {
+            display: grid;
+            gap: 0;
+            padding: 0;
+            grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
+        }
+
+        .product-card {
+            background-color: var(--card-color);
+            border: 2px solid var(--accent-color);
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            color: var(--text-color);
+            transition: transform 0.3s;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-card img {
+            width: 100%;
+            aspect-ratio: 2/2;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-card h3 {
+            margin-top: 25px;
+            font-size: 1.25rem;
+        }
+
+        .product-card p {
+            margin: 5px 0;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+        }
+
+        .product-card .rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 5px;
+        }
+
+        .product-card .rating i {
+            color: var(--highlight-color);
+            margin: 0 2px;
+        }
+
+    
+    .content {
+        padding: 20px;
+    }
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #2e2d25;
+        border-top: 1px solid #d7da19;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+    }
+    .footer i {
+        font-size: 20px;
+        cursor: pointer;
+    }
 
     .notification-bell {
         position: absolute;
@@ -347,10 +538,6 @@
     <title>Product Showcase</title>
 </head>
 <body>
-    <div class="notification-bell" onclick="goToNotifications()">
-        <i class="fas fa-bell"></i>
-        <span class="count" id="notification-count"></span>
-    </div>
  <div class="content">
         <!-- شريط التمرير التلقائي (Carousel) -->
         <div class="carousel">
@@ -367,18 +554,16 @@
                 <button id="shop-now-button">SHOP NOW</button>
             </div>
         </div>
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    </head>
-    <body>
-        <div class="stories-container" id="stories-container">
-            <!-- القصص ستتم إضافتها هنا ديناميكيًا عبر Firebase -->
-        </div>
-        
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+         <script src="js/app.js"></script>
+     <!-- Firebase scripts -->
+     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ </head>
+ <body>
+     <div class="stories-container" id="stories-container">
+         <!-- القصص ستتم إضافتها هنا ديناميكيًا عبر Firebase -->
+     </div>
 
          <div class="grid-container">
             <!-- بطاقة المنتج 1 -->
@@ -388,7 +573,7 @@
                 <p>$24.95</p>
                 <div class="rating">
                     <span>⭐⭐⭐⭐⭐</span>
-                    <span class="favorite">❤</span>
+                    <span class="favorite">❤️</span>
                 </div>
             </div>
             <!-- بطاقة المنتج 2 -->
@@ -398,7 +583,7 @@
                 <p>$24.95</p>
                 <div class="rating">
                     <span>⭐⭐⭐⭐⭐</span>
-                    <span class="favorite">❤</span>
+                    <span class="favorite">❤️</span>
                 </div>
             </div>
         </div>
@@ -413,7 +598,7 @@
                 <p>$24.95</p>
                 <div class="rating">
                     <span>⭐⭐⭐⭐⭐</span>
-                    <span class="favorite">❤</span>
+                    <span class="favorite">❤️</span>
                 </div>
             </div>
             <!-- بطاقة المنتج 4 -->
@@ -423,7 +608,7 @@
                 <p>$24.95</p>
                 <div class="rating">
                     <span>⭐⭐⭐⭐⭐</span>
-                    <span class="favorite">❤</span>
+                    <span class="favorite">❤️</span>
                 </div>
             </div>
         </div>
@@ -431,299 +616,4 @@
   
     <!-- شريط الأدوات السفلي -->
     <div class="footer">
-        <i class="fa fa-home" onclick="location.href='index.html'"></i>
-        <i class="fa fa-search" onclick="openSearch()"></i>
-        <i class="fa fa-bell notification" onclick="location.href='notifications.html'">
-            <span id="notification-badge" class="notification-badge">0</span>
-        </i>
-        <i class="fa fa-user" onclick="location.href='notif1ications.html'"></i>
-    </div>
-
-    
-
-    <script>
-        
-
-        function goToNotifications() {
-            window.location.href = 'notifications.html';
-        }
-
-        function updateNotificationCount() {
-            const count = localStorage.getItem('notificationCount') || 0;
-            document.getElementById('notification-count').innerText = count;
-        }
-
-        // تحديث عدد الإشعارات عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', updateNotificationCount);
-        // وظيفة لجلب عدد الإشعارات من Local Storage وتحديث العرض
-        function updateNotificationDisplay() {
-            const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-            const badge = document.getElementById('notification-badge');
-            badge.textContent = notifications.length;
-            badge.style.display = notifications.length > 0 ? 'flex' : 'none';
-        }
-
-        // تحديث العرض عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', (event) => {
-            updateNotificationDisplay();
-        });
-        
-
-        // تحديث العرض عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', (event) => {
-            updateNotificationDisplay();
-        });
-        let currentIndex = 0;
-        const images = document.querySelectorAll('.carousel img');
-        const totalImages = images.length;
-    
-        function showNextImage() {
-            images[currentIndex].classList.remove('active');
-            currentIndex = (currentIndex + 1) % totalImages;
-            images[currentIndex].classList.add('active');
-        }
-    
-        setInterval(showNextImage, 3000); // تغيير الصورة كل 3 ثواني
-    
-        function openSearch() {
-            document.getElementById('search-modal').style.display = 'flex';
-        }
-    
-        function closeSearch() {
-            document.getElementById('search-modal').style.display = 'none';
-        }
-    
-        function addItem() {
-    
-            closeSearch(); // إغلاق شريط البحث بعد إجراء البحث
-        }
-    
-        document.getElementById('shop-now-button').addEventListener('click', function() {
-            const activeImage = document.querySelector('.carousel img.active');
-            const url = activeImage.getAttribute('data-url');
-            if (url) {
-                window.location.href = url;
-            }
-        });
-
-        // وظيفة لتحديث عدد الإشعارات
-        let notificationCount = 0;
-
-        function updateNotificationCount(count) {
-            notificationCount += count;
-            document.getElementById('notification-badge').textContent = notificationCount;
-        }
-
-        // لتحديث العدد عند إضافة منتج جديد (يمكنك استدعاء هذه الوظيفة عند إضافة منتج جديد)
-        updateNotificationCount(1);
-        
-          // مثال: زيادة العدد بواحد
-          
-        document.addEventListener('DOMContentLoaded', () => {
-            const stories = document.querySelectorAll('.story');
-            
-            stories.forEach(story => {
-                const video = story.querySelector('video');
-                video.play();
-
-                story.addEventListener('click', () => {
-                    const videoUrl = story.getAttribute('data-video');
-                    Swal.fire({
-                        html: <video src="${videoUrl}" controls autoplay style="width: 100%; max-height: 80vh; border-radius: 10px;"></video>,
-                        showConfirmButton: false,
-                        background: '#000',
-                        padding: '0',
-                        width: '100%',
-                        customClass: {
-                            popup: 'story-popup'
-                        }
-                    });
-                });
-            });
-        });
-    </script>
-    </main>
-    <!-- ربط ملف الجافا سكريبت -->
-    <script src="js/app.js"></script>
-     <!-- Firebase scripts -->
-     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- </head>
- <body>
-     <div class="stories-container" id="stories-container">
-         <!-- القصص ستتم إضافتها هنا ديناميكيًا عبر Firebase -->
-     </div>
- 
-     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
-            authDomain: "messageemeapp.firebaseapp.com",
-            databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
-            projectId: "messageemeapp",
-            storageBucket: "messageemeapp.appspot.com",
-            messagingSenderId: "278680662267",
-            appId: "1:278680662267:web:cb9a86a0cd4709b86222b2"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
-
-        let stories = [];
-        let currentStoryIndex = 0;
-
-        function loadStories() {
-            const container = document.getElementById('stories-container');
-            const storageRef = storage.ref();
-            const storiesRef = storageRef.child('stories');
-
-            storiesRef.listAll().then(result => {
-                container.innerHTML = '';
-                stories = [];
-
-                const addStoryElement = document.createElement('div');
-                addStoryElement.className = 'add-story';
-                addStoryElement.innerHTML = `
-                    <div class="add-story-content">+</div>
-                    <p>إضافة قصة</p>
-                `;
-                container.appendChild(addStoryElement);
-                addStoryElement.addEventListener('click', addStory);
-
-                result.items.forEach((storyRef, index) => {
-                    storyRef.getDownloadURL().then(url => {
-                        const storyElement = document.createElement('div');
-                        storyElement.className = 'story';
-                        storyElement.dataset.video = url;
-                        storyElement.dataset.index = index;
-                        storyElement.innerHTML = `
-                            <div class="story-border"></div>
-                            <div class="story-content">
-                                <video src="${url}" muted loop playsinline></video>
-                            </div>
-                            <p>قصتك</p>
-                        `;
-                        container.appendChild(storyElement);
-                        stories.push({ url, ref: storyRef });
-                    });
-                });
-            }).catch(error => {
-                console.error('Error loading stories:', error);
-            });
-        }
-
-        function addStory() {
-            Swal.fire({
-                title: 'إضافة فيديو',
-                html: `
-                    <input id="video-title" class="swal2-input" placeholder="عنوان الفيديو">
-                    <input type="file" id="video-file" accept="video/*" class="swal2-input">
-                `,
-                confirmButtonText: 'رفع الفيديو',
-                showCancelButton: true,
-                cancelButtonText: 'إلغاء',
-                preConfirm: () => {
-                    const file = document.getElementById('video-file').files[0];
-                    const title = document.getElementById('video-title').value;
-
-                    if (!file || !title) {
-                        Swal.showValidationMessage('يرجى إدخال جميع المعلومات');
-                        return;
-                    }
-
-                    const storageRef = firebase.storage().ref();
-                    const videoRef = storageRef.child(`stories/${title}`);
-                    return videoRef.put(file).then(() => {
-                        Swal.fire('نجاح', 'تم رفع الفيديو بنجاح', 'success');
-                        loadStories();
-                    }).catch(error => {
-                        Swal.fire('خطأ', 'فشل رفع الفيديو', 'error');
-                    });
-                }
-            });
-        }
-
-        function deleteStory(storyRef, storyElement) {
-            storyRef.delete().then(() => {
-                storyElement.remove();
-                Swal.fire('نجاح', 'تم حذف الفيديو بنجاح', 'success');
-            }).catch(error => {
-                Swal.fire('خطأ', 'فشل حذف الفيديو', 'error');
-            });
-        }
-
-        function showStoryViewer(index) {
-            currentStoryIndex = index;
-            const viewer = document.createElement('div');
-            viewer.className = 'story-viewer';
-            viewer.innerHTML = `
-                <video src="${stories[index].url}" controls autoplay></video>
-                <div class="story-nav prev"></div>
-                <div class="story-nav next"></div>
-                <div class="close-viewer">&times;</div>
-            `;
-            document.body.appendChild(viewer);
-
-            const video = viewer.querySelector('video');
-            const prevNav = viewer.querySelector('.story-nav.prev');
-            const nextNav = viewer.querySelector('.story-nav.next');
-            const closeBtn = viewer.querySelector('.close-viewer');
-
-            prevNav.addEventListener('click', () => {
-                if (currentStoryIndex > 0) {
-                    currentStoryIndex--;
-                    video.src = stories[currentStoryIndex].url;
-                }
-            });
-
-            nextNav.addEventListener('click', () => {
-                if (currentStoryIndex < stories.length - 1) {
-                    currentStoryIndex++;
-                    video.src = stories[currentStoryIndex].url;
-                }
-            });
-
-            closeBtn.addEventListener('click', () => {
-                document.body.removeChild(viewer);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadStories();
-
-            document.addEventListener('click', (event) => {
-                const story = event.target.closest('.story');
-                if (story) {
-                    const index = parseInt(story.dataset.index);
-                    showStoryViewer(index);
-                }
-            });
-
-            document.addEventListener('contextmenu', (event) => {
-                const story = event.target.closest('.story');
-                if (story) {
-                    event.preventDefault();
-                    Swal.fire({
-                        title: 'حذف الفيديو',
-                        text: "هل أنت متأكد أنك تريد حذف هذا الفيديو؟",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'حذف',
-                        cancelButtonText: 'إلغاء',
-                        reverseButtons: true
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const index = parseInt(story.dataset.index);
-                            const storyRef = stories[index].ref;
-                            deleteStory(storyRef, story);
-                        }
-                    });
-                }
-            });
-        });
-     </script>
-   
-
-    
-</body>
-</html>
+        <
