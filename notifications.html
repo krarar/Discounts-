@@ -94,7 +94,6 @@
     <div id="notifications-container">
         <!-- Notifications will be displayed here -->
     </div>
-    
 
     <!-- Firebase scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -209,6 +208,37 @@
                 });
         }
 
+        function addItem(itemName, itemDetails, itemImage, itemLink) {
+            if (itemName && itemDetails && itemImage && itemLink) {
+                const newNotificationRef = database.ref('notifications').push();
+                const timestamp = Date.now();
+                newNotificationRef.set({
+                    name: itemName,
+                    details: itemDetails,
+                    image: itemImage,
+                    link: itemLink,
+                    timestamp: timestamp
+                }, (error) => {
+                    if (error) {
+                        alert('Failed to add notification. Please try again.');
+                    } else {
+                        // زيادة عداد الإشعارات الجديدة
+                        database.ref('newNotificationsCount').transaction((currentCount) => {
+                            return (currentCount || 0) + 1;
+                        });
+                        displayNotifications();
+                        alert('Notification added successfully!');
+                    }
+                });
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+
+        function resetNotificationCount() {
+            database.ref('newNotificationsCount').set(0);
+        }
+
         function markAllAsRead() {
             database.ref('notifications').once('value').then((snapshot) => {
                 const notifications = snapshot.val() || {};
@@ -216,24 +246,34 @@
                 for (const id in notifications) {
                     if (notifications[id].read !== true) {
                         updates[id] = { ...notifications[id], read: true };
-                        const viewer = document.createElement('div');
                     }
                 }
                 return database.ref('notifications').update(updates);
             }).then(() => {
                 displayNotifications();
+                resetNotificationCount(); // إعادة تعيين العداد بعد قراءة جميع الإشعارات
             }).catch((error) => {
                 console.error('Failed to mark all notifications as read:', error);
             });
         }
 
-        // Mark notifications as read on page load
+        function listenForNewNotifications() {
+            database.ref('notifications').limitToLast(1).on('child_added', (snapshot) => {
+                const newNotification = snapshot.val();
+                // تحديث واجهة المستخدم لعرض الإشعار الجديد
+                displayNotifications();
+            });
+        }
+
+        // تحميل الصفحة وتهيئة الإشعارات
         document.addEventListener('DOMContentLoaded', () => {
-            markAllAsRead();
             displayNotifications();
+            resetNotificationCount();
+            listenForNewNotifications();
+            markAllAsRead();
         });
 
-        // Update relative times every minute
+        // تحديث الأوقات النسبية كل دقيقة
         setInterval(displayNotifications, 60000);
     </script>
 </body>
