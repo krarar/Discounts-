@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب باستخدام رقم الهاتف</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .login-box {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        input[type="text"], button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .otp-form {
+            display: none;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <h1>إنشاء حساب باستخدام رقم الهاتف</h1>
+            <!-- Phone Number Form -->
+            <div id="phone-number-form">
+                <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (+964) 964781379863" required>
+                <button onclick="sendVerificationCode()">إرسال OTP</button>
+                <div id="error-message" class="error-message"></div>
+            </div>
+
+            <!-- OTP Form -->
+            <div id="otp-form" class="otp-form">
+                <input type="text" id="otp-code" placeholder="أدخل OTP" required>
+                <button onclick="verifyCode()">تحقق من OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration and Initialization -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCSMvWD8YVD_HPNmlQyOSjKSghL-ua2uVI",
+            authDomain: "your-price-is-in-your-hand.firebaseapp.com",
+            projectId: "your-price-is-in-your-hand",
+            storageBucket: "your-price-is-in-your-hand.appspot.com",
+            messagingSenderId: "636296326905",
+            appId: "1:636296326905:web:fc2b16a1df401d1d5c7c28",
+            measurementId: "G-W65EBJ2LR6"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        let verificationId;
+
+        // Function to send OTP
+        function sendVerificationCode() {
+            const phoneNumber = document.getElementById('phone-number').value;
+            const errorMessage = document.getElementById('error-message');
+
+            // تأكد من أن الرقم يتضمن رمز الدولة
+            if (phoneNumber === '' || !phoneNumber.startsWith('+964')) {
+                errorMessage.textContent = 'يرجى إدخال رقم هاتف صحيح مع رمز الدولة.';
+                return;
+            }
+
+            const appVerifier = new firebase.auth.RecaptchaVerifier('phone-number-form', {
+                size: 'invisible',
+            });
+
+            auth.signInWithPhoneNumber(phoneNumber, appVerifier)
+                .then((confirmationResult) => {
+                    verificationId = confirmationResult.verificationId;
+                    document.getElementById('phone-number-form').style.display = 'none';
+                    document.getElementById('otp-form').style.display = 'block';
+                })
+                .catch((error) => {
+                    errorMessage.textContent = 'فشل إرسال OTP. يرجى المحاولة مرة أخرى.';
+                    console.error(error);
+                });
+        }
+
+        // Function to verify OTP
+        function verifyCode() {
+            const otpCode = document.getElementById('otp-code').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (otpCode === '') {
+                errorMessage.textContent = 'يرجى إدخال OTP.';
+                return;
+            }
+
+            const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, otpCode);
+
+            auth.signInWithCredential(credential)
+                .then((result) => {
+                    alert('تم تسجيل الدخول بنجاح');
+                    console.log('تم تسجيل الدخول:', result.user);
+                })
+                .catch((error) => {
+                    errorMessage.textContent = 'فشل التحقق من OTP. يرجى المحاولة مرة أخرى.';
+                    console.error(error);
+                });
+        }
+    </script>
+</body>
+</html>
