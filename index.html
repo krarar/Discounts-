@@ -125,35 +125,47 @@
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
         'size': 'normal',
         'callback': function(response) {
-            console.log('reCAPTCHA verified');
+            console.log('reCAPTCHA تم التحقق منه');
         },
         'expired-callback': function() {
-            console.log('reCAPTCHA expired');
+            console.log('انتهت صلاحية reCAPTCHA');
         }
     });
 
-    // إرسال رمز التحقق
-    function sendVerificationCode() {
-        const countryCode = document.getElementById('country-code').value;
-        const phoneNumber = document.getElementById('phone-number').value;
-        const fullPhoneNumber = countryCode + phoneNumber;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
+    // التحقق من صحة الحقول
+    function validateInputs() {
         const firstName = document.getElementById('first-name').value;
         const lastName = document.getElementById('last-name').value;
         const address = document.getElementById('address').value;
+        const phoneNumber = document.getElementById('phone-number').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
         const termsAccepted = document.getElementById('terms').checked;
 
-        // التحقق من صحة البيانات
         if (!firstName || !lastName || !address || !phoneNumber || !password || !confirmPassword || !termsAccepted) {
             alert('يرجى ملء جميع الحقول والموافقة على الشروط.');
-            return;
+            return false;
         }
 
         if (password !== confirmPassword) {
             alert('كلمات المرور غير متطابقة.');
-            return;
+            return false;
         }
+
+        return true;
+    }
+
+    // إرسال رمز التحقق
+    function sendVerificationCode() {
+        if (!validateInputs()) {
+            return; // إيقاف العملية إذا لم يتم التحقق من المدخلات
+        }
+
+        const countryCode = document.getElementById('country-code').value;
+        const phoneNumber = document.getElementById('phone-number').value;
+        const fullPhoneNumber = countryCode + phoneNumber;
+
+        console.log(`إرسال الرمز إلى: ${fullPhoneNumber}`); // تتبع رقم الهاتف
 
         const appVerifier = window.recaptchaVerifier;
 
@@ -164,6 +176,7 @@
                 alert('تم إرسال رمز التحقق.');
             })
             .catch((error) => {
+                console.error('خطأ في إرسال رمز التحقق:', error); // تتبع الأخطاء
                 alert('حدث خطأ أثناء إرسال رمز التحقق: ' + error.message);
             });
     }
@@ -171,15 +184,19 @@
     // تأكيد الرمز والتحقق
     function verifyCode() {
         const code = document.getElementById('verification-code').value;
+        console.log(`الرمز المدخل: ${code}`); // تتبع الرمز المدخل
+
         window.confirmationResult.confirm(code)
             .then((result) => {
                 const user = result.user;
+                console.log('تم التحقق من المستخدم:', user); // تتبع المستخدم بعد التحقق
 
                 // يمكنك إضافة حفظ البيانات في قاعدة البيانات هنا
                 // إعادة التوجيه إلى صفحة أخرى بعد النجاح
                 window.location.href = "welcome.html";
             })
             .catch((error) => {
+                console.error('خطأ في تأكيد الرمز:', error); // تتبع الأخطاء
                 alert('رمز التحقق غير صحيح: ' + error.message);
             });
     }
