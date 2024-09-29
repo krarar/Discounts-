@@ -3,150 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إنشاء حساب باستخدام رقم الهاتف</title>
+    <title>إنشاء حساب برقم الهاتف وكلمة المرور</title>
+    <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js"></script>
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8;
-        }
-        .container {
+        body {
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
         }
-        .login-box {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        input, select {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
             width: 100%;
-            max-width: 400px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        input[type="text"], button {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
             box-sizing: border-box;
-            font-size: 16px;
         }
         button {
-            background-color: #4CAF50;
+            padding: 10px;
+            width: 100%;
+            background-color: #28a745;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #218838;
         }
-        .otp-form {
-            display: none;
+        #recaptcha-container {
+            margin-top: 15px;
         }
-        .error-message {
-            color: red;
-            font-size: 14px;
-            text-align: center;
+        .checkbox {
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-box">
-            <h1>إنشاء حساب باستخدام رقم الهاتف</h1>
-            <!-- Phone Number Form -->
-            <div id="phone-number-form">
-                <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (+964) 964781379863" required>
-                <button onclick="sendVerificationCode()">إرسال OTP</button>
-                <div id="error-message" class="error-message"></div>
-            </div>
 
-            <!-- OTP Form -->
-            <div id="otp-form" class="otp-form">
-                <input type="text" id="otp-code" placeholder="أدخل OTP" required>
-                <button onclick="verifyCode()">تحقق من OTP</button>
-            </div>
-        </div>
+<div class="container" id="signup-container">
+    <h2>إنشاء حساب برقم الهاتف وكلمة المرور</h2>
+
+    <!-- الاسم الأول والاسم الثاني والعنوان -->
+    <input type="text" id="first-name" placeholder="الاسم الأول">
+    <input type="text" id="last-name" placeholder="الاسم الثاني">
+    <input type="text" id="address" placeholder="العنوان">
+
+    <!-- اختيار البلد ورقم الهاتف -->
+    <select id="country-code">
+        <option value="+964">العراق</option>
+        <option value="+20">مصر</option>
+        <option value="+971">الإمارات</option>
+        <option value="+966">السعودية</option>
+        <option value="+962">الأردن</option>
+        <option value="+963">سوريا</option>
+        <option value="+218">ليبيا</option>
+        <option value="+212">المغرب</option>
+        <option value="+970">فلسطين</option>
+        <option value="+965">الكويت</option>
+        <option value="+973">البحرين</option>
+        <option value="+974">قطر</option>
+        <option value="+961">لبنان</option>
+        <option value="+216">تونس</option>
+        <option value="+213">الجزائر</option>
+        <option value="+252">الصومال</option>
+        <option value="+253">جيبوتي</option>
+        <option value="+269">جزر القمر</option>
+    </select>
+    <input type="tel" id="phone-number" placeholder="أدخل رقم الهاتف بدون مفتاح البلد">
+
+    <!-- كلمة المرور وإعادة كلمة المرور -->
+    <input type="password" id="password" placeholder="أدخل كلمة المرور">
+    <input type="password" id="confirm-password" placeholder="أعد إدخال كلمة المرور">
+
+    <!-- الموافقة على الشروط -->
+    <label class="checkbox">
+        <input type="checkbox" id="terms"> أوافق على جميع الشروط والأحكام
+    </label>
+
+    <!-- reCAPTCHA -->
+    <div id="recaptcha-container"></div>
+
+    <!-- زر إرسال -->
+    <button onclick="sendVerificationCode()">إرسال رمز التحقق</button>
+
+    <!-- قسم تأكيد الرمز -->
+    <div id="verification-section" style="display:none;">
+        <input type="text" id="verification-code" placeholder="أدخل رمز التحقق">
+        <button onclick="verifyCode()">تأكيد الحساب</button>
     </div>
+</div>
 
-    <!-- Firebase Configuration and Initialization -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCSMvWD8YVD_HPNmlQyOSjKSghL-ua2uVI",
-            authDomain: "your-price-is-in-your-hand.firebaseapp.com",
-            projectId: "your-price-is-in-your-hand",
-            storageBucket: "your-price-is-in-your-hand.appspot.com",
-            messagingSenderId: "636296326905",
-            appId: "1:636296326905:web:fc2b16a1df401d1d5c7c28",
-            measurementId: "G-W65EBJ2LR6"
-        };
+<script>
+    // إعداد Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDGpAHia_wEmrhnmYjrPf1n1TrAzwEMiAI",
+        authDomain: "messageemeapp.firebaseapp.com",
+        databaseURL: "https://messageemeapp-default-rtdb.firebaseio.com",
+        projectId: "messageemeapp",
+        storageBucket: "messageemeapp.appspot.com",
+        messagingSenderId: "255034474844",
+        appId: "1:255034474844:web:5e3b7a6bc4b2fb94cc4199"
+    };
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-        let verificationId;
+    // إعداد reCAPTCHA
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'normal',
+        'callback': function(response) {
+            console.log('reCAPTCHA verified');
+        },
+        'expired-callback': function() {
+            console.log('reCAPTCHA expired');
+        }
+    });
 
-        // Function to send OTP
-        function sendVerificationCode() {
-            const phoneNumber = document.getElementById('phone-number').value;
-            const errorMessage = document.getElementById('error-message');
+    // إرسال رمز التحقق
+    function sendVerificationCode() {
+        const countryCode = document.getElementById('country-code').value;
+        const phoneNumber = document.getElementById('phone-number').value;
+        const fullPhoneNumber = countryCode + phoneNumber;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const firstName = document.getElementById('first-name').value;
+        const lastName = document.getElementById('last-name').value;
+        const address = document.getElementById('address').value;
+        const termsAccepted = document.getElementById('terms').checked;
 
-            // تأكد من أن الرقم يتضمن رمز الدولة
-            if (phoneNumber === '' || !phoneNumber.startsWith('+964')) {
-                errorMessage.textContent = 'يرجى إدخال رقم هاتف صحيح مع رمز الدولة.';
-                return;
-            }
+        // التحقق من صحة البيانات
+        if (!firstName || !lastName || !address || !phoneNumber || !password || !confirmPassword || !termsAccepted) {
+            alert('يرجى ملء جميع الحقول والموافقة على الشروط.');
+            return;
+        }
 
-            const appVerifier = new firebase.auth.RecaptchaVerifier('phone-number-form', {
-                size: 'invisible',
+        if (password !== confirmPassword) {
+            alert('كلمات المرور غير متطابقة.');
+            return;
+        }
+
+        const appVerifier = window.recaptchaVerifier;
+
+        auth.signInWithPhoneNumber(fullPhoneNumber, appVerifier)
+            .then((confirmationResult) => {
+                window.confirmationResult = confirmationResult;
+                document.getElementById('verification-section').style.display = 'block';
+                alert('تم إرسال رمز التحقق.');
+            })
+            .catch((error) => {
+                alert('حدث خطأ أثناء إرسال رمز التحقق: ' + error.message);
             });
+    }
 
-            auth.signInWithPhoneNumber(phoneNumber, appVerifier)
-                .then((confirmationResult) => {
-                    verificationId = confirmationResult.verificationId;
-                    document.getElementById('phone-number-form').style.display = 'none';
-                    document.getElementById('otp-form').style.display = 'block';
-                })
-                .catch((error) => {
-                    errorMessage.textContent = 'فشل إرسال OTP. يرجى المحاولة مرة أخرى.';
-                    console.error(error);
-                });
-        }
+    // تأكيد الرمز والتحقق
+    function verifyCode() {
+        const code = document.getElementById('verification-code').value;
+        window.confirmationResult.confirm(code)
+            .then((result) => {
+                const user = result.user;
 
-        // Function to verify OTP
-        function verifyCode() {
-            const otpCode = document.getElementById('otp-code').value;
-            const errorMessage = document.getElementById('error-message');
+                // يمكنك إضافة حفظ البيانات في قاعدة البيانات هنا
+                // إعادة التوجيه إلى صفحة أخرى بعد النجاح
+                window.location.href = "welcome.html";
+            })
+            .catch((error) => {
+                alert('رمز التحقق غير صحيح: ' + error.message);
+            });
+    }
+</script>
 
-            if (otpCode === '') {
-                errorMessage.textContent = 'يرجى إدخال OTP.';
-                return;
-            }
-
-            const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, otpCode);
-
-            auth.signInWithCredential(credential)
-                .then((result) => {
-                    alert('تم تسجيل الدخول بنجاح');
-                    console.log('تم تسجيل الدخول:', result.user);
-                })
-                .catch((error) => {
-                    errorMessage.textContent = 'فشل التحقق من OTP. يرجى المحاولة مرة أخرى.';
-                    console.error(error);
-                });
-        }
-    </script>
 </body>
 </html>
